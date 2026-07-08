@@ -1,127 +1,117 @@
-Return-Path: <linux-scsi+bounces-25886-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25887-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id rIPmNlH9TWoaBQIAu9opvQ
-	(envelope-from <linux-scsi+bounces-25886-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 09:33:37 +0200
+	id LNDYIyYDTmqJBgIAu9opvQ
+	(envelope-from <linux-scsi+bounces-25887-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 09:58:30 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F2FC722A99
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 09:33:36 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7955722DEC
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 09:58:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=163.com header.s=s110527 header.b=RQA3pUgZ;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25886-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25886-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=linux.dev header.s=key1 header.b=gtLUJyvi;
+	dmarc=pass (policy=none) header.from=linux.dev;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25887-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25887-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 262CE308D7E6
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2026 07:23:53 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 093983002D3C
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2026 07:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 624623A59BC;
-	Wed,  8 Jul 2026 07:23:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2532F3F9264;
+	Wed,  8 Jul 2026 07:58:04 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BA63F410E
-	for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2026 07:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418143F23C4
+	for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2026 07:57:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783495427; cv=none; b=E7A6eauNNv1y/WYsltjNWujns+km4AbLzRsB0bioUYtI+llLVPRgB7vGFSWAqUdKwRx4x4K2/gZ60JARi2so60bPw8H8hKyZrSUWk71VRQlWqrI8MjCwqtYV01+PFmKoS0dhhZyBn2CeZAMQdAlHfAMo14j5Y5emXEfgcwmv/As=
+	t=1783497483; cv=none; b=QrfeE0d8bO/284uhZB4MEP27TVD3AT69cBP8dDVP13iAkhrOwAJ056ro7gjO0Vl4dyVl3m9kpDI0PXcY2OEziNg1HZTMpojqBU1T1ZwLVPlwnvReimj0gQ3RHFNBVHAqUJw3tUZIcb49W2xoeQnc727ZH9/Rmfcpl8smLWvfKRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783495427; c=relaxed/simple;
-	bh=tmNahjfoNoaAyHErBXtSPhq9R392O945ucHcRR+4bNY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BBL2OBqyMbpPsJMRLAmra9QDPc/B3RRI/+iNPTKGjFAVdH0dEd5nnd3aIVVehoAzdW42yVVpLZk2rfxbGV/p3Oqg9G6XK1qPJD0HghGOAX6/XlGFGdHHIcyvWBjYzROrbFOPQJZX7nMDgq4rfHfppXpbrBg7USD/gZiNmldHi68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=RQA3pUgZ; arc=none smtp.client-ip=117.135.210.3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
-	Content-Type; bh=tmNahjfoNoaAyHErBXtSPhq9R392O945ucHcRR+4bNY=;
-	b=RQA3pUgZdpEdf+tck1xQ/7+cXLHM5NjhqZ8nsPNaK+1U1XHiX+vfIEZNbX/1Px
-	a4F8cUuTdQcqIHmv8qj67r6GDKlDVQNMWq1v0RsSh4mr4JiOyTs7vpsy68SvQ+O2
-	eWoCXuKI38cnIxAvYEfN9m7Rtya0OSPnJWglJZawWAaDo=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp4 (Coremail) with SMTP id PygvCgB33inM+k1qRWDqGA--.62464S2;
-	Wed, 08 Jul 2026 15:22:53 +0800 (CST)
-From: Yang Xiuwei <yangxiuwei@kylinos.cn>
-To: john.g.garry@oracle.com
-Cc: James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	dlemoal@kernel.org,
-	linux-scsi@vger.kernel.org,
-	Yang Xiuwei <yangxiuwei@kylinos.cn>
-Subject: Re: [PATCH v2 1/3] scsi: sd: fix error handling in sd_probe() after large pool creation failure
-Date: Wed,  8 Jul 2026 15:22:49 +0800
-Message-Id: <20260708072249.264705-1-yangxiuwei@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <26757492-f9e0-49bf-bc77-4a6f3ae64276@oracle.com>
-References: <20260707030333.22245-1-yangxiuwei@kylinos.cn> <20260707030333.22245-2-yangxiuwei@kylinos.cn> <26757492-f9e0-49bf-bc77-4a6f3ae64276@oracle.com>
+	s=arc-20240116; t=1783497483; c=relaxed/simple;
+	bh=oHFrKOxs4d74venaBNt3pkoZJY6jbprN87xP+J56jZ4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=adoGEDuc1fpqP7ywEAO/fLJNT7vcgAmAgTUwwtfCWuZt3dQXVex2aCUub0/wKnsP/klbLvdqC9xEbpehTXITsdhp9UG2BCx+5EtR2PYy3jDxlZqaY8kBkCU9X6XNhd742yBIli2z2r1b90viZz4knK9Z1AK7tFTHQqs2F3xuPQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gtLUJyvi; arc=none smtp.client-ip=91.218.175.177
+Message-ID: <31718d0f-b170-41a4-8a3f-9d15582e98c8@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783497475;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mR4lfWo7GfjucSPv2Zh86OoqsbXdlAXQPR4Rl3VBAQU=;
+	b=gtLUJyvitG1d9WCXrxgFW2eRcIpSWAyBYObX8fyETCP+QkANN5jlNqGsmwvWm/ylnu5ZZm
+	bPqY/rMHFqDgQtihrc1dvq+empAlXgSzyX5/QJCKsYJr62nHMxaJxI7ahru2GY5usjns9z
+	hv+zh6MPUEdkyIO7Y+OEU3yhIh3m/N0=
+Date: Wed, 8 Jul 2026 08:57:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v2 1/3] scsi: sd: fix error handling in sd_probe() after
+ large pool creation failure
+To: Yang Xiuwei <yangxiuwei@kylinos.cn>, john.g.garry@oracle.com
+Cc: James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+ dlemoal@kernel.org, linux-scsi@vger.kernel.org
+References: <20260707030333.22245-1-yangxiuwei@kylinos.cn>
+ <20260707030333.22245-2-yangxiuwei@kylinos.cn>
+ <26757492-f9e0-49bf-bc77-4a6f3ae64276@oracle.com>
+ <20260708072249.264705-1-yangxiuwei@kylinos.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: John Garry <john.garry@linux.dev>
+In-Reply-To: <20260708072249.264705-1-yangxiuwei@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PygvCgB33inM+k1qRWDqGA--.62464S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrCw4rGr1xKr18KFykWF13CFg_yoWxXrcEkw
-	s3K3ykZw1agrsrWF1UAF4Yvrs5GFZ3urWqgrW5ur13tryDJ3y3WF4vk34fAw18tan7WFnx
-	Aw4DXrW7Cry5WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUjT5l7UUUUU==
-Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6g7fcGpN+s5ZwgAA3D
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:dlemoal@kernel.org,m:linux-scsi@vger.kernel.org,m:yangxiuwei@kylinos.cn,s:lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:yangxiuwei@kylinos.cn,m:john.g.garry@oracle.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:dlemoal@kernel.org,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[3];
+	FORGED_SENDER(0.00)[john.garry@linux.dev,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DMARC_NA(0.00)[kylinos.cn];
+	TAGGED_FROM(0.00)[bounces-25887-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[163.com:+];
-	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-25886-lists,linux-scsi=lfdr.de];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[john.garry@linux.dev,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.dev:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	RCPT_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:from_mime,linux.dev:dkim,linux.dev:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6F2FC722A99
+X-Rspamd-Queue-Id: B7955722DEC
 
-Hi John,
+On 7/8/26 08:22, Yang Xiuwei wrote:
+> On Wed, 08 Jul 2026, John Garry wrote:
+>> However, would it be simpler to always create this pool for LBS enabled
+>> (and not just when we probe some disk which has sector size > PAGE_SIZE)?
+> Yeah — same idea as sd_page_pool at init. sd_probe already has quite a
+> few error paths; I had a go at consolidating them in v1 but dropped it.
+> Moving the pool to init seems like a cleaner approach.
 
-On Wed, 08 Jul 2026, John Garry wrote:
-> However, would it be simpler to always create this pool for LBS enabled
-> (and not just when we probe some disk which has sector size > PAGE_SIZE)?
-
-Yeah — same idea as sd_page_pool at init. sd_probe already has quite a
-few error paths; I had a go at consolidating them in v1 but dropped it.
-Moving the pool to init seems like a cleaner approach.
-
-> On another topic, sd_large_page_pool_users does not need to be atomic as
-> it is always read/written under the mutex (so can be a regular int).
-
-Agreed on the atomic; an init-time pool would drop the users counter as
-well.
-
-Thanks,
-Yang Xiuwei
-
+Sure, but - as I said - it may waste memory if we (likely) have no disks 
+with sector size > page size. Maybe it's better as is (to alloc in probe 
+path).
 
