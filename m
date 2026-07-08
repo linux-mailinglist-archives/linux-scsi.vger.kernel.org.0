@@ -1,94 +1,94 @@
-Return-Path: <linux-scsi+bounces-25898-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25900-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id lH9vClWbTmoUQgIAu9opvQ
-	(envelope-from <linux-scsi+bounces-25898-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 20:47:49 +0200
+	id RNSmIbabTmpEQgIAu9opvQ
+	(envelope-from <linux-scsi+bounces-25900-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 20:49:26 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7788A729AE4
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 20:47:48 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7871E729B20
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 20:49:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=broadcom.com header.s=google header.b=KBcASSFE;
+	dkim=pass header.d=broadcom.com header.s=google header.b=BObftHDS;
 	dmarc=pass (policy=reject) header.from=broadcom.com;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25898-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25898-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25900-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25900-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 71825314233E
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2026 18:41:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7A83A3052127
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2026 18:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CFE34C954E;
-	Wed,  8 Jul 2026 18:40:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2A084D8D87;
+	Wed,  8 Jul 2026 18:40:43 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pl1-f227.google.com (mail-pl1-f227.google.com [209.85.214.227])
+Received: from mail-pj1-f100.google.com (mail-pj1-f100.google.com [209.85.216.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C354D2EC9
-	for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2026 18:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05D34D2EDC
+	for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2026 18:40:41 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783536040; cv=none; b=ECmhZauSQcKQSwNEZ9C7HA08SLwoFRQFPE9JFv1LTwI7ClfExuv5dOd0s0P7NgCqzd/7WOjb2fSCLAWN/DJw5kFJqNFhj5lcCFbWoKzDeeRnh8yij/D5It+gpN+jXOv6tcDqvtPrj106seiMQW723Pv5I5taCZmkyvCAhETdlIc=
+	t=1783536043; cv=none; b=ge5iSaTs5NTsxwvEmkpCk+m6BEcZNS4tZb4ysDDY+4Kilu9AFTVEEUmUqFfKyKHCHpd2abCJtdqJoKeYlTQ0HZYT8lsqb6Ybl52yZ7KR8Q/EDryJ2Cfar7dN5zj9LH42SPeEhaz63uujIWOpXWITFCdsPzowyOuIGabWOIN/7DQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783536040; c=relaxed/simple;
-	bh=bL6GZfx6UTubTcEzLyIqseMhoYZQbkuR7s1EzzNbf6c=;
+	s=arc-20240116; t=1783536043; c=relaxed/simple;
+	bh=FxnacupkGAFFNGuO564bT0u8EqaoKF1N8gEv5ghZeb4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r7sTvLc03PC+sD10jxi1vBgkPdrMBWpVsE6WyXCWqutnpoReJNyWjGDB1nuf/CFiy1924HDnyRIpoqxxN17Q/9oZgeBHBH0i4fU1Ua4jtjhbEaO1yYYizZy6ken/kLjTHZmpH2DFuFvtqOk4mIYn6qXFWnQypExSm8cfbTnUruM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=KBcASSFE; arc=none smtp.client-ip=209.85.214.227
-Received: by mail-pl1-f227.google.com with SMTP id d9443c01a7336-2c7cfa17fedso11571145ad.3
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2026 11:40:38 -0700 (PDT)
+	 MIME-Version; b=hqz1qio2yXqTlt5fSjqZ8rnzwMBWtLYt8FUWcWH2hHOxMZ/vJrQkDLawEiz4DubrKSfIBSBvfCze7au0Qf9cngF8AuCHXjFbZEX0Cd1KySYash1GoKOJhfpBQJo0ysI6hqWMmhmUdI47GGnAa1Z6mk3W5IXe/AYsYY0caMDzwt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=BObftHDS; arc=none smtp.client-ip=209.85.216.100
+Received: by mail-pj1-f100.google.com with SMTP id 98e67ed59e1d1-381065a7a03so772697a91.0
+        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2026 11:40:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783536038; x=1784140838;
+        d=1e100.net; s=20251104; t=1783536041; x=1784140841;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=uG/LgOddo79527I5ewTqybf625TfZNLE1GUR11MXTKk=;
-        b=XpgBP4LJLNvxBeviw/oKn7n6XXx14LCkQZhglnvZZH6NL/oQ9y0d4IbsvorxVX3+fd
-         c3i/WVW129Qb+/2aNEAhQrqvhUbzChV4YyEEHwSYrK4E3vk+Bz83x3EJQDwBMc1vip/L
-         zMgbVa+E9gK8a4XIXtRdpOSethVeWYVbqD6T8QgGpSs4sNbWXYHQ6wbEBo58JHFlAEnB
-         I6tcfHGEeOpQoODOcWwze3QSd8gxd91QZ5bWaInKX9/PpouYFBqOMfQnaN98kad0g7/1
-         hWAbC5MVoSBz0QRO7PZWNd+RzoPb6frqpAEBVN1431qPMZpTEF8h4Vgu860rII0j6lqX
-         Efew==
-X-Gm-Message-State: AOJu0YzadiV56IhqgEN/HGjSCAy5l4REYJoQRyRzqPvJs/OBaM9uDyKU
-	GJnkJ9KahlC37pisTR06Fry6woHXHXDCbIRBq0Flc8fjyeCHkWLaMXUR8Ul3QmYkaQoscTk/v+g
-	N5tIxzS1wY9PlHtLp6nVQSYFV752Gus7JeGSLMC655rkW6SyxUVkQc5haFnkFwUj/DyNgm/R5m/
-	STAzGAKEtajjylLYs/EaABeqr1s8NP7Tasz+5ZLbKgjTJ1+U7Sb7M0QFib/SfQ+7aWxdLNHBPBO
-	/bpsh30xQnhUArC
-X-Gm-Gg: AfdE7cmxB5s0XCsqqtA2OQtBKl7JTU/n0VtYHA7ESPIfTGkNl+3EpVq7Ua/6dYfO7ba
-	anEv05nn/93s7ThddZyiEmoBzVYxLPy6HTbDzCjcmGP3JGNl5IwKFUu5kEvDsRHRWl98wKbzOxR
-	OMM+2794/rAEnURGwjEqjUZIStdbi8qHf/1sblGBMhhASWui6DT7kCJLzOwfMEaVPlwRUXF8M0k
-	s4Tml/GKEHFSI0yMuOuY4LOoMhrjuivQjRKBIfrM+Vk84Au/APNPp8FVsLvoiU6gA90n5V10ZXk
-	FdQwnrbAocH2ptmJJ7V8HhoDfT3LGrQW815c9SBsyX227SokfssfgIOxuROXyBYUXcZj2FWsyE5
-	AK26xf0FVGASoMTILAYq3CDjZnZXrcAghXMSjUhR+UGzXbnAMsl87R1aFjkkD+lOcOGYOHbktTh
-	XPrM4iz6dRyFzZcyf/2BMQaqaInPASj9o3dAbUbn+QM+rMNw==
-X-Received: by 2002:a05:6a20:9595:b0:3bf:a9cb:b799 with SMTP id adf61e73a8af0-3c0bd2ea824mr4521529637.54.1783536037787;
-        Wed, 08 Jul 2026 11:40:37 -0700 (PDT)
+        bh=f1MU7/DIjSiGyXV69qvYwhTaKanYmHbp7hogHsvddaM=;
+        b=cAxUyQ7joVebeAzLRADzs1iPn0NA4j2hK6Gk0RPpPkzXczdH66yBR82vd/yQMk2Vhy
+         ouUv0utkiaqiGDtfDMNsnUJYPcLYq0x3K4eW36cLgRqfOnPuX7x+hxSIZrCbE9PjPAVs
+         5XEpt8zwkht+lRa2UBU4I/LalB/wSlxdfVYfoU1tncQ97WXWTgOiN3Au6CSkjI6nTmkl
+         mgMfa1EaSsPwa8+BBJlkNhiYyi0E89IRZ+iQyBFz/MnX9eIQFbRM6k/Z0ZdVJrbrtyvG
+         mbF3bxYwwJISDliK6Z81DYVUTK3Dqa2FOR9OffykYNQrocf4qNe83WeX0AKFbua1n6bx
+         mEVA==
+X-Gm-Message-State: AOJu0YwL09TFAMLfn8TSbH9dO3xztDaGVXKCQmIQZfJTcdtiTUga4rp5
+	EdFIE2rwMsyucB3BcQjRNRC0B447uw087LjXlNyThFnKd6JzJRrgVfSDwDn1ygH9bmUktrDDug+
+	+sdKCYWiJgxykPM/IBAtrOB856pX/eTH8OXc47HuKcYoN/HFJWGkPm8A/O+rCS4Hlm7EpLziBjn
+	ZCjZFvBdgS5lK+HGxQ/kFxzj/uuMwOQfaW1x3QkjeNaTl3uqWygoCDpCQ6Hzn8bwI/vKuBczKnN
+	2ck7tXrUJAjzaX8
+X-Gm-Gg: AfdE7ck/GtT/JaGTmn0vHG+xWsXGIbWEaiYYSACeIuM0HsdPm7CMto5vFkpvAATkVgS
+	Z1dfE+fI7w1R+CseL4JCMhGrHm+OzgL0JZelUy5RM4GARu42e+5KgZIjJcyEz50aKBtYIUFtesK
+	h3GydmsQcSh9WJW4U6p0LG7QDbq+GaQMkMAKQyiWkg1tO879ncfHfPh3j/sWQt4rGtXxwK2fBZL
+	PruqjWmX5bTM8je8SUG50ImlFJ9gP4XZcShN+8gAcMASZ+qBQ5wO1xDnuiPY9ZosBcW4d/yQUWB
+	jb5beVovYUGlIZQQsJeV3dIhRXhhU1ZEUGJXO7+8iG0mw1zPe5HLmsaniSsQhHGTbkCciivs/TC
+	9v0teG/62R2uG9jWNGN3IVs2fPD9qso9HGXubwdf7F6RvZIljgm+MczxsU+zWiRhq+Gdk/j2c/K
+	tOIYv5BXG4hBqHn368TP94wCbC8SGkIOHd7OBUSUW5lp2swQ==
+X-Received: by 2002:a17:90b:4cce:b0:37f:9ce0:af32 with SMTP id 98e67ed59e1d1-389421ac479mr4097760a91.29.1783536041111;
+        Wed, 08 Jul 2026 11:40:41 -0700 (PDT)
 Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-11.dlp.protect.broadcom.com. [144.49.247.11])
-        by smtp-relay.gmail.com with ESMTPS id 5a478bee46e88-31174a0ae6csm351476eec.18.2026.07.08.11.40.37
+        by smtp-relay.gmail.com with ESMTPS id 5a478bee46e88-311747f0a28sm339705eec.1.2026.07.08.11.40.40
         for <linux-scsi@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 08 Jul 2026 11:40:37 -0700 (PDT)
+        Wed, 08 Jul 2026 11:40:41 -0700 (PDT)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-c88fc985a65so1471227a12.2
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2026 11:40:36 -0700 (PDT)
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-c8952346bb9so852721a12.2
+        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2026 11:40:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1783536036; x=1784140836; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1783536039; x=1784140839; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=uG/LgOddo79527I5ewTqybf625TfZNLE1GUR11MXTKk=;
-        b=KBcASSFE6AYQpeBru8cXTsPbNOLxBQxh97PNb4bO4JFY9ijwVKCuHbI5UF6V+6lQNr
-         Kqjm12YNLmT5h8L+plFEpy4iYNvKbKbU8bfLD6q7ewCqlaqtuZbzEpFZpeNXxsVf/GEN
-         RN/OaJsAWAc6ETewK4WlaH2BbwpGyPwKhKUdc=
-X-Received: by 2002:a05:6a21:62c6:b0:398:837a:7af0 with SMTP id adf61e73a8af0-3c0bd04207cmr4167765637.30.1783536035784;
-        Wed, 08 Jul 2026 11:40:35 -0700 (PDT)
-X-Received: by 2002:a05:6a21:62c6:b0:398:837a:7af0 with SMTP id adf61e73a8af0-3c0bd04207cmr4167731637.30.1783536035200;
-        Wed, 08 Jul 2026 11:40:35 -0700 (PDT)
+        bh=f1MU7/DIjSiGyXV69qvYwhTaKanYmHbp7hogHsvddaM=;
+        b=BObftHDSpep9ZK/b6dlc3zmEuEjtJQqE0qxJWKo+1mukIoLV4svzhSttWx6H6Gkey+
+         w4Qq4Ea+I/3zLLwC1pDhBkK50+W7dEc7JnkrV27FVWpD2C1gWdtzhW6TN5OKnPlz9OM3
+         umxt00cZXhmtwhSa5QzPCzaUM1byxNDb9IHxQ=
+X-Received: by 2002:a05:6a21:62c8:b0:3c0:9c19:6596 with SMTP id adf61e73a8af0-3c0bd1a19e7mr4540025637.62.1783536039073;
+        Wed, 08 Jul 2026 11:40:39 -0700 (PDT)
+X-Received: by 2002:a05:6a21:62c8:b0:3c0:9c19:6596 with SMTP id adf61e73a8af0-3c0bd1a19e7mr4539993637.62.1783536038513;
+        Wed, 08 Jul 2026 11:40:38 -0700 (PDT)
 Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3117d847e17sm19820599eec.18.2026.07.08.11.40.32
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3117d847e17sm19820599eec.18.2026.07.08.11.40.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 11:40:34 -0700 (PDT)
+        Wed, 08 Jul 2026 11:40:38 -0700 (PDT)
 From: Ranjan Kumar <ranjan.kumar@broadcom.com>
 To: linux-scsi@vger.kernel.org,
 	martin.petersen@oracle.com
@@ -98,9 +98,9 @@ Cc: sathya.prakash@broadcom.com,
 	ipylypiv@google.com,
 	Ranjan Kumar <ranjan.kumar@broadcom.com>,
 	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH v2 04/10] mpi3mr: Fix NVMe page size caching for non-operational devices
-Date: Thu,  9 Jul 2026 00:02:59 +0530
-Message-ID: <20260708183305.244485-5-ranjan.kumar@broadcom.com>
+Subject: [PATCH v2 05/10] mpi3mr: Fix performance regression caused by extended IRQ poll sleep
+Date: Thu,  9 Jul 2026 00:03:00 +0530
+Message-ID: <20260708183305.244485-6-ranjan.kumar@broadcom.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260708183305.244485-1-ranjan.kumar@broadcom.com>
 References: <20260708183305.244485-1-ranjan.kumar@broadcom.com>
@@ -115,86 +115,145 @@ X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-7.66 / 15.00];
 	WHITELIST_DMARC(-7.00)[broadcom.com:D:+];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[broadcom.com,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[ranjan.kumar@broadcom.com,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-25898-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:linux-scsi@vger.kernel.org,m:martin.petersen@oracle.com,m:sathya.prakash@broadcom.com,m:chandrakanth.patil@broadcom.com,m:vishakhavc@google.com,m:ipylypiv@google.com,m:ranjan.kumar@broadcom.com,m:sashiko-bot@kernel.org,s:lists@lfdr.de];
-	DKIM_TRACE(0.00)[broadcom.com:+];
+	URIBL_MULTI_FAIL(0.00)[broadcom.com:server fail,sashiko.dev:server fail,vger.kernel.org:server fail,sin.lore.kernel.org:server fail];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ranjan.kumar@broadcom.com,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-25900-lists,linux-scsi=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,broadcom.com:from_mime,broadcom.com:email,broadcom.com:mid,broadcom.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,sashiko.dev:url];
+	FORGED_SENDER(0.00)[ranjan.kumar@broadcom.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,broadcom.com:from_mime,broadcom.com:email,broadcom.com:mid,broadcom.com:dkim,sashiko.dev:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:linux-scsi@vger.kernel.org,m:martin.petersen@oracle.com,m:sathya.prakash@broadcom.com,m:chandrakanth.patil@broadcom.com,m:vishakhavc@google.com,m:ipylypiv@google.com,m:ranjan.kumar@broadcom.com,m:sashiko-bot@kernel.org,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ranjan.kumar@broadcom.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[8];
 	ALIAS_RESOLVED(0.00)[];
+	DKIM_TRACE(0.00)[broadcom.com:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7788A729AE4
+X-Rspamd-Queue-Id: 7871E729B20
 
-For NVMe devices reported with an error access status,
-the cached PCIe page size may remain unset during device discovery.
-This causes management IOCTL validation to fail, preventing requests
-from reaching firmware and resulting in an incorrect error
-being returned to user space.
+Commit 24d7071d9645 ("scsi: mpi3mr: A performance fix") increased the
+threaded IRQ poll sleep range from 2-20 us to 20-21 us to work around a
+timer slack issue.
 
-Populate the page size attribute irrespective of device access status
-so that management IOCTLs are processed by firmware and the appropriate
-device-specific error is reported.
+On kernels unaffected by the timer slack issue, the longer sleep interval
+reduces reply queue processing efficiency and causes an approximately 7%
+throughput regression on NVMe direct-attached RAID10 configurations.
 
-Additionally, add bounds checking for the firmware-provided page_size.
-If the device is in an error state, the firmware might return invalid
-data. Unvalidated values could lead to undefined behavior or kernel
-panics during later bitwise shift operations. Fall back to a default
-page size of 4096 bytes (shift exponent 12) if the value is invalid.
+Restore the IRQ poll sleep range to 2-20 us to recover the lost
+throughput.
+
+Additionally, add missing dma_rmb() memory barriers in the admin and
+operational reply queue processing loops. This ensures that the descriptor
+payload is only read after the phase bit check is complete, preventing
+weakly ordered architectures from speculatively processing stale data.
 
 Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://sashiko.dev/#/patchset/20260626114109.43685-1-ranjan.kumar@broadcom.com?part=4
+Closes: https://sashiko.dev/#/patchset/20260626114109.43685-1-ranjan.kumar@broadcom.com?part=5
 Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 Signed-off-by: Ranjan Kumar <ranjan.kumar@broadcom.com>
 ---
- drivers/scsi/mpi3mr/mpi3mr_os.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/scsi/mpi3mr/mpi3mr.h    |  2 +-
+ drivers/scsi/mpi3mr/mpi3mr_fw.c | 27 ++++++++++++++++++++++++++-
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index d2a20f2721db..df7365d19b44 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -1354,12 +1354,14 @@ static void mpi3mr_update_tgtdev(struct mpi3mr_ioc *mrioc,
- 		tgtdev->dev_spec.pcie_inf.capb =
- 		    le32_to_cpu(pcieinf->capabilities);
- 		tgtdev->dev_spec.pcie_inf.mdts = MPI3MR_DEFAULT_MDTS;
--		/* 2^12 = 4096 */
--		tgtdev->dev_spec.pcie_inf.pgsz = 12;
-+		/* Validate firmware page size to prevent undefined shift behavior */
-+		if (pcieinf->page_size > 0 && pcieinf->page_size < 31)
-+			tgtdev->dev_spec.pcie_inf.pgsz = pcieinf->page_size;
-+		else
-+			tgtdev->dev_spec.pcie_inf.pgsz = 12; /* Default to 4096 (2^12) */
- 		if (dev_pg0->access_status == MPI3_DEVICE0_ASTATUS_NO_ERRORS) {
- 			tgtdev->dev_spec.pcie_inf.mdts =
- 			    le32_to_cpu(pcieinf->maximum_data_transfer_size);
--			tgtdev->dev_spec.pcie_inf.pgsz = pcieinf->page_size;
- 			tgtdev->dev_spec.pcie_inf.reset_to =
- 			    max_t(u8, pcieinf->controller_reset_to,
- 			     MPI3MR_INTADMCMD_TIMEOUT);
+diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
+index 1f2f0951b560..1d11d7c69536 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr.h
++++ b/drivers/scsi/mpi3mr/mpi3mr.h
+@@ -178,7 +178,7 @@ extern atomic64_t event_counter;
+ #define MPI3MR_DEFAULT_SDEV_QD	32
+ 
+ /* Definitions for Threaded IRQ poll*/
+-#define MPI3MR_IRQ_POLL_SLEEP			20
++#define MPI3MR_IRQ_POLL_SLEEP			2
+ #define MPI3MR_IRQ_POLL_TRIGGER_IOCOUNT		8
+ 
+ /* Definitions for the controller security status*/
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+index 434b66f7b502..2f787fa36ffd 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+@@ -473,6 +473,12 @@ int mpi3mr_process_admin_reply_q(struct mpi3mr_ioc *mrioc)
+ 		return 0;
+ 	}
+ 
++	/*
++	 * Ensure that the descriptor payload is read only after
++	 * the phase bit check is complete.
++	 */
++	dma_rmb();
++
+ 	do {
+ 		if (mrioc->unrecoverable || mrioc->io_admin_reset_sync)
+ 			break;
+@@ -493,6 +499,13 @@ int mpi3mr_process_admin_reply_q(struct mpi3mr_ioc *mrioc)
+ 		if ((le16_to_cpu(reply_desc->reply_flags) &
+ 		    MPI3_REPLY_DESCRIPT_FLAGS_PHASE_MASK) != exp_phase)
+ 			break;
++
++		/*
++		 * Ensure that the descriptor payload is read only after
++		 * the phase bit check is complete.
++		 */
++		dma_rmb();
++
+ 		if (threshold_comps == MPI3MR_THRESHOLD_REPLY_COUNT) {
+ 			writel(admin_reply_ci,
+ 			    &mrioc->sysif_regs->admin_reply_queue_ci);
+@@ -568,6 +581,12 @@ int mpi3mr_process_op_reply_q(struct mpi3mr_ioc *mrioc,
+ 		return 0;
+ 	}
+ 
++	/*
++	 * Ensure that the descriptor payload is read only after
++	 * the phase bit check is complete.
++	 */
++	dma_rmb();
++
+ 	do {
+ 		if (mrioc->unrecoverable || mrioc->io_admin_reset_sync)
+ 			break;
+@@ -594,6 +613,12 @@ int mpi3mr_process_op_reply_q(struct mpi3mr_ioc *mrioc,
+ 		if ((le16_to_cpu(reply_desc->reply_flags) &
+ 		    MPI3_REPLY_DESCRIPT_FLAGS_PHASE_MASK) != exp_phase)
+ 			break;
++
++		/*
++		 * Ensure that the descriptor payload is read only after
++		 * the phase bit check is complete.
++		 */
++		dma_rmb();
+ #ifndef CONFIG_PREEMPT_RT
+ 		/*
+ 		 * Exit completion loop to avoid CPU lockup
+@@ -744,7 +769,7 @@ static irqreturn_t mpi3mr_isr_poll(int irq, void *privdata)
+ 			    mpi3mr_process_op_reply_q(mrioc,
+ 				intr_info->op_reply_q);
+ 
+-		usleep_range(MPI3MR_IRQ_POLL_SLEEP, MPI3MR_IRQ_POLL_SLEEP + 1);
++		usleep_range(MPI3MR_IRQ_POLL_SLEEP, 10 * MPI3MR_IRQ_POLL_SLEEP);
+ 
+ 	} while (atomic_read(&intr_info->op_reply_q->pend_ios) &&
+ 	    (num_op_reply < mrioc->max_host_ios));
 -- 
 2.47.3
 
