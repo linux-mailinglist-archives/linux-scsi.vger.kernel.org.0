@@ -1,286 +1,300 @@
-Return-Path: <linux-scsi+bounces-25882-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25884-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ctYWAizwTWpmAQIAu9opvQ
-	(envelope-from <linux-scsi+bounces-25882-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 08:37:32 +0200
+	id +PRSEELyTWrSAQIAu9opvQ
+	(envelope-from <linux-scsi+bounces-25884-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 08:46:26 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A1CB7223B6
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 08:37:31 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8651F7224BE
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Jul 2026 08:46:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=oracle.com header.s=corp-2025-04-25 header.b=qZvP7g4a;
-	dkim=pass header.d=oracle.onmicrosoft.com header.s=selector2-oracle-onmicrosoft-com header.b=qRQqnWKz;
-	dmarc=pass (policy=reject) header.from=oracle.com;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25882-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25882-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	arc=reject ("cv is fail on i=2")
+	dkim=none;
+	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=huawei.com (policy=quarantine);
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25884-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25884-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 80B5630D8A28
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2026 06:31:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5D6DB30C78F9
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2026 06:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B993CF047;
-	Wed,  8 Jul 2026 06:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56593DA5B0;
+	Wed,  8 Jul 2026 06:38:44 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D3A3C2BB9
-	for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2026 06:30:16 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783492222; cv=fail; b=qoQ/1EiTQsUEHoKZSnY5e4ybPb8O+EEu3GYJnw2vv92y9eFv9BuQV2gsYuuNqwu0zjKnowrCZry+E/1/AFquRzkuMdVbY3lPP2Uu83fokcE9n6qSdrCdBcT2KpDUCwCH1F77xkBdfFZfh2Njtg4oAddEe2DyS4jY5IvnXYPz5Lk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783492222; c=relaxed/simple;
-	bh=KWzTaQZNDsziq7gMN5GmHjNIMoKTNS2UaToMwcVOt/I=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=o9ON3H1OuPMolFvHtNwb1IVvPCeQ/G2nRMuDS3TxxxyetpvbwPnjxHMbF9YTQ1O7D2wRs5F2S8P3kVSlJpuyBX8N9UB9Snflp0/R64MxyCMkvJjBj7GET8oXaVP9i6OG/0qpF5zKrC5ebTA3MhAjNRx1ravFjyQl/ekwKLjJgn0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=qZvP7g4a; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=qRQqnWKz; arc=fail smtp.client-ip=205.220.177.32
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 667JCD0K1636566;
-	Wed, 8 Jul 2026 06:30:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=4g99TPPTiZM6xJU7/TT2Iq928hsewUd2LenRyqx5FZ8=; b=
-	qZvP7g4a90IMCEXTMvkrAtmQh8DLr+95JSqYuZXZtIWy/BkdsfCWBZKGWEybSM0J
-	Nfyup3mkn274hsRGKMxC7T7oZHtYI0oCe/Zxdrua748RUsNVZH7x4fGbPem2R37l
-	WnhfxtqaIXFdBPOJohnfFPCHIb5LM/Q/7wJwyW0xEaqMacylRkilwSsEKsrbifAH
-	x2r4rJPJ8+vygXzl9XrpXkoLkea4RPUOXSzTE5UTQK6H3und8lq2Q2wlreZmMd0O
-	x5P+yglA/jeSNqyR3LV2zwWAOcLqP6x4LHQvw0XmvbkYprN++qPX6tCIqB56HQEI
-	f/hTnMmO8n9zKTm2atVSaA==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4f6t7cq0jr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Jul 2026 06:30:01 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 6686S7GT014709;
-	Wed, 8 Jul 2026 06:30:00 GMT
-Received: from byapr05cu005.outbound.protection.outlook.com (mail-westusazon11010056.outbound.protection.outlook.com [52.101.85.56])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4f6twjxywr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Jul 2026 06:30:00 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=brBo9yI9L103wa4PlZffkmwcgsG9XDO0p42/LpyEbvkwVb4WC6V68uT1gzms1Tu7r1nJwEytpvX2dZLJTn9KFtrhaOIKgN6CffIdRl5//X2r1louRnA/ZlRg6GeQERtgUgF9CjWshcJoHX2kx3jvZgV7NpKtzdF0wP29xYjCJLhLGvos3jtWPh33vsqEYPEuJ3wXbRfntGthbHeAoVZaPuoCWSyvV/nLS8sdwupjql9r9lbSkdHIcMFoFhDu4CLEpVG7kRv1wW6IuZ6lcPFhnueCpqdNwLV2UYySKn+eg64kI4UQsZoJ9u1rsMyudfgnb+D5IaCtz960eRT/5XiJoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4g99TPPTiZM6xJU7/TT2Iq928hsewUd2LenRyqx5FZ8=;
- b=YWeAj+vtegZ2qrGKq1dPfpKtfz7plap2lGDHhQvhg9HnFUVZS4bVq69sKM9pKqxtDPRzRI0MYozUT2bEl4KRc/35HzFXRjhGkSuGWLWvPZwlQxvD5OXELhmZTq0AmULdpRQ/HvIi2upddInioiuwS5Ufo0YerZsj6+KwTWFmXIgtHMIMy8e+ZCHkdEQB4XorOToEQz/erl7svtRbdYXYXCfoMjqndQFEwRZHDUXVYMs5mqvvgnX/qMJ8UVW4JuPEZUTEpKwHTCaXG/+3JODpyuhQNehpwjaDy+KKETOvIbrGaSGuJMcgmMMY0A6mdYiBZCCvrgP9zgymbtyIeu3sKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4g99TPPTiZM6xJU7/TT2Iq928hsewUd2LenRyqx5FZ8=;
- b=qRQqnWKzoMax2OKddPgJFmEX2+8ZZ7RPW+gryDqlanI8LF1EO80EFn9tT6vBTX0X6r45RB5NxaJzDWNsc7CnFc25a3eoLDGW+L+KMRhEdqknYMApOJEIXclCRK3fUoaeVurXQvbHp7u7JNPcNH24LMPndD9GqURIGK6785I6fzE=
-Received: from DM4PR10MB6229.namprd10.prod.outlook.com (2603:10b6:8:8c::12) by
- PH3PPF1D715CB68.namprd10.prod.outlook.com (2603:10b6:518:1::78d) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.14; Wed, 8 Jul
- 2026 06:29:50 +0000
-Received: from DM4PR10MB6229.namprd10.prod.outlook.com
- ([fe80::867:63e7:13fa:fa7d]) by DM4PR10MB6229.namprd10.prod.outlook.com
- ([fe80::867:63e7:13fa:fa7d%6]) with mapi id 15.21.0181.008; Wed, 8 Jul 2026
- 06:29:42 +0000
-Message-ID: <26757492-f9e0-49bf-bc77-4a6f3ae64276@oracle.com>
-Date: Wed, 8 Jul 2026 07:29:38 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] scsi: sd: fix error handling in sd_probe() after
- large pool creation failure
-To: Yang Xiuwei <yangxiuwei@kylinos.cn>, James.Bottomley@HansenPartnership.com,
-        martin.petersen@oracle.com
-Cc: dlemoal@kernel.org, linux-scsi@vger.kernel.org
-References: <20260707030333.22245-1-yangxiuwei@kylinos.cn>
- <20260707030333.22245-2-yangxiuwei@kylinos.cn>
-Content-Language: en-US
-From: John Garry <john.g.garry@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <20260707030333.22245-2-yangxiuwei@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO3P123CA0019.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:388::15) To DM4PR10MB6229.namprd10.prod.outlook.com
- (2603:10b6:8:8c::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E773DB64B;
+	Wed,  8 Jul 2026 06:38:40 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783492724; cv=none; b=A6BNma0xyKVi10LViQqybkPmRhHfGULPRYAMtIQhSNPEnS/NZo/mS/sNSmpLxLeS1VUOefUohupZiLt21acs3Qrmb+xbJYFFj0BsaB++tQ+kfJ56PrfbC5Q6hDrdCfQBgW1dJeo8uUZjMvVrGqaW2DBTXdIfKC3ze9xIPleuBkA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783492724; c=relaxed/simple;
+	bh=XnHptsupe31IfwuSGI2O5NgEIUMtzDrC2TUeEEvxXL8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RzBFKUH69JnHS8YZNcxHAlunYAV4c3ZI9c0GzzVs+DkdIuOp1XoCiv7dALbDh+tAibXIhn4z27jZZNQZtXtCBOU5wtP/HPH2oLu5L8HBYreHlB4aahpTrpM6NUUmXznaXjZno1V9gw6Yli/Bg/j30nLA2UScPk4O2Zf9LGKmMRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gw7hS6KJjzKHMLt;
+	Wed,  8 Jul 2026 14:38:16 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 6FD01405CA;
+	Wed,  8 Jul 2026 14:38:37 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.50.85.155])
+	by APP1 (Coremail) with UTF8SMTPSA id cCh0CgDH1nJo8E1qVSffAQ--.18674S4;
+	Wed, 08 Jul 2026 14:38:37 +0800 (CST)
+From: Yang Erkun <yangerkun@huawei.com>
+To: dgilbert@interlog.com,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com,
+	yukuai@kernel.org,
+	hch@lst.de,
+	axboe@kernel.dk
+Cc: linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	yangerkun@huawei.com
+Subject: [PATCH] scsi: sg: validate and round up scatter_elem_sz module parameter
+Date: Wed,  8 Jul 2026 14:30:45 +0800
+Message-ID: <20260708063045.2008478-1-yangerkun@huawei.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR10MB6229:EE_|PH3PPF1D715CB68:EE_
-X-MS-Office365-Filtering-Correlation-Id: bb367d66-d066-4f29-3d19-08dedcba4b79
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|1800799024|366016|56012099006|18002099003|22082099003|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	JKzwyzuEVyeNKxJeWYySIkc7Fyctd7XyqCmDVHkrYLN3TgLWs8nHKWXh5Q0sbLoC105u5cdolMtw7i7P8LlzZPF3kVessPHFue81RgEUnIi+1jpKaSr2734DA3AhxaWcG0q4lEnfwB3Y/SAEbivT2ki2VxQUjsaGsBn8wFN/ce+EbNgNGvhBd7HqJYQKrWUCJxf58GmxCmW1Qpu+KEBLdb6WWc/0R3J8u3IUydQFVXblqTW65DFaKoF1lY6nvQRsmyVba32dzBU7HzS7CjP2T8ojNAl+M4Pl4l5ksvqNEGXMAPEWxouCbWfqq/KLjLn5al8EutS/db1fPxp1LUJCexCc2U+5bMoxo893EmNsdAp2G6UuaDxMDFZc4lL2FeZlDXK5UXj3uqL0tcTrl6LUobOFMk7tOStKxxk8EisemnTKWdLYSqa0Y54oBA9yqskTujLnvUTjyZr5ias+VLvL0v/HEmoav8mzWYxYaSICl5GYUAcAe+4Ppe9kIWkO/IqtB8A1fwdok2cUZw7/aAQclKzTqyW3mdPb9UMjYqGxYKgxUwRzfq76Xbbr5m1HPfRgA7/BXWK/09pnwnOSgsKeLB/EfwpIEqLYFWkRql9CyYB4b5iUwX1+MY7Fv53BLY3+YbYLQ+IrITLigm2R8C2ooAw9eOpSr5/4/eSnPuenY7E=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB6229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(1800799024)(366016)(56012099006)(18002099003)(22082099003)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U2VuVGIvZHhNSThtSWZFU0R5WTVyc0dCZ1dxZWs0RVdQd2VqOUM1MUk2dXVm?=
- =?utf-8?B?QUdoR1VCVE1YZStucktHcm9MU0d0NlhjN2MwNjltQlRML0duR2tJZFZtTFZH?=
- =?utf-8?B?ODIvR0MxVnNzOEpsYXVCWlY5a3lXeUd2VUpFRUp0OHlUbm52OTNaK1dJRVVa?=
- =?utf-8?B?ZEVQTEZScitsUjNGbDJQb0plRmFWYlhYSDZNWVpjRzNwd0dlQThvaHQvUWVs?=
- =?utf-8?B?clE2c28wS1VHeCtMMm5qN08wZXJ3RUhoeXJHTXdzYWNRaHhSMks5eTZvby9P?=
- =?utf-8?B?clUwdUcxR2lNZ2U0YUpablJGa1hYWHMyaG0rSkJISkZ5NldGNDRFcFpnRS9E?=
- =?utf-8?B?S3gyZGRGQ2dWdGl1K1o2VzUydS8ybDBuMCtxNEtJUXVVMko5MnlORCszc3hk?=
- =?utf-8?B?SjV1M1pPWk96Z0dVS2RpdXdqemVUNDdjaGdmd0RLRUFCclFuZWdIM0dHSGN6?=
- =?utf-8?B?bkh5NDUrQi9sOVlVMVFkN2k3VGhPRnVvMTNyV3lEQmFnK3JLK2NYTTgyMGNj?=
- =?utf-8?B?ZysxQmdjMlVTYzRudVd1eFRlWWdGeVp0OC9ac0U5QUQvSmUvMFJhRkZpakRF?=
- =?utf-8?B?WTV0ZHFOcytvMU1DVXNaY2x1RTMrYVNUT0pvL1ZpRERUbmQ1SVBEamdjWW9Z?=
- =?utf-8?B?WFdCUlhxUWZ2bk9BSjZvZk1ON1ZqQzAzdmNObGYxR0ppSjRrWUF4NUc2S0Zx?=
- =?utf-8?B?WXU1aVRGaUlIQWVKQ2pMMnV3UllpaWR2WVFFdkxqcFdIYlQzaExnRDJ0QVhG?=
- =?utf-8?B?WVZHK3lWM3h2RTZIR1RNeU9NWE9ZcFgvSXdJUkN4WTJGTDJkRjA0Vmw0aVRs?=
- =?utf-8?B?SDB0bmI1alEvS3RGckZTdGF1WXNScEhpRzlMR1BTSU0wa3Yvd2JIUGh3Y1Q3?=
- =?utf-8?B?OE5nTnFBc1doYmlSaDdyZHB6WndOdDBzS25BcHpobGtGNXlaQlJPbXpvQlgr?=
- =?utf-8?B?dDlYbDNENFREWC9Obk4yY2pyK3V2eVBqTStuVDY3cnJFK09zUkxpc1N2Yy8z?=
- =?utf-8?B?Y2ozYzFnZzRkZEYxZjhTc0E2aHZFYVNxU0lvVWpOeTErTmp3SDBldTBJS1Bq?=
- =?utf-8?B?WVVDTnpRNWkzeFJlR3NiUGZ4d2RSTUllT1l5S05sWmFEL2N5SDVnczVybWdV?=
- =?utf-8?B?NWxjcmZwbUxUNnN2R003NnltampnbXVZYjA0TUMzZjAwSjJYY29UMjhIVnk4?=
- =?utf-8?B?RXNwYlQ2ZTB5b0N3K3JKb09aaWdGR0ZUaC9jRVZraHdRL040M091N1pFQXdx?=
- =?utf-8?B?M1Q4b0RZaS9yZ2l6TWJvWDY0KzhJUGxIZGtaWVNXVnpONmEyanBkV1VjM2No?=
- =?utf-8?B?UTFOTFhGVnZXRy9TUFBZMlFWVXZxZHdUdUNDL1ErSC9FVmt2YU15eExBUkxS?=
- =?utf-8?B?aDQ3RDVMQytHZTZUSWNNdzgvVVRnVUgwamxHQkRUZmJGck1BbUlYNkNZMU03?=
- =?utf-8?B?L1cyaGJRc0hZUzEvVUIwcUJXWk5sZVNpZURIK3RRZWFhL3RIZVdXM1pvT3FN?=
- =?utf-8?B?RExZTW52TC9KY1J0NVZrZ2hTVVBsTjZ3d3ZUU2J1djRRODVGTDM4ZG9FSDZF?=
- =?utf-8?B?M3hMVkxVdk5SMkpFUTJuQm1uemMyYWVnNWx4WmdKQjR0UjIycm1JNWdlZmE4?=
- =?utf-8?B?bVJWa1BUM0VETlBTMFREdXJXelZPS2R0T3lXS0VKREpFM0I0UjFBcU9JU0l5?=
- =?utf-8?B?Ykt1cTVGMTNwRFVyT1BFNEFvNlhpbHE4SzduZDg4cU1ocS8vMTVRelFqaTlq?=
- =?utf-8?B?bkIzb1RkY0RyUDRsdDZNUEZIWW1QZGUydzZJaTN6ZENXRUt3c0VIdlkwWjVZ?=
- =?utf-8?B?d2ZYTWhnK0lUWlVWZ0FSSEFBQnF3RWIxQUY3TG5uNzhjZ3Uza2hQYVdGTnE5?=
- =?utf-8?B?YktMWG1GbjY1emUxOU9hM0JQeFJxSDd4TFhzMXRqZzRLZktNb2lmbG9sbmFQ?=
- =?utf-8?B?YnkyOGtjR0VHeVIyNDVURUg1VFowdWxIdStxWnpRdm1hSjVmbCtOc1FHZDcy?=
- =?utf-8?B?OXNDNEpTdjZ0YVpFaCthUWdlVE94djhNdmNvVWlZYldFbnE0d3JQMUVJU0cx?=
- =?utf-8?B?QTJEOGRTM0dKT1ZqVGtkTzBOZEJQK1ArTTNGMDRySXMrcGp3TWJVNXFaeDFI?=
- =?utf-8?B?THY5VkZkMmpGaGZuVEZ5dmNqaGlzT2tJRm1zd3dkUi9ta0ZYcDEvZGhSVUZB?=
- =?utf-8?B?b0NITi9iU2ZadXlGN0hBSzVka1Q4ek5oaDVBdnVscXFnb0lJcm9PQWZDMlVa?=
- =?utf-8?B?UGlFcGk3djljQyt4a1hVVExYbGMvVFBZaHlWa3p1RzIzcmV3K2h3RHJYRG9s?=
- =?utf-8?B?cUtSbk90K0FYanlDOHc3amtvNmg5dGtvaUtmQjI5d00yN2ptQTd1QT09?=
-X-Exchange-RoutingPolicyChecked:
-	Ur4qlYHUpp3/fz2udbAjGYq7mmpvJ6ri+udOSh5Ap9zt8p6FEaD5eKCb/oICFhpHwOeselKVRKcgqygq+jgDGmZTR20rfqzOBYTfnU1fE+eJuQQSpqJTyfWSyOqIFtlCvVr5tzMDvRJBj8idFn8Bo9d9ceeKZiQEJP3Z//l2KXRbHqjD6+Tq28AGCTd8om4QHWvGLvcD3nTSan5vCqKEv6loKCyq0mrZbEFUWQ+vxFGVF6mpUGRXk0RW///6V0L3puAQRzz0N/86UVX/R9Ow9oHQ5ob10sxCIds0GmY1AaTbxKJDwR8t4j4yEiPpSvuYxVXyvdOkE0B0UlEN5Zzhqg==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	0R5PvckvfMuIV4stDS8P7lx8O3YGHWWHm9of/zavU9nKxWmfPpJSnYREPdOYHOxoZikVkhNrnN9Tr2JmwKCdte+sdM6qwpWrQvC28ah2BvJNeMpN9jVkYg5rukrYa1YARJE14OiJIku1G6w5xaNNjUmqdYzi4E418iw8YWc9meq803e7nxUJYDpOHb+Rfhg0uzAVUf4Z9Ffcuf1Y8Qt7ROJi26mqYzvitzZI5AEAWiMYbZEx4dfvDdgpZaNph8UyDIJOVAgg0/Qd6S4ecxlnp6NmAKcUC7ZUM96faHQnaN3yZ2bQQwvnHnvpybqRwWj0FsGQj5QOhFLXVRWl3kmIU9GiKJ29ci//yotcu4hEW0QWHgcwrgELbw/7P8tgjr0Ycl0bHTFEkctOlfr4OUgsp9FvuSV2CHy/xEHbrKye2djs6UWkC2+vSLM97XCkDOonyZ3Yfe+rdZFuy8y18jpeee8RyH1DgA6rpNrCgZm8PDY3/9IoAlWTbt/kQWSAqVw3iIjFYuhNaAneTuMZvS7ghjn+lW46ii70tW8jTs6EZYUEtjHrr8jjpI24gyHN9TA/ySB9WGtZmD9VOz7/eKrazNhgim5ZapP7kdVLiiG8Nc8=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb367d66-d066-4f29-3d19-08dedcba4b79
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB6229.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2026 06:29:42.4064
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8Ln95O0+P2eYrNNDpAx38wKbtu6FTlKr4ZLECnRfXwhk33qxreQJjsdboQh6BUAmM1UYIqjWjNMJEJ85FDLLLw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3PPF1D715CB68
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-07_06,2026-07-06_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- adultscore=0 suspectscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
- bulkscore=0 malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2606160000 definitions=main-2607080060
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA4MDA1OSBTYWx0ZWRfXxBx5oUwvzTr1
- e5RNdkJpb0nM8c0ZhwE67PN5i9IcFxjsIkJ1uPPxPgRyQ/sAFT/+1qcmPJrhHU1drhMe0LZbTEO
- i9G117tPrNT6qlhDlWQhaL1M5MfWb3rPir/iZstwGHEWnHQCCGxHdf/qq6T78UTehSa6FqOzzQv
- c1TEMZtiQaxe56yV9Kli4rffmDndhFUYg/kAGAKyW1pkPvmOiFNmrmZejvR0U2fC8ZbB6wVh7LI
- nxPkf27lBtVhXGmouDgiD0KSs7OrwEu7bfg6rZp+fJFFfbT815/UtVJm2SAvSQvBBEaRtAlDEvd
- FSeK0/wEPwUCnH5+5iyxMHjH/OLooKpdji0bnOWzyGEHLAVC5W/p2+Fpzg91AR4WZBuq4WXacvZ
- ICQFKrHP/xJdIoNsPYNBNOt2F9hCGZqvSPuytzoio4DEfk6TcJ6euhDk6yqpGeMD3ZDuGiGdhiy
- LrVpmr4puc8Q/FTDPwA==
-X-Authority-Analysis: v=2.4 cv=P+QKQCAu c=1 sm=1 tr=0 ts=6a4dee69 cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=RAioF0-LDSMA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=BqU2WV_vvsyTyxaotp0D:22 a=VwQbUJbxAAAA:8
- a=yPCof4ZbAAAA:8 a=KTYrAC8X6tAVWB8hNSQA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 2_oQFV-jpwm3q45-2TcDJW1gfW1WCruF
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA4MDA1OSBTYWx0ZWRfX5PIBz++hRAQn
- nkop8wfqkniTKXfdTI0G4njrB95AO/XU8HyPoQxwjWoDIZy+3jiH2K+i7zhd1YK8t43RVRRM1JD
- v8axMee3WaSOaW6iStvLSIsjKOJgchR6P1U0P2KJYMKPtKhnWDLI
-X-Proofpoint-ORIG-GUID: 2_oQFV-jpwm3q45-2TcDJW1gfW1WCruF
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgDH1nJo8E1qVSffAQ--.18674S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxKr4rXr1UWr1DXw43GF1Utrb_yoW7Kr1DpF
+	WfJFW29rWrGr12qwsrXr4UKrn09as5K345uF92qw1a93s8Jwn8uF1UAFWYqFy5Jr95GrWk
+	KFWDZ3Wru342ka7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7
+	CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY
+	0x0EwIxGrwCF04k20xvEw4C26cxK6c8Ij28IcwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+	026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+	Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+	vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE
+	14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU1nYFJUUUUU==
+Sender: yangerkun@huaweicloud.com
+X-CM-SenderInfo: 51dqwvhunx0q5kxd4v5lfo033gof0z/
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-7.16 / 15.00];
-	WHITELIST_DMARC(-7.00)[oracle.com:D:+];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
+X-Spamd-Result: default: False [1.54 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25882-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:yangxiuwei@kylinos.cn,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:dlemoal@kernel.org,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	HAS_ORG_HEADER(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oracle.com:from_mime,oracle.com:email,oracle.com:mid,oracle.com:dkim];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
+	TAGGED_FROM(0.00)[bounces-25884-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	FORGED_RECIPIENTS(0.00)[m:dgilbert@interlog.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:yukuai@kernel.org,m:hch@lst.de,m:axboe@kernel.dk,m:linux-scsi@vger.kernel.org,m:linux-block@vger.kernel.org,m:yangerkun@huawei.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[yangerkun@huawei.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yangerkun@huawei.com,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	R_DKIM_NA(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MIME_TRACE(0.00)[0:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_SEVEN(0.00)[9]
+	PRECEDENCE_BULK(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:from_mime,huawei.com:email,huawei.com:mid,vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5A1CB7223B6
+X-Rspamd-Queue-Id: 8651F7224BE
 
-On 07/07/2026 04:03, Yang Xiuwei wrote:
-> After device_add(&sdkp->disk_dev) succeeds, sd_large_pool_create()
-> failure must unregister disk_dev and let scsi_disk_release() free
-> sdkp. Going through out_free_index kfree()s an already registered
-> device and leaks the sysfs entry.
-> 
-> Fixes: 7179e626b76e ("scsi: sd: Enable sector size > PAGE_SIZE in SCSI sd driver")
-> Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+echo -1 or 0 > /sys/module/sg/parameters/scatter_elem_sz
+exec 4<> /dev/sg0
 
-This is the same as I sent:
+The preferred shell trigger following UBSAN warning:
 
-Reviewed-by: John Garry <john.g.garry@oracle.com>
+UBSAN: shift-out-of-bounds in drivers/scsi/sg.c:1888:13
+shift exponent 64 is too large for 32-bit type 'int'
+....
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x64/0x80
+ __ubsan_handle_shift_out_of_bounds+0x1d1/0x380
+ sg_build_indirect.cold+0x38/0x4b
+ sg_build_reserve+0x59/0x90
+ sg_add_sfp+0x151/0x240
+ sg_open+0x169/0x310
+ chrdev_open+0xbe/0x240
+ do_dentry_open+0x121/0x480
+ vfs_open+0x2e/0xf0
+ do_open+0x265/0x400
+ path_openat+0x110/0x2b0
+ do_file_open+0xe4/0x1a0
+ do_sys_openat2+0x7f/0xe0
+ __x64_sys_openat+0x56/0xa0
+ do_syscall_64+0xf5/0x640
+ entry_SYSCALL_64_after_hwframe+0x76/0x7e
 
-However, would it be simpler to always create this pool for LBS enabled 
-(and not just when we probe some disk which has sector size > PAGE_SIZE)?
+The scatter_elem_sz module parameter currently lacks validation. Setting
+it to -1/0 causes a left shift overflow in sg_build_indirect. Although
+this overflow does not currently cause other problem, allowing
+scatter_elem_sz to be set to -1/0 is not appropriate given its intended
+purpose. Therefore, this patch uses module_param_call to add validation
+checks.
 
-We only get LBS when we have THP, so not always. And we would waste 2x 
-64K pages. But at least the code would be simpler.
+Additionally, the code handling scatter_elem_sz is refactored for
+clarity: the scatter_elem_sz_prev variable and the runtime fixup logic
+in sg_build_indirect() are removed. The entry fixup (syncing
+scatter_elem_sz_prev to scatter_elem_sz) was fragile -- it updated
+scatter_elem_sz_prev but not the local variable "num", which is the
+exact source of the UBSAN warning. The in-loop fixup (updating
+scatter_elem_sz to ret_sz when ret_sz > scatter_elem_sz_prev) is no
+longer needed because the .set callback rounds up scatter_elem_sz to a
+power-of-two multiple of PAGE_SIZE, making it always equal to ret_sz.
+The init_sg boot-time clamp is also removed as SG_SCATTER_SZ (32768)
+is always >= PAGE_SIZE.
 
-On another topic, sd_large_page_pool_users does not need to be atomic as 
-it is always read/written under the mutex (so can be a regular int).
+Fixes: 6460e75a104d ("[SCSI] sg: fixes for large page_size")
+Signed-off-by: Yang Erkun <yangerkun@huawei.com>
+---
+ drivers/scsi/sg.c | 68 +++++++++++++++++++++++------------------------
+ 1 file changed, 34 insertions(+), 34 deletions(-)
 
-
-> Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
-> ---
->   drivers/scsi/sd.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-> index 599e75f33334..d18693d390b2 100644
-> --- a/drivers/scsi/sd.c
-> +++ b/drivers/scsi/sd.c
-> @@ -4089,7 +4089,9 @@ static int sd_probe(struct scsi_device *sdp)
->   	if (sdp->sector_size > PAGE_SIZE) {
->   		if (sd_large_pool_create()) {
->   			error = -ENOMEM;
-> -			goto out_free_index;
-> +			device_unregister(&sdkp->disk_dev);
-> +			put_disk(gd);
-> +			goto out;
->   		}
->   	}
->   
+diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+index 74cd4e8a61c2..377c3e1dee7f 100644
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -92,7 +92,6 @@ static int def_reserved_size = SG_DEF_RESERVED_SIZE;
+ static int sg_allow_dio = SG_ALLOW_DIO_DEF;
+ 
+ static int scatter_elem_sz = SG_SCATTER_SZ;
+-static int scatter_elem_sz_prev = SG_SCATTER_SZ;
+ 
+ #define SG_SECTOR_SZ 512
+ 
+@@ -1622,8 +1621,34 @@ sg_remove_device(struct device *cl_dev)
+ 	kref_put(&sdp->d_ref, sg_device_destroy);
+ }
+ 
+-module_param_named(scatter_elem_sz, scatter_elem_sz, int, S_IRUGO | S_IWUSR);
+-module_param_named(allow_dio, sg_allow_dio, int, S_IRUGO | S_IWUSR);
++static int scatter_elem_sz_set(const char *val, const struct kernel_param *kp)
++{
++	int ret, new_val, order;
++
++	ret = kstrtoint(val, 0, &new_val);
++	if (ret)
++		return ret;
++
++	if (new_val <= 0) {
++		pr_err("sg: scatter_elem_sz must be positive, got %d\n", new_val);
++		return -EINVAL;
++	}
++
++	order = get_order(new_val);
++	if (order > MAX_PAGE_ORDER) {
++		pr_err("sg: scatter_elem_sz too large (order %d > MAX_PAGE_ORDER %d)\n",
++			order, MAX_PAGE_ORDER);
++		return -EINVAL;
++	}
++
++	scatter_elem_sz = 1 << (PAGE_SHIFT + order);
++	return 0;
++}
++
++module_param_call(scatter_elem_sz, scatter_elem_sz_set, param_get_int,
++		  &scatter_elem_sz, 0644);
++
++module_param_named(allow_dio, sg_allow_dio, int, 0644);
+ 
+ static int def_reserved_size_set(const char *val, const struct kernel_param *kp)
+ {
+@@ -1649,8 +1674,7 @@ static const struct kernel_param_ops def_reserved_size_ops = {
+ 	.get	= param_get_int,
+ };
+ 
+-module_param_cb(def_reserved_size, &def_reserved_size_ops, &def_reserved_size,
+-		   S_IRUGO | S_IWUSR);
++module_param_cb(def_reserved_size, &def_reserved_size_ops, &def_reserved_size, 0644);
+ 
+ MODULE_AUTHOR("Douglas Gilbert");
+ MODULE_DESCRIPTION("SCSI generic (sg) driver");
+@@ -1668,11 +1692,6 @@ init_sg(void)
+ {
+ 	int rc;
+ 
+-	if (scatter_elem_sz < PAGE_SIZE) {
+-		scatter_elem_sz = PAGE_SIZE;
+-		scatter_elem_sz_prev = scatter_elem_sz;
+-	}
+-
+ 	rc = register_chrdev_region(MKDEV(SCSI_GENERIC_MAJOR, 0), 
+ 				    SG_MAX_DEVS, "sg");
+ 	if (rc)
+@@ -1854,9 +1873,10 @@ sg_build_sgat(Sg_scatter_hold * schp, const Sg_fd * sfp, int tablesize)
+ static int
+ sg_build_indirect(Sg_scatter_hold * schp, Sg_fd * sfp, int buff_size)
+ {
+-	int ret_sz = 0, i, k, rem_sz, num, mx_sc_elems;
++	int ret_sz = 0, i, k, rem_sz, mx_sc_elems;
+ 	int sg_tablesize = sfp->parentdp->sg_tablesize;
+ 	int blk_size = buff_size, order;
++	int elem_sz = scatter_elem_sz;
+ 	gfp_t gfp_mask = GFP_ATOMIC | __GFP_COMP | __GFP_NOWARN | __GFP_ZERO;
+ 
+ 	if (blk_size < 0)
+@@ -1874,39 +1894,19 @@ sg_build_indirect(Sg_scatter_hold * schp, Sg_fd * sfp, int buff_size)
+ 	if (mx_sc_elems < 0)
+ 		return mx_sc_elems;	/* most likely -ENOMEM */
+ 
+-	num = scatter_elem_sz;
+-	if (unlikely(num != scatter_elem_sz_prev)) {
+-		if (num < PAGE_SIZE) {
+-			scatter_elem_sz = PAGE_SIZE;
+-			scatter_elem_sz_prev = PAGE_SIZE;
+-		} else
+-			scatter_elem_sz_prev = num;
+-	}
+-
+-	order = get_order(num);
++	order = get_order(elem_sz);
+ retry:
+ 	ret_sz = 1 << (PAGE_SHIFT + order);
+ 
+ 	for (k = 0, rem_sz = blk_size; rem_sz > 0 && k < mx_sc_elems;
+ 	     k++, rem_sz -= ret_sz) {
+-
+-		num = (rem_sz > scatter_elem_sz_prev) ?
+-			scatter_elem_sz_prev : rem_sz;
+-
+ 		schp->pages[k] = alloc_pages(gfp_mask, order);
+ 		if (!schp->pages[k])
+ 			goto out;
+ 
+-		if (num == scatter_elem_sz_prev) {
+-			if (unlikely(ret_sz > scatter_elem_sz_prev)) {
+-				scatter_elem_sz = ret_sz;
+-				scatter_elem_sz_prev = ret_sz;
+-			}
+-		}
+-
+ 		SCSI_LOG_TIMEOUT(5, sg_printk(KERN_INFO, sfp->parentdp,
+-				 "sg_build_indirect: k=%d, num=%d, ret_sz=%d\n",
+-				 k, num, ret_sz));
++				 "%s: k=%d, ret_sz=%d\n",
++				 __func__, k, ret_sz));
+ 	}		/* end of for loop */
+ 
+ 	schp->page_order = order;
+-- 
+2.52.0
 
 
