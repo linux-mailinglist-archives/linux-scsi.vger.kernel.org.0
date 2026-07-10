@@ -1,250 +1,188 @@
-Return-Path: <linux-scsi+bounces-25947-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25948-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id go13HWxdUGr9xQIAu9opvQ
-	(envelope-from <linux-scsi+bounces-25947-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2026 04:48:12 +0200
+	id NVXYHCF+UGoS0AIAu9opvQ
+	(envelope-from <linux-scsi+bounces-25948-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2026 07:07:45 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0CA6736C60
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2026 04:48:11 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 599037373BA
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2026 07:07:44 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=XTC5lGn2;
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25947-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25947-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=DSF7xmFe;
+	dmarc=pass (policy=none) header.from=gmail.com;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25948-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25948-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 26E8F302C92A
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2026 02:43:52 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id BB460300E68D
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2026 05:07:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723A48248B;
-	Fri, 10 Jul 2026 02:43:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E24E026A1C4;
+	Fri, 10 Jul 2026 05:06:58 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35B2725B0B6
-	for <linux-scsi@vger.kernel.org>; Fri, 10 Jul 2026 02:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A3A33750DC
+	for <linux-scsi@vger.kernel.org>; Fri, 10 Jul 2026 05:06:56 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783651431; cv=none; b=OHYJij6UyhixEkhbLV8Mj6ekkJ4V1rcWD31C7HTQ0/HuqFXMkK4Yy+rGm/x7R0CPeerzVxn0MGfc0G39GolHAXjXr90Nuw3zHCdkoHKvqFj2wwPDxe6NOjUROSHOilsQmoEdQq9VMHFyww9a65brz1THhv+YYZvioF8INSa2bLo=
+	t=1783660018; cv=none; b=iyyp0yqkoicI8RzM0V/PyCA45mkCjP+MGD0d5hNTwZfVXmzT/wt/LJPTuWvhS5z1nxfldRCifJQfWERzA9mTRjjrHZjiiDKSTIMvWH3aI13WXwPPrCO/RfoTsy/Y9fO4YjyfJI2QovV9Jo+KA1OXE2LBKN2kzyCPDP2qVAhIAiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783651431; c=relaxed/simple;
-	bh=XMuR5U5EBxNsCW3SvMVkoAKkaUYKLtNRsD5S4WR5eRA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sIxqlYBWqcQYlbNgj20bDDLZv4PqpXFkGaFrKlhsrhTupXTxW8eEQ+Ds5bz9TIvLZWAjJnWJJTSNsIa9dKAUV4h+6cOiiuCXsUvFRk1DswxlGosUBbBTujaF+G7jojxgDq08565fsvEuuqyb7MiyAwInvqZbxFZpCUPglV76iIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XTC5lGn2; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACECB1F000E9;
-	Fri, 10 Jul 2026 02:43:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783651429;
-	bh=1qH3VHClzGZEceAVrlr+3DluwzfS2ApKRsGhaHAUqeQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XTC5lGn2FeceBOf7isBCaHZlIuBNImR2usnZSraYZNbnq7Uapm/VpRUL3ebNV8hEy
-	 E03gSqDYIpz4YRrw4Wz7wBiJTlR3IQaq0Umicoq0NNOHPHVFR/Lld6f4l41Gu0el4L
-	 lgmztGhYhvV6VUJMOVfMZ/9d7nawU0ezdEnIUbg99HCOndzNJGwZubUwKqzaG69wPh
-	 W3mrypnvs+oQGJopsbMeoP0MOWyFrO/piMrqSSowVXLjPuSWDpRMiN7W6Hn5xF5WNP
-	 eXUbJcx3zmKWyZJGal0ieQriTqlgjJejCXjZXv1lSq41BHKZvaCWWoAUBl4e+ukLu4
-	 yuYG2gH15FcIA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] scsi: lpfc: add KUnit coverage for EDC descriptor
- bounds
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Michael Bommarito" <michael.bommarito@gmail.com>
-Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260710022932.3741311-3-michael.bommarito@gmail.com>
-References: <20260710022932.3741311-1-michael.bommarito@gmail.com>
- <20260710022932.3741311-3-michael.bommarito@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 10 Jul 2026 02:43:49 +0000
-Message-Id: <20260710024349.ACECB1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1783660018; c=relaxed/simple;
+	bh=CBxJGxNLXTZa+4GkCgJgl7hIUuvDLwrTMXiLlOdjvAs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K72lmKTvdCXaSSvzRxrb9cI5IMIhKADixFkGLLthjZqgyc4VPXtfFsEaK484lnhJTuEB6kIDHHHbpYwqrj4+S2b6HAVC37yIbInCdiV+jrMkS6qIsmQRJAzsymGbsVWfAu0VZiDR1oODc4xfh+WXM+gJ0aCwh0s6UQuCOoWOl8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DSF7xmFe; arc=none smtp.client-ip=209.85.214.179
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cacd69a9c0so4543155ad.1
+        for <linux-scsi@vger.kernel.org>; Thu, 09 Jul 2026 22:06:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783660015; x=1784264815; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pWNfAMp36IVbKDCLkOUVS83/PLFc14nRvYbSDKyBhWs=;
+        b=DSF7xmFeZ5CcUAKKkxU/UUwQgeytF1puvc+y66yAGfImBexwrFVsV82O3dZqCDmPp0
+         SPm+UP/KlmRqHKeQRVvcVN5sjYX/sI49a5p9eQhZA3c68NmncnA0rsQwwmtYFsKj2hIg
+         3LWrjyCA/tMZU/p9jycIjrjYMi63D+15r3T44V01bHSQ//yHlJ+bBb9Tu7Kx1HTXtL59
+         2HMFFplBIboY9gMRaOFzp8+8sDkxKxpK7lkLg1Owh8EVHEvztI7ek8GP9mQlRQsHHf/q
+         l+HtnjDgs84KNMhwdTPpUgVW7If3DoOfVDCCXn5JQvSaJ2YvRlfr4UsjjEU/ve/YhJuu
+         YOxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783660015; x=1784264815;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pWNfAMp36IVbKDCLkOUVS83/PLFc14nRvYbSDKyBhWs=;
+        b=FSdYw2EoDh4xIDfk+N6m2X1zlj521HWCuFOijOs4o4lgdpxcJNmPRSIJlg5ywoNGLg
+         K9sY7qg/shAd09h5W2Z52TM9eneZs2bDryirhK/dHtlFcqCFD4MG815tZxN6aInQOba4
+         1JCTSjekuQrRN1pF9TUWvIqBPbmbGxvD3JlbAZcJjq1wgDDwgUXUre3t4Dj7UT0csneO
+         eiDsFNbI3iDOszrbbKy7lzEVGRPf3Xxv9y5RoADBhWpnWBJKOsCeknSTEjd9ZjFkZFMo
+         5oG5nvvpSAz4ZoIJqRuFW5qHBVpTLlKF1bty0+YPkVZNx9Ut3Z7IBzMZKZAq0axiUa+D
+         uI3A==
+X-Forwarded-Encrypted: i=1; AHgh+Rq8aAGAocjZN4AMzZBF6w0WXTuJcnSCv5OX5mXGiCZT6tIVYDM6/wXlL/uBFXajmoaE+ivKikrMfm2a@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4pmDk5t0guNzknqknNbHjBxqnEX+M++gr+htUAR4gPCGv159r
+	w7E4QKkXUXg2IPkz9sEXU1JvKxM2pBj5vCcRHjgn1r6t+iL7pdJ4McyN
+X-Gm-Gg: AfdE7ckKF8OzCD1qh0x73RXblGDiX5SypwjEeLrcEPkBIRy/CXh9KOOz6Hbzygdv2HS
+	Ds/Nv7+qO9sDBQRBWL9VJ/RIgZ4G+5IK0XzP+B/ecwM3BL8f+GNqfntZUKokqvCxA6jDUg9jlGg
+	fxAmqP+Piu/5j9dC9ZvYBo0cU4aVS+Yrr02wB51hwDaZbgSSjrhgNcxURzaQDP5qFjhf/zMk35F
+	77Adq2QQIm9Kc0JOi7Z2gsqC08JzdlpsywLWjCa0N23DF4niGajRzM5VANa2rq5gdf2w/Jxx3fS
+	OeRUWJV/u2zEbnsB9TDP46U1Y63YbZcvxzTWo7PAIKBNS7QVUwJUreU/7bXyZRSeFleERbVkUdF
+	K8p+irP44kCfndhuZWupR3ZnS+YGhDuMtIq2nFhs9KtLQo8YB0N5s8VzyKFKjJSYS50jHUR2LXu
+	HVkvCHTULz1s5Z6MS+Xd5sLEYrji1RVj/duaN6cvyunMu7kbfwkL/K0zlWLRYAtEsYxMCh2z6zU
+	RyfUlKHLyp+HusU
+X-Received: by 2002:a17:903:110f:b0:2c9:bd64:8c8b with SMTP id d9443c01a7336-2ccea40dd61mr109250695ad.31.1783660015427;
+        Thu, 09 Jul 2026 22:06:55 -0700 (PDT)
+Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d3c99fsm53688015ad.68.2026.07.09.22.06.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2026 22:06:54 -0700 (PDT)
+From: HyeongJun An <sammiee5311@gmail.com>
+To: Mike Christie <michael.christie@oracle.com>,
+	Lee Duncan <lduncan@suse.com>,
+	Chris Leech <cleech@redhat.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	open-iscsi@googlegroups.com,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	HyeongJun An <sammiee5311@gmail.com>
+Subject: [PATCH] scsi: libiscsi_tcp: bound SCSI Response data segment to the connection buffer
+Date: Fri, 10 Jul 2026 14:06:45 +0900
+Message-ID: <20260710050645.1194212-1-sammiee5311@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25947-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:michael.bommarito@gmail.com,m:linux-scsi@vger.kernel.org,m:michaelbommarito@gmail.com,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[HansenPartnership.com,googlegroups.com,vger.kernel.org,gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-25948-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ALIAS_RESOLVED(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:michael.christie@oracle.com,m:lduncan@suse.com,m:cleech@redhat.com,m:martin.petersen@oracle.com,m:James.Bottomley@HansenPartnership.com,m:open-iscsi@googlegroups.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:sammiee5311@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[sammiee5311@gmail.com,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_NO_DN(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[sammiee5311@gmail.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,lists.linux.dev:replyto,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,smtp.kernel.org:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C0CA6736C60
+X-Rspamd-Queue-Id: 599037373BA
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+iscsi_tcp_hdr_dissect() receives the data segment of several PDU types
+into the fixed-size conn->data buffer, which is allocated for
+ISCSI_DEF_MAX_RECV_SEG_LEN (8192) bytes.  For the LOGIN_RSP, TEXT_RSP,
+REJECT and ASYNC_EVENT opcodes the dissect path already rejects a PDU
+whose DataSegmentLength exceeds that buffer.
 
-New issues:
-- [Medium] The KUnit test leaks memory pools if an assertion fails because =
-cleanup is deferred instead of registered with KUnit.
-- [Medium] The KUnit test uses an uninitialized `ndlp` node, causing the te=
-st to silently abort early and mask a missing mock function crash.
+The SCSI Command Response (ISCSI_OP_SCSI_CMD_RSP) path also copies its
+data segment (sense/response data) into conn->data via
+iscsi_tcp_data_recv_prep(), but it does so without the same check.  The
+only upstream bound on in.datalen is conn->max_recv_dlength, the
+initiator's advertised MaxRecvDataSegmentLength, which is commonly
+negotiated well above 8192 (open-iscsi defaults to 262144).  A target
+that returns a SCSI Response with a DataSegmentLength between 8193 and
+max_recv_dlength therefore overflows the 8192-byte conn->data buffer.
 
-Pre-existing issues:
-- [High] Missing bounds check for unknown EDC diagnostic descriptors allows=
- an underflow of `bytes_remain`, leading to an out-of-bounds memory read or=
- infinite loop.
---
+Apply the same bound used by the sibling opcodes before handing the
+data segment to conn->data.
 
---- Patch [2]: [PATCH 2/2] scsi: lpfc: add KUnit coverage for EDC descripto=
-r bounds ---
-commit dd6d0b3cfc06c72b1e47a15c2af79c7992a6552f
-Author: Michael Bommarito <michael.bommarito@gmail.com>
+Fixes: a081c13e39b5 ("[SCSI] iscsi_tcp: split module into lib and lld")
+Assisted-by: Claude:claude-opus-4-8
+Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
+---
+ drivers/scsi/libiscsi_tcp.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-scsi: lpfc: add KUnit coverage for EDC descriptor bounds
+diff --git a/drivers/scsi/libiscsi_tcp.c b/drivers/scsi/libiscsi_tcp.c
+index e90805ba868f..790d11ec00bc 100644
+--- a/drivers/scsi/libiscsi_tcp.c
++++ b/drivers/scsi/libiscsi_tcp.c
+@@ -753,6 +753,18 @@ iscsi_tcp_hdr_dissect(struct iscsi_conn *conn, struct iscsi_hdr *hdr)
+ 		spin_unlock(&conn->session->back_lock);
+ 		break;
+ 	case ISCSI_OP_SCSI_CMD_RSP:
++		/*
++		 * Sense/response data is received into conn->data, so bound
++		 * it to that buffer like the responses handled below.
++		 */
++		if (tcp_conn->in.datalen > ISCSI_DEF_MAX_RECV_SEG_LEN) {
++			iscsi_conn_printk(KERN_ERR, conn,
++					  "iscsi_tcp: received buffer of len %u but conn buffer is only %u (opcode %0x)\n",
++					  tcp_conn->in.datalen,
++					  ISCSI_DEF_MAX_RECV_SEG_LEN, opcode);
++			rc = ISCSI_ERR_PROTO;
++			break;
++		}
+ 		if (tcp_conn->in.datalen) {
+ 			iscsi_tcp_data_recv_prep(tcp_conn);
+ 			return 0;
+-- 
+2.43.0
 
-This patch adds KUnit coverage for lpfc_els_rcv_edc() descriptor-list bound=
-s.
-The tests live in lpfc_els.c so they can drive the real static EDC parser
-without exporting test-only symbols.
-
-> diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-> index 0023524528d93..3193a2aaac2f1 100644
-> --- a/drivers/scsi/lpfc/lpfc_els.c
-> +++ b/drivers/scsi/lpfc/lpfc_els.c
-> @@ -12592,3 +12592,157 @@ lpfc_cmpl_els_uvem(struct lpfc_hba *phba, struc=
-t lpfc_iocbq *icmdiocb,
-
-[ ... ]
-
-> +static void lpfc_edc_kunit_setup_hba(struct kunit *test,
-> +				     struct lpfc_hba *phba,
-> +				     struct lpfc_vport *vport)
-> +{
-
-[ ... ]
-
-> +	phba->lpfc_mbuf_pool =3D dma_pool_create("lpfc_edc_mbuf", kdev,
-> +					       LPFC_BPL_SIZE, 8, 0);
-> +	KUNIT_ASSERT_NOT_NULL(test, phba->lpfc_mbuf_pool);
-> +	phba->mbox_mem_pool =3D mempool_create_kmalloc_pool(1,
-> +							  sizeof(LPFC_MBOXQ_t));
-> +	KUNIT_ASSERT_NOT_NULL(test, phba->mbox_mem_pool);
-> +}
-
-[Severity: Medium]
-If any KUnit assertion fails later in lpfc_edc_kunit_run() (such as the
-allocation check for cmd_dmabuf->virt), the test will abort immediately=20
-without executing lpfc_edc_kunit_teardown_hba(). Will this leak the dma
-and memory pools created here? Should these be registered for automatic
-cleanup with KUnit instead?
-
-[ ... ]
-
-> +static void lpfc_edc_kunit_run(struct kunit *test, bool malformed)
-> +{
-> +	struct lpfc_hba *phba;
-> +	struct lpfc_vport *vport;
-> +	struct lpfc_nodelist *ndlp;
-> +	struct lpfc_iocbq *cmdiocb;
-> +	struct lpfc_dmabuf *cmd_dmabuf;
-> +	struct fc_els_edc *edc;
-> +	struct fc_tlv_desc *tlv;
-> +	size_t payload_len;
-> +
-> +	phba =3D kunit_kzalloc(test, sizeof(*phba), GFP_KERNEL);
-> +	vport =3D kunit_kzalloc(test, sizeof(*vport), GFP_KERNEL);
-> +	ndlp =3D kunit_kzalloc(test, sizeof(*ndlp), GFP_KERNEL);
-
-[Severity: Medium]
-Is the kref for this node list left as zero by the zero-allocation?
-
-When lpfc_els_rcv_edc() calls lpfc_issue_els_edc_rsp() later in this path,
-it attempts to take a reference via lpfc_nlp_get(ndlp). Because kref is
-zero, won't this fail and return NULL, causing the function to silently abo=
-rt
-and skip sending the response?=20
-
-This early abort would mask a potential crash, as phba->__lpfc_sli_issue_io=
-cb
-does not appear to be stubbed in the lpfc_edc_kunit_setup_hba() mock setup.
-
-> +	cmdiocb =3D kunit_kzalloc(test, sizeof(*cmdiocb), GFP_KERNEL);
-> +	cmd_dmabuf =3D kunit_kzalloc(test, sizeof(*cmd_dmabuf), GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, phba);
-> +	KUNIT_ASSERT_NOT_NULL(test, vport);
-> +	KUNIT_ASSERT_NOT_NULL(test, ndlp);
-> +	KUNIT_ASSERT_NOT_NULL(test, cmdiocb);
-> +	KUNIT_ASSERT_NOT_NULL(test, cmd_dmabuf);
-
-[ ... ]
-
-> +	cmdiocb->cmd_dmabuf =3D cmd_dmabuf;
-> +	lpfc_els_rcv_edc(vport, cmdiocb, ndlp, payload_len);
-
-[Severity: High]
-This is a pre-existing issue, but missing bounds checks for unknown EDC
-diagnostic descriptors in lpfc_els_rcv_edc() could allow an underflow of
-bytes_remain.
-
-In the target function:
-
-lpfc_els.c:lpfc_els_rcv_edc() {
-    ...
-    while (bytes_remain) {
-        ...
-        switch (dtag) {
-        ...
-        default:
-            dtag_nm =3D lpfc_get_tlv_dtag_nm(dtag);
-            lpfc_printf_log(phba, KERN_WARNING, ...);
-        }
-        bytes_remain -=3D FC_TLV_DESC_SZ_FROM_LENGTH(tlv);
-        tlv =3D fc_tlv_next_desc(tlv);
-    ...
-}
-
-If a remote FC node sends an unknown descriptor tag whose length is malicio=
-usly
-crafted to be larger than the remaining payload, won't bytes_remain underfl=
-ow
-to a huge value since there is no bounds check in the default switch case?
-This could bypass the loop termination and allow an out-of-bounds read on t=
-he
-next iteration.
-
-> +
-> +	KUNIT_EXPECT_TRUE(test, true);
-> +	lpfc_edc_kunit_teardown_hba(phba);
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710022932.3741=
-311-1-michael.bommarito@gmail.com?part=3D2
 
