@@ -1,255 +1,231 @@
-Return-Path: <linux-scsi+bounces-26001-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26002-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 43ySDltgUmohPAMAu9opvQ
-	(envelope-from <linux-scsi+bounces-26001-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jul 2026 17:25:15 +0200
+	id qs9nMRhhUmpNPAMAu9opvQ
+	(envelope-from <linux-scsi+bounces-26002-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jul 2026 17:28:24 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0392741F76
-	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jul 2026 17:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 10AB2741FBD
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jul 2026 17:28:24 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b="ksoqK/zj";
-	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b=Y9yDTbzU;
-	dmarc=pass (policy=reject) header.from=mailbox.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26001-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26001-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=mSb3IlfQ;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26002-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26002-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0A7D83028F10
-	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jul 2026 15:21:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DFADE3026C3E
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jul 2026 15:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E0BE2E11C7;
-	Sat, 11 Jul 2026 15:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D9532DB78C;
+	Sat, 11 Jul 2026 15:24:55 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5375735A3A9;
-	Sat, 11 Jul 2026 15:21:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00589287247
+	for <linux-scsi@vger.kernel.org>; Sat, 11 Jul 2026 15:24:53 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783783307; cv=none; b=kmUNw8ih9tnYHNcq3BZUgX4Qu6KH7WY3iZ8NSTuritJugRHVdDlKXXOHTtFh6DI9lMrUVt61AHjLfjQJi/mUVXIjt9NEakcTzfkaeSWGEmLGuww3p3K2YADpz8bA2Yx+RUnE+6eZ0vu7tdZgSqEVWlfRmr2ZFvopHBlURDKjuiQ=
+	t=1783783495; cv=none; b=pBq4eQyxivmpDV8QgQnsyTMrF3ZeL3dop4I/Ldl7PH0KG45EpyiB5HEmHLbo8Bjb9XJ966+OuZw4sCmGkoqIhEOiDbzOC2cTF4+CXwJJ+UbofRHpaCfje5t5vt8aC+YI5teWguRs1NBdNA/Opvrrx1X3FxxlrgLQ+5wuZV7rDbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783783307; c=relaxed/simple;
-	bh=dA+p/e0yU5GmI2+843t83Ws3vAPk7ZHcyx+dI89Sz1U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L72dgViX57b74k8mX764I6qDGvTgFvTMKPaXq3uzrlj9wwhBH2NvhRRrTHJSh4cMS7011bMxHD86tcCyasEPzt97zhGH4GFsmsOoLM2sP+O53+xqVz39o89EuKd3YEfaI06hZRXGQTCNMT+U9T5JYyl8vN+8Ngdrcl9jU+BySBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=ksoqK/zj; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=Y9yDTbzU; arc=none smtp.client-ip=80.241.56.172
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA512)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4gyC9208hBzMlFY;
-	Sat, 11 Jul 2026 17:21:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1783783302;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5zGD2166erzzmBrOUSjlgc7V6NcBK4nb2itQnBTjxms=;
-	b=ksoqK/zj+BidOqeAJJ7EKT02ziVUZdAZpUvhJMwQtSmRWjSq9Enio2FtjUZVXyDQeKcPS9
-	tz3EEt5kqcm2UE7WJdYDM3b+KpBAVSFgo0g3D5mBCTAgfgfn5uP25Y5c2Om8YP0zHfM12z
-	cTtb5RUpNqORLbagExvL5rRh5ClAY9dGm+PNTYbSKo32vko5Z12zm2a9Smho1qpekhzHJP
-	uzV29wf7UQtMAkvXzHuC0UQ1Fhw09TFGSpBly6QMQVskI/ENe8Tf4ouU54ZEFFTBXOU5Wb
-	dU/uMxvi3O5dII+fFRTJDMNJ6tw022Ppk5aZ0NZNabs/Rxu2ksDW/Y48+ev3Ew==
-From: Maurice Hieronymus <mhi@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1783783300;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5zGD2166erzzmBrOUSjlgc7V6NcBK4nb2itQnBTjxms=;
-	b=Y9yDTbzUH5iQ+rWrMO26z0OIS3g+EqRjCkPCiekugHNCtM7hSviYHk68Cm/Xegt23h7q78
-	WyQla1TBoqMmPXMPzpLAKJF1spAjJXMQ7ucmmcjPMC+tglQFyfu8TAEBTLKANlbEyyZNse
-	xVN5Xf0BaS7yqkcpaFBbqTghqEybETOdS+VFYqsaZNrGvG06kQVhEK0pyytE3pStJkBp3r
-	yYH8zCv/wVf3PmL5YByhmUTOpaKMZGZYEBodK+ddHvtw+rHGcLgXRyfBX/cMV4ZB3CE9Nl
-	oVA1frLCK+jSksHMfitUChWECby6KcNDEFsVc/6uJaCeoPpBH16kWBQ82HjtTA==
-Date: Sat, 11 Jul 2026 17:21:07 +0200
-Subject: [PATCH 2/2] PCI: Replace pci_dev->broken_parity_status with
- accessors
+	s=arc-20240116; t=1783783495; c=relaxed/simple;
+	bh=Tkl5jx0+OUs/vYITNcrJ49a8tbOye5m55RutD8Il+Bg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=pD9yHhZGv8hj9TWPLPrVTiHxPCIVE7lRUHLHmPCq/MwNECuBfzBtypOoqbidfryHMEg+YOnHikzCdlTbN0m16//bfpU69GhTARStx9uAQOYV6xa5iuFP+jt3kKEulicP9fBtxa5+ZXa9sN+rIAXWiMj6xkTDTbnj8fHjIRTkgeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mSb3IlfQ; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19B41F000E9;
+	Sat, 11 Jul 2026 15:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783783493;
+	bh=8Cl4wMZgX64YPY4Gzuf5SxjqoLPswzi3NIKrz/aD1n0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=mSb3IlfQqio7ZBq+KEq7qR0d3uNEbzUnMwdbopqgAPZQsaNuhsvP0S2ttmi5nM0cw
+	 Q/386hnw5xUcUEyDqIMPs9Uy7WUAJxIv2x2fG2wuDf8JEqWzY16zkiXyDlmkvhyW7W
+	 XGo28tAyuoCdtSZwIGlbM0Sg9IRquqRDKB589pdGFOnw2Vrui15/HhTandUFnVlWOL
+	 ML/8JGSRUbfinM3rJ35VBAeVTfZtCsSjzL2sFNzklL726dgHxCiODI+99u3BYOhnos
+	 BIMzjgV/Dy22b6zJD8eBOJ777wWt/OmbH0Ut3IYjN0Z67f6n7v2zJouNRKLSY+HuhG
+	 TpLjSfYIBdROw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] scsi: sd: bound the IO hints descriptor walk to the
+ buffer
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Michael Bommarito" <michael.bommarito@gmail.com>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260711150736.2917641-1-michael.bommarito@gmail.com>
+References: <20260711150736.2917641-1-michael.bommarito@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 11 Jul 2026 15:24:53 +0000
+Message-Id: <20260711152453.B19B41F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260711-pci-dev-flags-v1-2-2fcf2811138c@mailbox.org>
-References: <20260711-pci-dev-flags-v1-0-2fcf2811138c@mailbox.org>
-In-Reply-To: <20260711-pci-dev-flags-v1-0-2fcf2811138c@mailbox.org>
-To: Edward Cree <ecree.xilinx@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Bjorn Helgaas <bhelgaas@google.com>, Justin Tee <justin.tee@broadcom.com>, 
- Paul Ely <paul.ely@broadcom.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Juergen Gross <jgross@suse.com>, 
- Stefano Stabellini <sstabellini@kernel.org>, 
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, 
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
-Cc: Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
- netdev@vger.kernel.org, linux-net-drivers@amd.com, 
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
- linux-scsi@vger.kernel.org, xen-devel@lists.xenproject.org, 
- linux-edac@vger.kernel.org, Maurice Hieronymus <mhi@mailbox.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783783272; l=3918;
- i=mhi@mailbox.org; s=20260525; h=from:subject:message-id;
- bh=dA+p/e0yU5GmI2+843t83Ws3vAPk7ZHcyx+dI89Sz1U=;
- b=2KUtaRPN52gN+DrVoSi0Gx1KvBexgp3rJLmXihe43P4Nxd7ql/LG0mNOPKmJYGQTEluKIkZ/a
- e0xF1urLLB7BZdfXCqB9rBoVHA+cFHOIyMacXK65ieb1QbtT7PbaILy
-X-Developer-Key: i=mhi@mailbox.org; a=ed25519;
- pk=AHlEkGG3hpXZHntlEzF42Ip/LFyXWOgsNUvaHqAnV80=
-X-MBO-RS-ID: c995304cfe7236ecf3e
-X-MBO-RS-META: kw8gscg45gpin8zawfowe9q3as1dmn7e
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
-	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:ecree.xilinx@gmail.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:bhelgaas@google.com,m:justin.tee@broadcom.com,m:paul.ely@broadcom.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:jgross@suse.com,m:sstabellini@kernel.org,m:oleksandr_tyshchenko@epam.com,m:ojeda@kernel.org,m:boqun@kernel.org,m:gary@garyguo.net,m:bjorn3_gh@protonmail.com,m:lossin@kernel.org,m:a.hindborg@kernel.org,m:aliceryhl@google.com,m:tmgross@umich.edu,m:daniel.almeida@collabora.com,m:tamird@kernel.org,m:acourbot@nvidia.com,m:work@onurozkan.dev,m:bp@alien8.de,m:tony.luck@intel.com,m:dakr@kernel.org,m:rust-for-linux@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-net-drivers@amd.com,m:linux-kernel@vger.kernel.org,m:linux-pci@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:xen-devel@lists.xenproject.org,m:linux-edac@vger.kernel.org,m:mhi@mailbox.org,m:ecreexilinx@gmail.com,m:andrew@lunn.ch,s:lists@lfd
- r.de];
-	TAGGED_FROM(0.00)[bounces-26001-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,broadcom.com,HansenPartnership.com,oracle.com,suse.com,epam.com,garyguo.net,protonmail.com,umich.edu,collabora.com,nvidia.com,onurozkan.dev,alien8.de,intel.com];
-	FORGED_SENDER(0.00)[mhi@mailbox.org,linux-scsi@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[38];
 	RCVD_COUNT_THREE(0.00)[4];
+	FORWARDED(0.00)[lists@lfdr.de];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-26002-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:michael.bommarito@gmail.com,m:linux-scsi@vger.kernel.org,m:michaelbommarito@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mhi@mailbox.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[mailbox.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi,netdev];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mailbox.org:from_mime,mailbox.org:email,mailbox.org:mid,mailbox.org:dkim,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sashiko.dev:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D0392741F76
+X-Rspamd-Queue-Id: 10AB2741FBD
 
-`broken_parity_status` shares a C bitfield word in `struct pci_dev`
-with many other bits. `broken_parity_status_store()` writes it from
-sysfs at any time without taking any lock, so userspace can make it
-race with every other writer of the same word, e.g. `pci_set_master()`
-from a runtime PM resume path, and updates of neighboring bits can be
-lost.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Move the bit into the `flags` bitmap modified with atomic bitops,
-using the accessor pattern introduced by the previous commit.
+Pre-existing issues:
+- [High] The stack-allocated `buf` in `sd_is_perm_stream()` is not zero-ini=
+tialized, and its residual length is not checked after `scsi_execute_cmd()`=
+, leading to a use of uninitialized stack memory.
+- [Medium] The loop bounds calculation double-counts the mode header length=
+ and relies on an unaligned ALIGN_DOWN relative to the buffer, causing the =
+loop to evaluate a truncated descriptor that overhangs the allocated buffer=
+, and generate an out-of-bounds pointer (Undefined Behavior).
+--
 
-Signed-off-by: Maurice Hieronymus <mhi@mailbox.org>
----
- drivers/edac/edac_pci_sysfs.c | 4 ++--
- drivers/pci/pci-sysfs.c       | 4 ++--
- include/linux/pci.h           | 5 ++++-
- 3 files changed, 8 insertions(+), 5 deletions(-)
+--- Patch [1]: [PATCH] scsi: sd: bound the IO hints descriptor walk to the =
+buffer ---
+commit 536deb268b96e3b10a547fc2087216469f8c3827
+Author: Michael Bommarito <michael.bommarito@gmail.com>
 
-diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
-index 9f437f648e4e..fadc61235f1f 100644
---- a/drivers/edac/edac_pci_sysfs.c
-+++ b/drivers/edac/edac_pci_sysfs.c
-@@ -554,7 +554,7 @@ static void edac_pci_dev_parity_test(struct pci_dev *dev)
- 	/* check the status reg for errors on boards NOT marked as broken
- 	 * if broken, we cannot trust any of the status bits
- 	 */
--	if (status && !dev->broken_parity_status) {
-+	if (status && !pci_dev_broken_parity_status(dev)) {
- 		if (status & (PCI_STATUS_SIG_SYSTEM_ERROR)) {
- 			edac_printk(KERN_CRIT, EDAC_PCI,
- 				"Signaled System Error on %s\n",
-@@ -593,7 +593,7 @@ static void edac_pci_dev_parity_test(struct pci_dev *dev)
- 		/* check the secondary status reg for errors,
- 		 * on NOT broken boards
- 		 */
--		if (status && !dev->broken_parity_status) {
-+		if (status && !pci_dev_broken_parity_status(dev)) {
- 			if (status & (PCI_STATUS_SIG_SYSTEM_ERROR)) {
- 				edac_printk(KERN_CRIT, EDAC_PCI, "Bridge "
- 					"Signaled System Error on %s\n",
-diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-index 5ec0b245a69b..5e094d1e23e3 100644
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -80,7 +80,7 @@ static ssize_t broken_parity_status_show(struct device *dev,
- 					 char *buf)
- {
- 	struct pci_dev *pdev = to_pci_dev(dev);
--	return sysfs_emit(buf, "%u\n", pdev->broken_parity_status);
-+	return sysfs_emit(buf, "%u\n", pci_dev_broken_parity_status(pdev));
- }
- 
- static ssize_t broken_parity_status_store(struct device *dev,
-@@ -93,7 +93,7 @@ static ssize_t broken_parity_status_store(struct device *dev,
- 	if (kstrtoul(buf, 0, &val) < 0)
- 		return -EINVAL;
- 
--	pdev->broken_parity_status = !!val;
-+	pci_dev_assign_broken_parity_status(pdev, val);
- 
- 	return count;
- }
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 9964646bdd46..fdcd9b1b7371 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -347,10 +347,13 @@ struct rcec_ea;
-  *		bookkeeping state, maintained by pci_set_master(),
-  *		pci_clear_master() and pci_disable_device(); modifying it
-  *		does not itself change the hardware state.
-+ * @PCI_DEV_FLAG_BROKEN_PARITY_STATUS: Device generates false positive
-+ *		parity errors; set via sysfs.
-  * @PCI_DEV_FLAG_COUNT: Number of defined struct_pci_dev_flags.
-  */
- enum struct_pci_dev_flags {
- 	PCI_DEV_FLAG_BUSMASTER = 0,
-+	PCI_DEV_FLAG_BROKEN_PARITY_STATUS = 1,
- 
- 	PCI_DEV_FLAG_COUNT
- };
-@@ -482,7 +485,6 @@ struct pci_dev {
- 
- 	unsigned int	no_msi:1;		/* May not use MSI */
- 	unsigned int	block_cfg_access:1;	/* Config space access blocked */
--	unsigned int	broken_parity_status:1;	/* Generates false positive parity */
- 	unsigned int	irq_reroute_variant:2;	/* Needs IRQ rerouting variant */
- 	unsigned int	msi_enabled:1;
- 	unsigned int	msix_enabled:1;
-@@ -626,6 +628,7 @@ static inline void pci_dev_assign_##accessor_name(struct pci_dev *pdev, bool val
- }
- 
- __create_pci_dev_flag_accessors(busmaster, PCI_DEV_FLAG_BUSMASTER);
-+__create_pci_dev_flag_accessors(broken_parity_status, PCI_DEV_FLAG_BROKEN_PARITY_STATUS);
- 
- #undef __create_pci_dev_flag_accessors
- 
+scsi: sd: bound the IO hints descriptor walk to the buffer
 
--- 
-2.51.2
+This commit attempts to fix an out-of-bounds read in sd_read_io_hints() by
+clamping the device-reported mode data length to SD_BUF_SIZE. This prevents
+the descriptor walk from reading past the buffer when parsing permanent-str=
+eam
+IO hints.
 
+> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+> index 599e75f333343..eec383cbc39f1 100644
+> --- a/drivers/scsi/sd.c
+> +++ b/drivers/scsi/sd.c
+> @@ -3304,6 +3304,7 @@ static void sd_read_io_hints(struct scsi_disk *sdkp=
+, unsigned char *buffer)
+>  	struct scsi_sense_hdr sshdr;
+>  	struct scsi_mode_data data;
+>  	int res;
+> +	u32 len;
+> =20
+>  	if (sdp->sdev_bflags & BLIST_SKIP_IO_HINTS)
+>  		return;
+> @@ -3313,9 +3314,17 @@ static void sd_read_io_hints(struct scsi_disk *sdk=
+p, unsigned char *buffer)
+>  			      sdkp->max_retries, &data, &sshdr);
+>  	if (res < 0)
+>  		return;
+> +	/*
+> +	 * The device-reported mode data length can exceed the buffer that
+> +	 * was actually transferred; clamp it so the descriptor walk stays
+> +	 * within buffer[SD_BUF_SIZE].
+> +	 */
+> +	if (data.length > SD_BUF_SIZE - data.header_length)
+> +		len =3D SD_BUF_SIZE;
+> +	else
+> +		len =3D data.header_length + data.length;
+>  	start =3D (void *)buffer + data.header_length + 16;
+> -	end =3D (void *)buffer + ALIGN_DOWN(data.header_length + data.length,
+> -					  sizeof(*end));
+> +	end =3D (void *)buffer + ALIGN_DOWN(len, sizeof(*end));
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but does this calculation
+double-count the mode header length and result in an overhanging pointer?
+
+Looking at scsi_mode_sense(), it populates data.length with the total length
+of the mode parameter list, which already includes the header. Computing
+len =3D data.header_length + data.length overestimates the valid data size =
+by
+8 bytes.
+
+Additionally, if len is clamped to SD_BUF_SIZE (512) and start is at offset
+24, the descriptors (16 bytes each) fall at offsets 24, 40, ..., 504. Becau=
+se
+end is calculated as buffer + ALIGN_DOWN(len, sizeof(*end)), end will be
+buffer + 512.
+
+The loop condition desc < end will evaluate to true for the descriptor at
+offset 504 (since 504 < 512). This descriptor spans bytes 504-519,
+overhanging the 512-byte buffer limit. The loop evaluation of desc++ will
+also produce a pointer past the end of the buffer.
+
+>  	/*
+>  	 * From "SBC-5 Constrained Streams with Data Lifetimes": Device severs
+>  	 * should assign the lowest numbered stream identifiers to permanent
+>  	 * streams.
+>  	 */
+>  	for (desc =3D start; desc < end; desc++)
+>  		if (!desc->st_enble || !sd_is_perm_stream(sdkp, desc - start))
+
+[Severity: High]
+This is a pre-existing issue, but does sd_is_perm_stream() use uninitialized
+stack memory if the device returns a short transfer?
+
+Looking at sd_is_perm_stream():
+
+drivers/scsi/sd.c:sd_is_perm_stream() {
+...
+	struct {
+		struct scsi_stream_status_header h;
+		struct scsi_stream_status s;
+	} buf;
+...
+	res =3D scsi_execute_cmd(sdev, cdb, REQ_OP_DRV_IN, &buf, sizeof(buf),
+			       SD_TIMEOUT, sdkp->max_retries, &exec_args);
+...
+	if (get_unaligned_be32(&buf.h.len) < sizeof(struct scsi_stream_status))
+		return false;
+	return buf.s.perm;
+}
+
+The stack-allocated buf is not zero-initialized. If a device completes the
+command with a GOOD status but transfers fewer bytes than requested (for
+example, only the 8-byte header), scsi_execute_cmd() does not check the
+residual length here.
+
+If the device-controlled buf.h.len field is large enough to pass the check,
+the function will evaluate and return buf.s.perm, leaking uninitialized
+kernel stack memory into the disk's permanent stream configuration.
+
+>  			break;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260711150736.2917=
+641-1-michael.bommarito@gmail.com?part=3D1
 
