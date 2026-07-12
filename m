@@ -1,63 +1,64 @@
-Return-Path: <linux-scsi+bounces-26009-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26010-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id UBK0DhqxU2rCdgMAu9opvQ
-	(envelope-from <linux-scsi+bounces-26009-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jul 2026 17:22:02 +0200
+	id laV8NxmxU2rBdgMAu9opvQ
+	(envelope-from <linux-scsi+bounces-26010-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jul 2026 17:22:01 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2305A74523E
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80E7674523F
 	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jul 2026 17:22:01 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Lky0A0kq;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=cNduJ6vf;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26009-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26009-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26010-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26010-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3D5583002904
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jul 2026 15:21:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 819BF3004D02
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jul 2026 15:22:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53B3C33F585;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D572F33FE36;
 	Sun, 12 Jul 2026 15:21:55 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C41233937;
-	Sun, 12 Jul 2026 15:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59A431B833;
+	Sun, 12 Jul 2026 15:21:54 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783869715; cv=none; b=jii/T/KKHYBDfVv0g+6mMax75Bnhv6LE2dTfKocMF/+pIpB7DdfKabmNLx4ZmNctSil8t+PryuNnAkOqMY/tQO2i88xalE1NUmmtomJWovj8ZnDyOjtnAubUMbEuog9W2nR6N6FixNBfdkcPivjjk5RB/+JB3O2JwZ52eHRY5zw=
+	t=1783869715; cv=none; b=hNtTgW0ZPtLaxLMhJ0C+Y2lFtqYmd6sJNgYHw41sKnGpw0n3/lfX1by51Ru6Dlkx39Gt6gq3mP/C9jTzXZjvTkytYPLumroBoGTWpYTRR/FpNqRPZfCRZcDeZIL/BXYNHXUQWzW4IGkjHY6bLFY1I25f3hgpHdJs4QP+ZmORYmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1783869715; c=relaxed/simple;
-	bh=nmNKn8d8NL2MJuTkqQcDGPfhXnyRwEyvVGDq0rIntbI=;
+	bh=Wm/bHExqwt1VMbL9+4z9VSyjwuMuIZ7z6Im4hl2j1+0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pAjPoVcoxtVp2MWhln6gch0Fd5zgFSz10KFVQbQmSVEX7aIrB6lVP2upI9k5HScGrHOZhub765Ekr8VKRvgtFtTlq2FxzLPTqb6F2zhRXk0rAytvpez/PEngz0+s95ol5T46T6+VzAkk/jtPq6UMAHasbG5CFXAPHwk4Awd2lnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lky0A0kq; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 565DF1F000E9;
-	Sun, 12 Jul 2026 15:21:53 +0000 (UTC)
+	 Message-Id; b=E4Q8dZOL6wR2j0c5HGVf66YWGZUuaJaP/Q2FFHNtZNXbCOtnmYiSRyTlPsykFgc6PyfwoWP6sM1eXwAdIfjEBnypjqpHZezP1ShOCjku4CnNZGqhpDVdJhYkdi2X8VtctXWogl6xiV4Z/yvP/AeATOxVsKZto3kB9gjoXjlw4UU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNduJ6vf; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A531F00A3D;
+	Sun, 12 Jul 2026 15:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783869713;
-	bh=qWSMGfte5HRvvi5DpOJwL3QsCZIFyGpnLPEtSGY5lEw=;
+	s=k20260515; t=1783869714;
+	bh=RTcyfWxMVXuc4zI8ECGHPeEhb8FuUVVIHmsboUSAx4c=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Lky0A0kqLIt442M0ksxw0XTRy7sLVGM9DeK+tCR8VwvfjEwKdK2SWtjyswWtbSgJl
-	 7xANlufk5NkFLMvLxvb/4JtOR+h7+n2dh2tQMSevOEEC0e/8hQm0s0jJxMyzkQFlcG
-	 Cdc97mJxnFj/Ga7rx/OvJxnJX4LoGa5k1U+gJgmdqeKO8Z2EArmHZCc320fMU2lgGa
-	 vb/uL+7YXD9eGd+AmPQHuo70stGcQPhPfb4GrwZKzjrD4g1SatXT2BfQ3ecKQhHNHc
-	 fRHmQYG1gquVbCgPOGpx94ASOrpLmrnKYCCcD8dVwvAzQNkTcYzSXCYwlLF8jnMOp8
-	 P1Pq8b0zqRFnw==
+	b=cNduJ6vf5HNrlZuikX0WG5Mw77oW2Kf7Wk5NBwRFoYdoeE59xwgZ6DFRWc4oO6Pe1
+	 OaLsPEzftFZE7RT/apigLhUC52/m4Tyc1GviEdiW7aHS00LmMEN0ejq740J0HyhKk1
+	 5aGaMPmnZ6/iHIe79ENOnguvDErsYjriKft4i42QbJuEPHbof2E/C7H7ATdhwItHY2
+	 ymwDnEp8M725t2nLZ2/LdFkwHPWwLndni+KkiU/+eC5MQr9Pj4IbiyTVOqVAgjI2tC
+	 pn+LtPHVR1CH0pA6rUA6IppAPQbENN7nHhER/cfNdtpc8ydabHMMqidBQ1S7Dik4ID
+	 NLNWPHLUPKAEg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] PCI: Replace pci_dev->is_busmaster with accessors
+Subject: Re: [PATCH 2/2] PCI: Replace pci_dev->broken_parity_status with
+ accessors
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Maurice Hieronymus" <mhi@mailbox.org>
-Cc: linux-scsi@vger.kernel.org, ojeda@kernel.org, linux-pci@vger.kernel.org
-In-Reply-To: <20260711-pci-dev-flags-v1-1-2fcf2811138c@mailbox.org>
+Cc: linux-pci@vger.kernel.org, linux-scsi@vger.kernel.org, ojeda@kernel.org
+In-Reply-To: <20260711-pci-dev-flags-v1-2-2fcf2811138c@mailbox.org>
 References: <20260711-pci-dev-flags-v1-0-2fcf2811138c@mailbox.org>
- <20260711-pci-dev-flags-v1-1-2fcf2811138c@mailbox.org>
+ <20260711-pci-dev-flags-v1-2-2fcf2811138c@mailbox.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 12 Jul 2026 15:21:52 +0000
-Message-Id: <20260712152153.565DF1F000E9@smtp.kernel.org>
+Date: Sun, 12 Jul 2026 15:21:53 +0000
+Message-Id: <20260712152154.24A531F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -70,7 +71,7 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -78,9 +79,9 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26009-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-26010-lists,linux-scsi=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:mhi@mailbox.org,m:linux-scsi@vger.kernel.org,m:ojeda@kernel.org,m:linux-pci@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:mhi@mailbox.org,m:linux-pci@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:ojeda@kernel.org,s:lists@lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -97,98 +98,94 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCPT_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,mailbox.org:email,smtp.kernel.org:mid,sashiko.dev:url,lists.linux.dev:replyto]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,mailbox.org:email,lists.linux.dev:replyto,sashiko.dev:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,smtp.kernel.org:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2305A74523E
+X-Rspamd-Queue-Id: 80E7674523F
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Concurrent read-modify-write of the hardware PCI_COMMAND register =
-can lose updates.
+- [High] Incomplete fix: other sysfs store methods modify C bitfields witho=
+ut locks, leaving identical read-modify-write (RMW) tearing races unaddress=
+ed.
 --
 
---- Patch [1]: [PATCH 1/2] PCI: Replace pci_dev->is_busmaster with accessor=
-s ---
-commit ff1aee4bf47f9e69854d2a3ad6eea071a246ecb1
+--- Patch [2]: [PATCH 2/2] PCI: Replace pci_dev->broken_parity_status with =
+accessors ---
+commit 0e6499959d43880d6cf73511e1681afc56300aa3
 Author: Maurice Hieronymus <mhi@mailbox.org>
 
-PCI: Replace pci_dev->is_busmaster with accessors
+PCI: Replace pci_dev->broken_parity_status with accessors
 
-This commit moves the is_busmaster bit from a shared bitfield into a
-new flags bitmap using atomic bitops. This prevents concurrent
-read-modify-write cycles on the shared software bitfield, explicitly
-enabling safe concurrent usage of pci_disable_device() and pci_set_master().
+This patch moves the broken_parity_status bit into a flags bitmap
+modified with atomic bitops. This prevents read-modify-write tearing races
+when sysfs writers race with other kernel updates to the same machine word.
 
-Link: https://lore.kernel.org/rust-for-linux/DJOEYVBS17MJ.1YD3TNGQBWHNK@ker=
-nel.org/ [1]
-
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 77b17b13ee615..c4fd6fe6098d0 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index 5ec0b245a69bd..5e094d1e23e3e 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
 
 [ ... ]
 
-> @@ -2205,7 +2205,7 @@ void pci_disable_device(struct pci_dev *dev)
+> @@ -93,7 +93,7 @@ static ssize_t broken_parity_status_store(struct device=
+ *dev,
+>  	if (kstrtoul(buf, 0, &val) < 0)
+>  		return -EINVAL;
 > =20
->  	do_pci_disable_device(dev);
-> =20
-> -	dev->is_busmaster =3D 0;
-> +	pci_dev_assign_busmaster(dev, false);
->  }
-
-[ ... ]
-
-> @@ -4120,7 +4120,7 @@ static void __pci_set_master(struct pci_dev *dev, b=
-ool enable)
->  			enable ? "enabling" : "disabling");
->  		pci_write_config_word(dev, PCI_COMMAND, cmd);
->  	}
-> -	dev->is_busmaster =3D enable;
-> +	pci_dev_assign_busmaster(dev, enable);
->  }
+> -	pdev->broken_parity_status =3D !!val;
+> +	pci_dev_assign_broken_parity_status(pdev, val);
 
 [Severity: High]
-This is a pre-existing issue, but since the commit message notes that
-pci_set_master() and pci_disable_device() can run concurrently to justify
-this change, can those concurrent calls also lose updates to the hardware
-PCI_COMMAND register?
+This is a pre-existing issue, but does this leave other identical
+read-modify-write tearing races unaddressed in this same file?
 
-In __pci_set_master(), there is an unprotected read-modify-write cycle on
-the hardware register:
+For example, in d3cold_allowed_store(), there is a lockless assignment:
 
-	pci_read_config_word(dev, PCI_COMMAND, &old_cmd);
-	if (enable)
-		cmd =3D old_cmd | PCI_COMMAND_MASTER;
-	else
-		cmd =3D old_cmd & ~PCI_COMMAND_MASTER;
-	if (cmd !=3D old_cmd) {
-		pci_dbg(dev, "%s bus mastering\n",
-			enable ? "enabling" : "disabling");
-		pci_write_config_word(dev, PCI_COMMAND, cmd);
-	}
+drivers/pci/pci-sysfs.c:d3cold_allowed_store() {
+    ...
+    pdev->d3cold_allowed =3D !!val;
+    ...
+}
 
-Similarly, do_pci_disable_device() (called just before the change in
-pci_disable_device() above) performs its own unprotected update:
+This bitfield shares a machine word with ignore_hotplug. If a sysfs write
+races with a GPU driver calling pci_ignore_hotplug() during runtime PM,
+could the kernel's update be lost? If the ignore_hotplug bit is torn, the
+PCI hotplug controller might unexpectedly remove the GPU when it enters
+D3cold, causing a kernel panic upon resume.
 
-	pci_read_config_word(dev, PCI_COMMAND, &pci_command);
-	if (pci_command & PCI_COMMAND_MASTER) {
-		pci_command &=3D ~PCI_COMMAND_MASTER;
-		pci_write_config_word(dev, PCI_COMMAND, pci_command);
-	}
+Similarly, msi_bus_store() locklessly assigns:
 
-If a Rust guard object calls pci_disable_device() concurrently with
-pci_set_master(), could we accidentally clear or set other critical flags
-like PCI_COMMAND_INTX_DISABLE or PCI_COMMAND_MEMORY due to the hardware
-read-modify-write race?
+drivers/pci/pci-sysfs.c:msi_bus_store() {
+    ...
+    pdev->no_msi =3D !val;
+    ...
+}
+
+This shares a word with msi_enabled. If this tears msi_enabled, could it
+cause IRQ leaks when freeing vectors?
+
+Another instance is pci_write_rom() locklessly assigning:
+
+drivers/pci/pci-sysfs.c:pci_write_rom() {
+    ...
+    pdev->rom_attr_enabled =3D enable;
+    ...
+}
+
+Would it make sense to also migrate d3cold_allowed, no_msi, and
+rom_attr_enabled to this new atomic flags bitmap?
+
+> =20
+>  	return count;
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260711-pci-dev-fl=
-ags-v1-0-2fcf2811138c@mailbox.org?part=3D1
+ags-v1-0-2fcf2811138c@mailbox.org?part=3D2
 
