@@ -1,171 +1,238 @@
-Return-Path: <linux-scsi+bounces-26047-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26048-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id FhZfB6+HVGramwMAu9opvQ
-	(envelope-from <linux-scsi+bounces-26047-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 08:37:35 +0200
+	id qBRiJGSLVGqmnAMAu9opvQ
+	(envelope-from <linux-scsi+bounces-26048-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 08:53:24 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A326E74793A
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 08:37:34 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BB94747B6E
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 08:53:24 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=QNeL9yHp;
-	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26047-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26047-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=G1gLxXMh;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26048-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26048-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 77F6A3028F7E
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 06:36:51 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 51C3B3008C06
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 06:53:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A0D381E86;
-	Mon, 13 Jul 2026 06:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9677935B63B;
+	Mon, 13 Jul 2026 06:53:20 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E51382397
-	for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2026 06:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663E5342CBA
+	for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2026 06:53:19 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783924607; cv=none; b=CC+Z6fnWAZW7OBfdfnDvEShd2tcZn9Dmy7PaCI2hw+jrUXjRSTLnOx77uhTmsNi06833/BEvbuRNSyo2MvDaLIikBAxWPoLamQLR11GVG6A1CVy+ECGntPDC1ylAKIISIlqwi5DhrM1STnMVztIa93Lw6tK44GH/0NWyT9YdNQM=
+	t=1783925600; cv=none; b=Rv2ap9Ld2844CFREDDljghNeeEerDCxR4YnDFwBjs/DY6WAfxLdkyZwcWKpUwePjGYpuqknM1FWQEUyh8aunusSlAGQbJQVMrq2+tVszuBnhhhlgk8gMQvutWKGSWvUKY7GqWbWX1da9Ld3clKDV5vfAqGTH5xN17sFtu8XfXDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783924607; c=relaxed/simple;
-	bh=tapKB0OdfQ2qsJPh7f83iC6X0lGIx0sRdPmA5A7DH6g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IBzswejQ9qDqwlDhV5um5uCmcAVHnMr7GXUM+j8v+cHr/zDqFbDB/TU539C/M26cnlXNeIt3ED/T8p/7o5QvjR3cvUke3MsTHLqiVUDUxPBknH5in8KRhS/7LtbV8IwGXaq5rYtI28FzrgMy6o6zkCAX2S3xLOXdZZpeh8bg3hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNeL9yHp; arc=none smtp.client-ip=209.85.167.46
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5aeae350e0aso3242028e87.1
-        for <linux-scsi@vger.kernel.org>; Sun, 12 Jul 2026 23:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783924604; x=1784529404; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VMkqWgex1B+1V2DB5qYbUsGcW2IFuOY8YL+iXrC+I8Q=;
-        b=QNeL9yHpMbso0RCbt7dMuv+w3a5QirU0Tfhu2zettiw5/dGrICUh8784g6oMVMMdPo
-         wA5uP18DZWKkNtjVX2FcXShcHQ94PuBLxWBiZn8crELpHQ3TtnmAO6h4chrKgSoM4Mdc
-         QPbMmTzwEjEpQ5zcQNqrUuaA3xk5uzq3/DuOgxk/u//Z7HWv3X7gYKaHtCohDd91hAfL
-         KKRJc7oiHWHJWKSI91ojR+/IatwQq6Uyikz4vODKf5MffYAKZ1SeY18LBOoYM/uj76Fv
-         LKgDHLl6iRZGMybm60nzGAbGzGrzCFxXN8s/xc1wAaz9R94vmvxo/5S6TFvV6zoy53Uv
-         NYuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783924604; x=1784529404;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=VMkqWgex1B+1V2DB5qYbUsGcW2IFuOY8YL+iXrC+I8Q=;
-        b=TNi3F5bte/gO3ozi0gIwSAvxG8M+mmyxsdFZbu31OYE3qfOeQDO2E911KKOTXpreN/
-         Mt0wSK0Vb9whOQtJrAupqWz8SIM3J1+u32pDQyo5CsusCexM9DFCPz/RBIS3LtcixKoF
-         Cq87VafiAprbWAa5XRTDMdCSbphMxQGSueUHp0fPIBkgPAnVHQtqRJ/tON6GOGxwLX+J
-         2+QndjE1u/1J3lX4FrcX5+pG3ohH5cZ7CmSPQBOS2CnZA+GQKwtE27wXlGdCTW1ypzUU
-         qNxFtjkWwPUe0fS7zvLpjd6P4173isu5AX3R1r5H1WyCdg6eJSd0LfVYm22OZ3kC2Hum
-         unGQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrWIdomuwJa0DQ0VEqeTmlZIafBBSXsVfgopJ6gdWQls5ixwRWkA9CFttO9p6zhmXW+vV9/HqsSuqn2@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRxjoJAa+7uri7RGsuwT2lPB7Cz6r9O2gjhqce4zQRnbR0pk1R
-	cVURKEDBlURQLte89P6vwZ4v25Q1E3qpB+vnFrEOr1lyi+n+tQ1fqxA0
-X-Gm-Gg: AfdE7cku0KG1YhTCS8pRdAlyRWEJj+dsyOf3V+KDo0xGv+9yldb5bpxZBDt2MV7HPSI
-	0vbz+59FQ3eC7CUmB0jCgfgn+rvhblKmRzEX8L1aTgxcHPV/jkSJEGQYFFR5quVaWHTkAhnUNuX
-	7s9eIflEbpwkIIglv8j7TvcWho7bgyObd1uI7ELdZ6JWdxDoZ3HQgh1KzzN6Kbauc28XzsvviMk
-	jxs13SxUyJVjmvoFW/FuKLvnB19EFaDJW72/leHdZozfLYiFGF8GAFA1cny+PgO3o1ETLR0Vxiv
-	b/PjGXqkvfB+iLKs9I0qAtJnXvcilUo5z4QlZmhX1UvrYhu6nx08kumm1y5YFY4WpKO5IZah3lo
-	QuEHLHiiimlxNdKIRzbXhcqqgSj7/BBeM/b294YZTmSexiLNWHgOLtHJ/UDvFdzObE+nsbZ/WYh
-	pSgKo1JWBgLCGGqOvpzkYG7hR9A2obgnkk34U+ZFWF0UIbEIj58m5MCOQDRXbUn0PO
-X-Received: by 2002:a05:6512:12d4:b0:5ae:b764:3ba5 with SMTP id 2adb3069b0e04-5b0236c84f6mr1460633e87.64.1783924603562;
-        Sun, 12 Jul 2026 23:36:43 -0700 (PDT)
-Received: from SC-WS-02986.corp.sbercloud.ru ([5.18.235.145])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-39c84b83a84sm26001371fa.26.2026.07.12.23.36.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2026 23:36:42 -0700 (PDT)
-From: Aleksey Shishkin <demonaxsh@gmail.com>
-To: 
-Cc: linux-kernel@ispras.ru,
-	Aleksey Shishkin <aishishkin@cloud.ru>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Kees Cook <kees@kernel.org>,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: scsi_dh_rdac: fix NULL pointer dereference in error handling
-Date: Mon, 13 Jul 2026 09:36:28 +0300
-Message-ID: <20260713063640.3081603-1-demonaxsh@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1783925600; c=relaxed/simple;
+	bh=QDySocU4wJQi+Qzw2gR86fbLWbClmYgAtiy7lIDliIE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ZnUkPxykMv05mDeAzIDSaFps48ORcmq+yG3EdmcB04BqKHk+YxQ1uiYj2zMTyFpvjr7v2cOjufrIEqo+wlEHLBVXU+5Xaa5o/7rgTq8s+P1IB6jlb9k+VILe+gsSH946WGW4lhjdeHqxEGHirA62OYyTREht/sydV20g+roMHxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1gLxXMh; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDEEE1F000E9;
+	Mon, 13 Jul 2026 06:53:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783925599;
+	bh=M/7qpbKNp6XrtBmWE/bpXppoP9nqKzj1L5P2sVhYe2s=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=G1gLxXMhQWmkIi87fmQKUXWXRm/ECGZUHZiA3FLTgLViq4/XC5fTh9UuLuaA3LQBM
+	 P1fOSqZT4cwX6Ci9ZnIPHkND17N6ZhS9LFsQCpqIircHcdY7DY0y9dye304OU8weIo
+	 RZd1rJdaSP1xjUnVCxE+87nPxs6DkuX1HTUCkeIMr64B5qW7a7id5dSDq+TO/qm2Zr
+	 kwljttADfBjFw/eNJMjj0j1IDVCgdZUZisiQgPkad10TajO3IciC7nZbrJt12o0Ho3
+	 /+XWGajWNPA4xlFXXRCjmu1mR3hR9n4T4YmmmgVGc2COcDkALNvxk9w72HRavM9vLo
+	 TeTlB8VtuG+Qg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] scsi: scsi_dh_rdac: fix NULL pointer dereference in
+ error handling
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Aleksey Shishkin" <demonaxsh@gmail.com>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260713063640.3081603-1-demonaxsh@gmail.com>
+References: <20260713063640.3081603-1-demonaxsh@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 13 Jul 2026 06:53:18 +0000
+Message-Id: <20260713065318.CDEEE1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26047-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:linux-kernel@ispras.ru,m:aishishkin@cloud.ru,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:kees@kernel.org,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER(0.00)[demonaxsh@gmail.com,linux-scsi@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[demonaxsh@gmail.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	ALIAS_RESOLVED(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-26048-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:demonaxsh@gmail.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp,cloud.ru:email]
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,cloud.ru:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,sashiko.dev:url,smtp.kernel.org:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A326E74793A
+X-Rspamd-Queue-Id: 0BB94747B6E
 
-From: Aleksey Shishkin <aishishkin@cloud.ru>
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-There is a critical logic error in error handling. If get_controller()
-fails and returns NULL, the function sets err = SCSI_DH_RES_TEMP_UNAVAIL.
-However, immediately after spin_unlock(), the code unconditionally
-overwrites err with SCSI_DH_OK.
+Pre-existing issues:
+- [Critical] A malicious SCSI device can trigger a stack buffer overflow in=
+ `get_lun_info()` by providing an oversized `array_uniq_id_len` in VPD page=
+ 0xC8.
+- [High] In the error handling path of `rdac_bus_attach()`, if an initializ=
+ation step such as `check_ownership` or `set_mode_select` fails, the handle=
+r data `h` is freed without removing `h->node` from the RCU-protected `h->c=
+tlr->dh_list`, causing a Use-After-Free.
+- [High] A time-of-check to time-of-use (TOCTOU) race condition between `rd=
+ac_bus_detach()` and the `send_mode_select()` workqueue function allows det=
+achment to proceed while work is actively executing, resulting in Use-After=
+-Free of handler data.
+--
 
-This causes the kernel to falsely report a successful initialization,
-leading to an inevitable Null Pointer Dereference (Kernel Panic) later
-when the driver attempts to use the uninitialized h->ctlr.
+--- Patch [1]: [PATCH] scsi: scsi_dh_rdac: fix NULL pointer dereference in =
+error handling ---
+commit 712793434a46fcd5b5270defe36dc411e0363100
+Author: Aleksey Shishkin <aishishkin@cloud.ru>
+Subject: scsi: scsi_dh_rdac: fix NULL pointer dereference in error handling
 
-Fix this by moving the assignment err = SCSI_DH_OK inside the else block
-so it is only set when the controller is successfully acquired.
+This patch fixes a logic error in error handling where the return code was
+incorrectly overwritten to SCSI_DH_OK after a failed get_controller() call,
+moving the assignment into the success block.
 
-Signed-off-by: Aleksey Shishkin <aishishkin@cloud.ru>
----
- drivers/scsi/device_handler/scsi_dh_rdac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/drivers/scsi/device_handler/scsi_dh_rdac.c b/drivers/scsi/de=
+vice_handler/scsi_dh_rdac.c
+> index 88c8e36b221e2..ed02e1737bd79 100644
+> --- a/drivers/scsi/device_handler/scsi_dh_rdac.c
+> +++ b/drivers/scsi/device_handler/scsi_dh_rdac.c
+> @@ -455,9 +455,9 @@ static int initialize_controller(struct scsi_device *=
+sdev,
+>  		else {
+>  			h->sdev =3D sdev;
+>  			list_add_rcu(&h->node, &h->ctlr->dh_list);
+> +			err =3D SCSI_DH_OK;
+>  		}
 
-diff --git a/drivers/scsi/device_handler/scsi_dh_rdac.c b/drivers/scsi/device_handler/scsi_dh_rdac.c
-index 88c8e36b221e..ed02e1737bd7 100644
---- a/drivers/scsi/device_handler/scsi_dh_rdac.c
-+++ b/drivers/scsi/device_handler/scsi_dh_rdac.c
-@@ -455,9 +455,9 @@ static int initialize_controller(struct scsi_device *sdev,
- 		else {
- 			h->sdev = sdev;
- 			list_add_rcu(&h->node, &h->ctlr->dh_list);
-+			err = SCSI_DH_OK;
- 		}
- 		spin_unlock(&list_lock);
--		err = SCSI_DH_OK;
- 	}
- 	return err;
- }
--- 
-2.47.3
+[Severity: High]
+This is a pre-existing issue, but I noticed a potential use-after-free in t=
+he
+error handling path.
 
+When initialize_controller() succeeds, it adds the node to the RCU list her=
+e.
+However, if a subsequent initialization step fails in rdac_bus_attach(),
+the error path looks like this:
+
+rdac_bus_attach() {
+    ...
+clean_ctlr:
+	spin_lock(&list_lock);
+	kref_put(&h->ctlr->kref, release_controller);
+	spin_unlock(&list_lock);
+
+failed:
+	kfree(h);
+}
+
+Is it possible to reach kfree(h) without removing the node from the
+controller's dh_list? If the controller remains alive and is shared by
+another LUN, could subsequent RCU traversals of the list access this freed
+memory?
+
+>  		spin_unlock(&list_lock);
+> -		err =3D SCSI_DH_OK;
+>  	}
+>  	return err;
+>  }
+
+[Severity: High]
+This is a pre-existing issue, but does rdac_bus_detach() have a race condit=
+ion
+with the mode select workqueue?
+
+In rdac_bus_detach(), the code locklessly checks ms_queued before flushing:
+
+rdac_bus_detach() {
+    ...
+    if (h->ctlr && h->ctlr->ms_queued)
+        flush_workqueue(kmpath_rdacd);
+    ...
+}
+
+However, the worker thread send_mode_select() clears this flag early before
+completing the potentially blocking SCSI command:
+
+send_mode_select() {
+    ...
+    ctlr->ms_queued =3D 0;
+    ctlr->ms_sdev =3D NULL;
+    ...
+}
+
+Could rdac_bus_detach() run concurrently during this window, see ms_queued =
+as
+zero, skip the workqueue flush, and proceed to free the handler data while
+the worker is still actively executing?
+
+[Severity: Critical]
+This is a pre-existing issue, but is there a potential stack buffer overflow
+in get_lun_info()?
+
+The function retrieves device data into inqp and uses array_uniq_id_len
+directly for a memory copy:
+
+get_lun_info() {
+    ...
+    memcpy(array_id, inqp->array_unique_id, inqp->array_uniq_id_len);
+    ...
+}
+
+The destination buffer is a 16-byte fixed-size stack array declared in
+rdac_bus_attach():
+
+rdac_bus_attach() {
+    char array_id[UNIQUE_ID_LEN];
+    ...
+}
+
+Since array_uniq_id_len is provided by the device (potentially up to 255),
+could an untrusted or misconfigured device provide an oversized length and
+overflow the stack frame?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713063640.3081=
+603-1-demonaxsh@gmail.com?part=3D1
 
