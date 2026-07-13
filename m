@@ -1,87 +1,85 @@
-Return-Path: <linux-scsi+bounces-26035-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26037-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 8Vn2IzNPVGq8kQMAu9opvQ
-	(envelope-from <linux-scsi+bounces-26035-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 04:36:35 +0200
+	id 4inyD1ZPVGrHkQMAu9opvQ
+	(envelope-from <linux-scsi+bounces-26037-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 04:37:10 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF692746A43
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 04:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D350C746A66
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 04:37:09 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=oracle.com header.s=corp-2025-04-25 header.b="EoaCxD3/";
+	dkim=pass header.d=oracle.com header.s=corp-2025-04-25 header.b=c3BNASgJ;
 	dmarc=pass (policy=reject) header.from=oracle.com;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26035-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26035-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26037-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26037-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 63ED6303D4D8
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 02:34:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CC84D3041AA1
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 02:34:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00221340412;
-	Mon, 13 Jul 2026 02:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADCEE32D0EE;
+	Mon, 13 Jul 2026 02:34:07 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DAF3242BD;
-	Mon, 13 Jul 2026 02:33:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D56E33F368;
+	Mon, 13 Jul 2026 02:33:55 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783910042; cv=none; b=izW7aj4JZcOl86n5lea+iZxpBUzgocJEIrOa2T47ryJhA+tFD3SAJaTz9sf3cUm148aOC7UWbGhhjbKM6IUVRQUCAGmYyQohWjidQnxqDDr7b8vu+HUQEdQG067J6ubvSDWOxkA0DGzYtRS0C5Yv8egxrYRd5s/cX27+NK0dfrU=
+	t=1783910043; cv=none; b=b+nN8pF/SyT3WAx9gQ2vzFwQZJTVCe1sgIGV8iQkU0gC7exSyIEf0TvDm8PRNWxzGZ/OjgxlajWWiy2x04p+OlQ8/K+RcANO6EXTpYqfoCF4LLrsJNHfVwObfzwZI+gcTL23Y+Rb9sRCwf142gOBr61iNdopvZkZiv3woPklY7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783910042; c=relaxed/simple;
-	bh=oSLzEXXJYuQSfapPi1oGwtRb7i/oVqLac2+KXIUxvjo=;
+	s=arc-20240116; t=1783910043; c=relaxed/simple;
+	bh=jwt2tryPTeJ9Hi3DSPFgB7yIT5PPdYH6XseGcDinOaQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tlYBgAuKD9q1FqvzPxXMauCj/pr0UvC3kfWSGEmQb1bbnCovrceQBtbnyqxnHNjsXiAKxAZgnJj3P8ircR6AyYHXxGJdEIQulBHm4UIZrCJomihVzVMJ5fZbo6eurZAXTEsC4YT/HflPD363Po5i6CYjxrymtKo+c3DMRWGffYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=EoaCxD3/; arc=none smtp.client-ip=205.220.165.32
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66D0Q38E180572;
+	 MIME-Version:Content-Type; b=hAtUZDdw6F4zfc6v2tyjcya6YROtiZO39LYOS7iqoIgPbIa9Rn/Qcr+qZf1m8NKdO9HVA7h/GDj1HWDj1ZAg4q3hMNdz1AhADZHu/zV3JCFEqoPF3RUSXzPUngaS03eL/eBqKf6uaPPetUgHOME8cFkMPws7nmy5HVmcEu5a5a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=c3BNASgJ; arc=none smtp.client-ip=205.220.165.32
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66D0Bn8x165806;
 	Mon, 13 Jul 2026 02:33:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=LKIzrYZnAO25BPi7hCa7lAndiDK+9kkZWsaqBGlKrZI=; b=
-	EoaCxD3/qk7aX6fCv4ZQKfyxejWOQycjTgdsw2qNac5HF/8F0/0Ce/Z01jOOg6LY
-	I7u+oJqFquBQOm3cylaTvDh2/YWSoNOD1Afd1USuz+5BOsoQotXhV6M3ISdXv/Ku
-	rxb0sYNYFtIOaDW1HdPW1OlhQ1Lm5FPPy9DnU76cx5fNm4wS1qQfbXaYsb+qDpcT
-	K0tgn2wdN1CaO7rj5awHtckExc2IfH//dClyC/wT0OHqZec6yrfMR4iZkE6AE7Xn
-	79SUQvi+khuXw3FOYYnvphRqs1eyyanbsCnWPnRmuRGkV42v6jYFDfHpu5atWwmu
-	kTueEAaXPHfwhYM7RVC0ig==
+	corp-2025-04-25; bh=qbv21PqstAcJbZkBnSBApkCoOs9joiHIT78ZoAOddoY=; b=
+	c3BNASgJ/+q9E/udTRtTod6NsuteUnovsLpsaBaiazGl0fZudtgaEXO/42nnTYfM
+	aelN1+0iNLEwSYiFEfDuRUV2MkDKgECdZFPXY/wbrv4KKY7w50eu0gMDF4TgdB2e
+	SvG2k2xlxk/0WGfBQYFqUwnS3ikiYhrtmF8jlekuGZd/khnsEtR2O80jEjhfXh3U
+	Zk5zVoULwNrex0DfWntJxN9SbBVchQdFdKrh46gxeVpHS+4bqSA8uWut64RlnfwK
+	6u/Fav4mB5B5BRt23xTVe+roUhoiMiSletXodhczneXPp0QS6YD+c5DDS35odhAH
+	9XZHFRBT5Oj/PshgUkKiRQ==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fbeedhckg-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fbepn1cr3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 13 Jul 2026 02:33:37 +0000 (GMT)
+	Mon, 13 Jul 2026 02:33:38 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66D2XVPC029136;
-	Mon, 13 Jul 2026 02:33:36 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66D2XV8W029220;
+	Mon, 13 Jul 2026 02:33:37 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4fbc9fssux-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4fbc9fssv4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Mon, 13 Jul 2026 02:33:36 +0000 (GMT)
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 66D2O0ct010878;
-	Mon, 13 Jul 2026 02:33:35 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 66D2O0cv010878;
+	Mon, 13 Jul 2026 02:33:36 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4fbc9fssh6-6;
-	Mon, 13 Jul 2026 02:33:35 +0000 (GMT)
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4fbc9fssh6-7;
+	Mon, 13 Jul 2026 02:33:36 +0000 (GMT)
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        linux-scsi@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
+To: Ram Vegesna <ram.vegesna@broadcom.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        WenTao Liang <vulab@iscas.ac.cn>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@sandisk.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Peter Wang <peter.wang@mediatek.com>
-Subject: Re: [PATCH] ufs: core: tracing: Do not dereference pointers in TP_printk()
-Date: Sun, 12 Jul 2026 22:32:37 -0400
-Message-ID: <178390967056.3399387.17096580780727607387.b4-ty@oracle.com>
+        Vitaliy Shevtsov <v.shevtsov@mt-integration.ru>,
+        Daniel Wagner <dwagner@suse.de>, Kees Cook <kees@kernel.org>,
+        James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] scsi: elx: efct: fix refcount leak in efct_hw_io_abort()
+Date: Sun, 12 Jul 2026 22:32:38 -0400
+Message-ID: <178390967077.3399387.1650905221698217241.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260630185412.283c26c5@gandalf.local.home>
-References: <20260630185412.283c26c5@gandalf.local.home>
+In-Reply-To: <20260611053037.63756-1-vulab@iscas.ac.cn>
+References: <20260611053037.63756-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -95,27 +93,27 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  definitions=2026-07-12_08,2026-07-10_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  spamscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0
- mlxscore=0 mlxlogscore=914 phishscore=0 classifier=spam adjust=0 reason=mlx
+ mlxscore=0 mlxlogscore=712 phishscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2606160000 definitions=main-2607130023
-X-Authority-Analysis: v=2.4 cv=d+bFDxjE c=1 sm=1 tr=0 ts=6a544e81 b=1 cx=c_pps
+X-Proofpoint-GUID: pvgZCk64IZ3kbVMtlh1dSGW8aNRLyyxJ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEzMDAyMyBTYWx0ZWRfX+Pox8jsLHujc
+ 3Nxp+TZce+cNswCD9WtXhJUIFXlVlLVwpwwVVNdJ/dJIw3u/7dvqR21DvdnbJwn6/C0uBzZuFeH
+ uRaaZiVgEjNmSlNksdq3x9jnOAyABIUmaYIyRUKMgdGpyZH4NnDaCw4Kir3Tkil5TFMVY+gPWEi
+ EkTztdtV4keJn2g7hVPXGDKfN60Fj+DzbNfIJoSDGGocuhKcKM2snXCN+ljkZxRaEsAzs5pRLZH
+ wcQSirBW/xtSASbSjSbAqcFNxZa9PJZe3ENKlhWGrBAUb8y4tEYZKmWBM+9NAzd53ZyjoLo09Tv
+ +brF/NAKxZ+TbFfy1U3QR+bUck+r5WCFbYdKnCjyrVPbvyoSk+WVArGgN1SP1mkMtXtnKaYpjHe
+ KoImGKbIbSnJJa9TVPMSBFqkGCsyqwq4FOwF8yeqonpJHvJtR/BLiek5lkzO2IV0V39P3K8glsy
+ 0gq5tTBRYtpb3pswceGlKKTQJymkAposYBlj2hzQ=
+X-Authority-Analysis: v=2.4 cv=bJom5v+Z c=1 sm=1 tr=0 ts=6a544e82 b=1 cx=c_pps
  a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
  a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8
- a=JfRuaTOZcsbe-I550hoA:9 a=QEXdDO2ut3YA:10 a=5yU3S35YU4bGjq-dph-N:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=x0eKOSpe3m1H3M0S9YoZ:22 a=VwQbUJbxAAAA:8
+ a=ylW9feQpB8xVrbssfo4A:9 a=QEXdDO2ut3YA:10 a=5yU3S35YU4bGjq-dph-N:22
  a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12221
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEzMDAyMyBTYWx0ZWRfX7fl7dADpiLoJ
- rfPbsgB3eLqU11+PDYBqFP1uAo164JMyxnl0zLBcxlvMm556YcjPBsQSZN/YyFuBPbeJl3JFxjD
- ITX7UbChcf+55oC75iWfQBjZGcT2BreuQsFP7z94EmhPfoLYBrjwkUpq7vEm8KHiTfSzRpb9PqF
- rYUS0MTrTlm+WkxUDaKI3hC+T+XpRMFdLFP2LXSndTj6s0CCyWErzOQP9cabwFgUsZW8HRpjIya
- ahq2yQcj2fPuAprhbLLON49tpkcgbL+RoxOPQ5uKoiPZMTiUG9ojiZ+Hf6d1tHtwrcVZ+BltD1T
- Qha3QPgGpAOqJMJA03EEBUm9sLumDudp4HEU2PF8sIVh/472exHrgDKAgj938Lzxd2MMifgPAEr
- GVymIlxGag32EGVf/oEaDIwGSBVghIoCaGM6+C1umB3x8jhehClZmeVD5ube0YpF+rJKwrcSWb4
- GiCNGktX4xFV+DATMjrsgXlsCWg7K/eUhbp1XNe4=
-X-Proofpoint-GUID: Q4KOtfjP0VOMi89s_p_3beBiOA-pXluI
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEzMDAyMyBTYWx0ZWRfX8JhmXPCgAZ05
- gJ1h+OSshzeErosjYp8x4e5htRwYBuhsNp34FUlTnNxsGDQJYIR/denY+M5dZRMjS5N+DnnkvEz
- PJknAANJrnHpDkFvBNVEGI/lCqSwgL6EDi8HSUp5hCs8yGEzdztD
-X-Proofpoint-ORIG-GUID: Q4KOtfjP0VOMi89s_p_3beBiOA-pXluI
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEzMDAyMyBTYWx0ZWRfXwK3Ge9aavjFl
+ CPq9DP+Bn5JPDInV7/jXRu5YbfnyjgWdpOInuafxgc5v2C0/O4gAr1f5DtC6uufydJD6/CM8Wbu
+ Pvun+3MBJkIJGUwiv1X4GB5ydaMiE2jGcaBMtGy4G+xbaT2cJLf7
+X-Proofpoint-ORIG-GUID: pvgZCk64IZ3kbVMtlh1dSGW8aNRLyyxJ
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-9.16 / 15.00];
 	WHITELIST_DMARC(-7.00)[oracle.com:D:+];
@@ -126,22 +124,23 @@ X-Spamd-Result: default: False [-9.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-26037-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-26035-lists,linux-scsi=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[12];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:linux-kernel@vger.kernel.org,m:linux-trace-kernel@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:rostedt@goodmis.org,m:martin.petersen@oracle.com,m:mhiramat@kernel.org,m:mathieu.desnoyers@efficios.com,m:alim.akhtar@samsung.com,m:avri.altman@sandisk.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:peter.wang@mediatek.com,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:ram.vegesna@broadcom.com,m:James.Bottomley@HansenPartnership.com,m:vulab@iscas.ac.cn,m:martin.petersen@oracle.com,m:v.shevtsov@mt-integration.ru,m:dwagner@suse.de,m:kees@kernel.org,m:jsmart2021@gmail.com,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stable@vger.kernel.org,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[oracle.com:+];
+	FORGED_SENDER(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
+	FREEMAIL_CC(0.00)[oracle.com,mt-integration.ru,suse.de,kernel.org,gmail.com,vger.kernel.org];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,oracle.com:from_mime,oracle.com:dkim,oracle.com:mid];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[oracle.com:+];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
@@ -149,28 +148,27 @@ X-Spamd-Result: default: False [-9.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: EF692746A43
+X-Rspamd-Queue-Id: D350C746A66
 
-On Tue, 30 Jun 2026 18:54:12 -0400, Steven Rostedt wrote:
+On Thu, 11 Jun 2026 13:30:37 +0800, WenTao Liang wrote:
 
-> The trace events in drivers/ufs/core/ufs_trace.h were converted to take a
-> pointer to the hba structure as an argument for the tracepoint and then in
-> TP_printk() the printing of the dev_name from the ring buffer was
-> converted to using the dev dereferenced pointer from the hba saved
-> pointer.
+> When efct_hw_reqtag_alloc() fails in efct_hw_io_abort(), the error
+> path returns -ENOSPC without releasing the reference obtained via
+> kref_get_unless_zero() earlier in the function. All other error
+> paths correctly drop the reference. This causes a permanent
+> reference leak on the io_to_abort object.
 > 
-> This is not allowed as the TP_printk() is executed at the time the trace
-> event is read from /sys/kernel/tracing/trace file. That can happen
-> literally, seconds, minutes, hours, weeks, days, or even months later!
-> There is no guarantee that the hba pointer will still exist by the time it
-> is dereferenced when the "trace" file is read.
+> Additionally, the abort_in_progress flag is left set to true on
+> this path, which means future abort attempts for the same I/O will
+> immediately return -EINPROGRESS even though the abort was never
+> submitted, effectively blocking recovery.
 > 
 > [...]
 
 Applied to 7.2/scsi-fixes, thanks!
 
-[1/1] ufs: core: tracing: Do not dereference pointers in TP_printk()
-      https://git.kernel.org/mkp/scsi/c/46aea2c64e11
+[1/1] scsi: elx: efct: fix refcount leak in efct_hw_io_abort()
+      https://git.kernel.org/mkp/scsi/c/2c007acf7b31
 
 -- 
 Martin K. Petersen
