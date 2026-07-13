@@ -1,302 +1,190 @@
-Return-Path: <linux-scsi+bounces-26067-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26068-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id S7RnOSsBVWoCiwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-26067-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 17:15:55 +0200
+	id pQj2FmUJVWrwjAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-26068-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 17:51:01 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E191F74CE51
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 17:15:54 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE78B74D457
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 17:51:00 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=mUOJSina;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=soR5R82M;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=QCgcM+Km;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Qj912vQy;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26067-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26067-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=suse.de;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=purestorage.com header.s=google2022 header.b=gsEOBe+w;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26068-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26068-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=purestorage.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2BB94308D609
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 14:57:56 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 63B38300D343
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 15:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BAA43D504;
-	Mon, 13 Jul 2026 14:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3612C1586;
+	Mon, 13 Jul 2026 15:50:54 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26586363094
-	for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2026 14:57:26 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783954649; cv=none; b=YcRE8iB/r/yTXvNJ0wWsN+sgTfwsb0aMhDQw21bEX5wVnU63x3tgHBZlz7MlxM9pIjaK7cvOBsljEsCqseP/xgSvm89Vaz0yyMr8ET11WV++6CBQqCi76wRyCqfYzLrfGEkKTG0dCQGNq71jTDio3yTVk+RZuitHU5dcDKXURP8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783954649; c=relaxed/simple;
-	bh=6ABN5gkGY/3/F9k+Yhjq2Bu4+3LHZvglZfQ52vr+EhU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r+8LAukea/ASaBTHpdj4igUmi//z7CTARoyYXuP6GFAA2F5ICidfWcMisPGrPSu7YRlYVYcj4vNbpilz0qLjy7Ic1UVXN+RwcQmLB7uTi7ivv//2zzSrrSCNeErq1SzuLxU5aylaMyOHAbdH27MjFwviI3BZdn56er1o9I7POo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mUOJSina; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=soR5R82M; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QCgcM+Km; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Qj912vQy; arc=none smtp.client-ip=195.135.223.130
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9421477946;
-	Mon, 13 Jul 2026 14:57:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783954643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w87g+D5SReWeuPg85I2R5REzG6jyR6WyeIEK7Oxt9Lo=;
-	b=mUOJSinalmE2ffsIONe157EXkZKLQiaoGJH7cUzcDCHJsvyT/YUW6QuDQdlluxQU5zFHak
-	5uHtBuxO+EDEO3tY/uW/kT0Q+9CKaedFem3BYOwQZylEsnA3ROaZTnHJoDU9pP31T7KNua
-	FLhrxB64E1UoSdV30u6p/XQXxmFjXAE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783954643;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w87g+D5SReWeuPg85I2R5REzG6jyR6WyeIEK7Oxt9Lo=;
-	b=soR5R82MF+Mu62i1L4HAbEIJ6vWZYBeWi31SZE979/ua2yD3lsy6IUUD318V2ruAhjzKga
-	HyBGeXDFxDaXaiAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783954642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w87g+D5SReWeuPg85I2R5REzG6jyR6WyeIEK7Oxt9Lo=;
-	b=QCgcM+Km5SZY8NOHjlCw3HosC8zS+PF0scHR2IwLdplL87Eaem5ybUMwG87hdA1rjngrmv
-	jfc2mqfXpfb9US5KoGmzJi4CuAqmiNBxt9mvN6apbKj7smPvowzdTcGXq+YNh7slMzW9Ry
-	eebKIgGCE6urB9kYpA+nMZpQoDQl6tw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783954642;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w87g+D5SReWeuPg85I2R5REzG6jyR6WyeIEK7Oxt9Lo=;
-	b=Qj912vQywvUs7wBqJ2BfrXiTmJvI4xAWx3e/pTEHECGFv+xcUxTb2o5xyu7np2AqVZnxUQ
-	B7mpilofPRlrSBAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9F73A779AE;
-	Mon, 13 Jul 2026 14:57:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id jkEmIMX8VGogSgAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Mon, 13 Jul 2026 14:57:09 +0000
-Message-ID: <d126eb95-4f57-43f7-8cde-31f201d3dad0@suse.de>
-Date: Mon, 13 Jul 2026 16:57:02 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5BC2BEFEE
+	for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2026 15:50:52 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783957854; cv=pass; b=ED2/pbCZKrSb45jTfa5ki3/rLkIb6KI4PlHifuVRa1FTRh6mTOL03uxQ/Sae2SynHSRJSj/eKv0wQUjuy7X2PLcq0XzyTi7mg0hdD7zrdf/sjVXei+Zy6lxiEs1y1xz0V6epfWv5W67LFsdKvTY1fHVy+Mh9/h46NoJnN4vA+4o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783957854; c=relaxed/simple;
+	bh=3mECq0JgKQxu+65FqIfg6qBb9bwB9oI7Lmlwod5ymao=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OkmdvrowkS3xDsLF+LrLnAoJ4/eHWCN9ASxweSXj7Xohk8Tl7AVQABXXSCOKOmJ/lTXmQ/p4XtcIhqrQEA0fXkTRt0ACkcMI6g5IqokOhE/E3JhMuu9FzMDpcXom0oJchz4Xo+e9pIrDfkOYsEf4ghDukzOmqHoNv3EbAoZrbjg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=gsEOBe+w; arc=pass smtp.client-ip=209.85.210.50
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7e9fc323873so498571a34.0
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2026 08:50:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783957851; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XrVGskZxSx5JJOYp0L7KY3ukizrQw1UWHygMoD/krVuvul06Bq9F5wLzyHITY4aouR
+         dnsUCNN1bOflCLTArGoNrd+1YOR7FcEFb/WFrRFhc141c0jTBIlZzkRJbhdJ9adHhhN4
+         7AhhHbV3ODso2mg036ZnbTQYt8XVSLN+qamgevcFFvgXgVkf8H3IulnvNWGuv73Ia9dA
+         1kNKY9uyJWRifk00C15R+kzChnlgpoxlHmpcw68qJ14UBjeM9Js0GFHBYP31Whw0azj6
+         mvnBgS0njXCoSm+VdIlROZRD9ZtTPI7bndnvgRFy5n33PznTZwgAgCNikel1pnUgZyOl
+         Vomw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3mECq0JgKQxu+65FqIfg6qBb9bwB9oI7Lmlwod5ymao=;
+        fh=KiZM1ZDRJQC3toeaRbDYwvAPYRv6+yQFQN6TFW0ofgY=;
+        b=kEQBXffXVcsA791xIG9BNN9hBxAO+k9Hy/ACG/QIqbNlCoHzXsDXe5o76rwb+p4o0a
+         smBNqn6KWCXusmMRWmucSC7A6GuqkrHxsq+msD+2f9Zp+rzswPbnMSG7LPZhDCfSVqnl
+         UF9N3q3jM3Zotr6cCyyTDpSRxblcr5/2REftQFOgDwLD/1rdP/CEe3iTT1lEss5K7miJ
+         GNHHUXBwklLlppgfDOf2dADSWqVKfA/zEKscR0iYc+aupmsfSuXlh8Rv1xvg/HpFeXqD
+         pgxakDYi40CaaNbxzkBdtefxFcz2Nx28JrsmmULhI/nbqmiC7bYZ/zW+Sw9zvHvWIJF/
+         Q0VQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1783957851; x=1784562651; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3mECq0JgKQxu+65FqIfg6qBb9bwB9oI7Lmlwod5ymao=;
+        b=gsEOBe+wIyNi+N+Y3DYT3ewaeUbTGU/25iTY6t5gwTvo50Ha/Pppkph49XdFrYJ9/j
+         jIIJn03KaJkTEPGJVUu4eJyLpQLoMZ9GzNknaqAxnwAidNb97l7VJlDZYEicBkYY7wm/
+         8qjIZ3oM8ZbdfHr/XzyAtJRg3yjryLMaaQdsRQ0OF0LjAExZ17hXX7vbTHJDPrAslyiS
+         cFzlfTyAyYqNgRevkCO5Wwx8jW8oYZ0YHAwh7ucG7Es2qWa03W8PdM406LBbEnVRWy9v
+         0Pf6nIDpPfFtHXrDnazsbvgsW+RqhkyJVppRz/fA3HW7qwnX4kquonwZFL9xynJ2x/R5
+         Ne0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783957851; x=1784562651;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3mECq0JgKQxu+65FqIfg6qBb9bwB9oI7Lmlwod5ymao=;
+        b=I7HfFQ1ZS4XlrOSp9z0TdciRYgDrekS1IEJGAiN3p/fFgsTypU55MolhHtd7U3a/ND
+         nCAcGlct/mOScOxx1NEnV2Rxi4JsDkP6taM1P8N7Ung/rOm+mJHDcrkKUAn7bYO55FH4
+         dJcqoCvsGIRbpjBHbTI+/S2pF61C8hm3q5zokWRbwddOjXbZ7kCNVT5hTm+VWR1zQHbn
+         1VmwvWTf+n9UldNYCNIUs1itb3TEV3getmBH0TSsgwW9cJsUYpP2Au1vRBhXaUASnOaG
+         yTkN3UJvAtPKpTdcGOAClOcnpodSbVeJyS4gS2+7KchBbW+5+ZENyxPpzxk1X0tU2Zxm
+         uzSA==
+X-Forwarded-Encrypted: i=1; AFNElJ/sANAXP+MoNQWAZv5HmHdKUe7zltUZc3kRfMGnozcEdcxHKbcbUVD4bznyqit7tqIUW0Sv8eD6MzVr@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjoIeHMOyw3bBbLj1ecl4EBu7aksByfdmh5lj5ZiEOKrLbJgwr
+	J9vsqol4Uvgbatqa7b0akKqBTQVr1mV6cPgrET2ZBpe1dyBlfJtgHZ16w+GVk87tzUKQqc0FkRl
+	lRvHwkwCUWSyg00CZJbOCEU0y3nftH3g4ksqlO3xm1w==
+X-Gm-Gg: AfdE7clxJIn/yudDbDW0RStnmwcqLy+jZJyTFX3FvTEDVJNZeEWs9E56AlLcmxTUrkT
+	xwR9/dMmvD4MEJDF6SmP9wv3Dm+deTQxOkjX4rY9QAdhn7tsnWsfSMCqxiLT9GUhKeRnv6njNT6
+	5nTNefE8mThg/AtDJt5+FISKv4gd3sx90Akx+DAnmL+Ubo/I8hHao2DWQuHzg1Mb/bj5Wsbo4Eh
+	O1W/UFJjzz411XI7M7tQIQlXeVO/wXv5I9dy13XVXV0rOvbCKX2T580qRuiYyHyAhsIY3cfpw==
+X-Received: by 2002:a05:6830:650f:b0:7e9:e702:a9d1 with SMTP id
+ 46e09a7af769-7ec097b58famr3955386a34.4.1783957851185; Mon, 13 Jul 2026
+ 08:50:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/13 RFC net-next] net: ipv4: introduce CONFIG_IPV4 to
- decouple the IPv4 stack
-To: Arnd Bergmann <arnd@arndb.de>, Netdev <netdev@vger.kernel.org>
-Cc: "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>,
- Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>,
- Anthony L Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Elad Nachman <enachman@marvell.com>, Saeed Mahameed <saeedm@nvidia.com>,
- Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
- Petr Machata <petrm@nvidia.com>, Edward Cree <ecree.xilinx@gmail.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Arend van Spriel <arend.vanspriel@broadcom.com>,
- Miri Korenblit <miriam.rachel.korenblit@intel.com>,
- Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
- Chaitanya Kulkarni <kch@nvidia.com>, Saurav Kashyap <skashyap@marvell.com>,
- Javed Hasan <jhasan@marvell.com>, GR-QLogic-Storage-Upstream@marvell.com,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Nilesh Javali <njavali@marvell.com>,
- Manish Rangankar <mrangankar@marvell.com>, Varun Prakash
- <varun@chelsio.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>,
- Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
- Chuck Lever <cel@kernel.org>, Jeff Layton <jlayton@kernel.org>,
- NeilBrown <neil@brown.name>, Olga Kornievskaia <okorniev@redhat.com>,
- Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
- Marek Lindner <marek.lindner@mailbox.org>,
- Simon Wunderlich <sw@simonwunderlich.de>,
- Antonio Quartulli <antonio@mandelbit.com>,
- Sven Eckelmann <sven@narfation.org>,
- Nikolay Aleksandrov <razor@blackwall.org>,
- Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
- Phil Sutter <phil@nwl.cc>, Johannes Berg <johannes@sipsolutions.net>,
- Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, Julian Anastasov <ja@ssi.bg>,
- Aaron Conole <aconole@redhat.com>, Eelco Chaudron <echaudro@redhat.com>,
- Ilya Maximets <i.maximets@ovn.org>, Allison Henderson <achender@kernel.org>,
- Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
- Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
- Xin Long <lucien.xin@gmail.com>, "D. Wythe" <alibuda@linux.alibaba.com>,
- Dust Li <dust.li@linux.alibaba.com>, Sidraya Jayagond
- <sidraya@linux.ibm.com>, Wenjia Zhang <wenjia@linux.ibm.com>,
- Mahanta Jambigi <mjambigi@linux.ibm.com>, Tony Lu
- <tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>,
- Jon Maloy <jmaloy@redhat.com>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Vikas Gupta <vikas.gupta@broadcom.com>,
- Rajashekar Hudumula <rajashekar.hudumula@broadcom.com>,
- Justin Chen <justin.chen@broadcom.com>,
- Bhargava Marreddy <bhargava.marreddy@broadcom.com>,
- Nicolai Buchwitz <nb@tipi-net.de>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Heiner Kallweit <hkallweit1@gmail.com>, Krzysztof Kozlowski
- <krzk@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>,
- Yao Zi <me@ziyao.cc>, Yanteng Si <siyanteng@cqsoftware.com.cn>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Julian Braha <julianbraha@gmail.com>, Joey Lu <a0987203069@gmail.com>,
- Shangjuan Wei <weishangjuan@eswincomputing.com>,
- Chen-Yu Tsai <wens@kernel.org>, Inochi Amaoto <inochiama@gmail.com>,
- "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Qingfang Deng <qingfang.deng@linux.dev>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Eric Biggers <ebiggers@kernel.org>,
- Ethan Nelson-Moore <enelsonmoore@gmail.com>, Ard Biesheuvel
- <ardb@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Alyssa Ross <hi@alyssa.is>,
- linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
- "open list:NETRONOME ETHERNET DRIVERS" <oss-drivers@corigine.com>,
- linux-net-drivers@amd.com, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-wireless@vger.kernel.org,
- brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
- linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
- b.a.t.m.a.n@lists.open-mesh.org,
- "open list:ETHERNET BRIDGE" <bridge@lists.linux.dev>,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- mptcp@lists.linux.dev, lvs-devel@vger.kernel.org, dev@openvswitch.org,
- rds-devel@oss.oracle.com, linux-sctp@vger.kernel.org,
- linux-s390@vger.kernel.org,
- "open list:TIPC NETWORK LAYER" <tipc-discussion@lists.sourceforge.net>
-References: <20260712013941.4570-1-fmancera@suse.de>
- <20260712013941.4570-2-fmancera@suse.de>
- <12ffac6a-649a-4e4a-8d12-0b48171e1d95@app.fastmail.com>
- <2256daf4-d03c-4a57-9d72-7a388d823f18@suse.de>
- <713178ff-0fb2-4f1b-90bc-9841cd42c20e@app.fastmail.com>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <713178ff-0fb2-4f1b-90bc-9841cd42c20e@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -0.80
+References: <20260627054220.2174166-1-csander@purestorage.com> <yq1cxwrdgmx.fsf@ca-mkp.ca.oracle.com>
+In-Reply-To: <yq1cxwrdgmx.fsf@ca-mkp.ca.oracle.com>
+From: Caleb Sander Mateos <csander@purestorage.com>
+Date: Mon, 13 Jul 2026 08:50:39 -0700
+X-Gm-Features: AUfX_mwkxpGgZJY4pVFOcqA7Ferj1yZzrVgo2oA_tVNxLSUmFMmyocci83-Ncfw
+Message-ID: <CADUfDZoGyu-EWxT5tN41K24oFwu8p4mmxFRsHcDpLBoAY6Y0Yw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] block: use integrity interval instead of sector as seed
+To: "Martin K. Petersen" <martin.petersen@oracle.com>, Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, Sagi Grimberg <sagi@grimberg.me>, 
+	Chaitanya Kulkarni <kch@nvidia.com>, Anuj Gupta <anuj20.g@samsung.com>, linux-block@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org, 
+	target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[purestorage.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[purestorage.com:s=google2022];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[davemloft.net,google.com,kernel.org,redhat.com,nvidia.com,ziepe.ca,lunn.ch,intel.com,marvell.com,gmail.com,foss.st.com,broadcom.com,kernel.dk,lst.de,grimberg.me,hansenpartnership.com,oracle.com,chelsio.com,zeniv.linux.org.uk,suse.cz,auristor.com,brown.name,talpey.com,mailbox.org,simonwunderlich.de,mandelbit.com,narfation.org,blackwall.org,netfilter.org,strlen.de,nwl.cc,sipsolutions.net,ssi.bg,ovn.org,mojatatu.com,resnulli.us,linux.alibaba.com,linux.ibm.com,secunet.com,gondor.apana.org.au,tipi-net.de,armlinux.org.uk,ziyao.cc,cqsoftware.com.cn,bootlin.com,eswincomputing.com,bp.renesas.com,linux.dev,linuxfoundation.org,alyssa.is,vger.kernel.org,lists.osuosl.org,corigine.com,amd.com,st-md-mailman.stormreply.com,lists.infradead.org,lists.linux.dev,lists.open-mesh.org,openvswitch.org,oss.oracle.com,lists.sourceforge.net];
+	TAGGED_FROM(0.00)[bounces-26068-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26067-lists,linux-scsi=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:arnd@arndb.de,m:netdev@vger.kernel.org,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:dsahern@kernel.org,m:horms@kernel.org,m:idosch@nvidia.com,m:jgg@ziepe.ca,m:leon@kernel.org,m:andrew+netdev@lunn.ch,m:anthony.l.nguyen@intel.com,m:przemyslaw.kitszel@intel.com,m:enachman@marvell.com,m:saeedm@nvidia.com,m:tariqt@nvidia.com,m:mbloch@nvidia.com,m:petrm@nvidia.com,m:ecree.xilinx@gmail.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:arend.vanspriel@broadcom.com,m:miriam.rachel.korenblit@intel.com,m:kbusch@kernel.org,m:axboe@kernel.dk,m:hch@lst.de,m:sagi@grimberg.me,m:kch@nvidia.com,m:skashyap@marvell.com,m:jhasan@marvell.com,m:GR-QLogic-Storage-Upstream@marvell.com,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:njavali@marvell.com,m:mrangankar@marvell.com,m:varun@chelsio.com,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:jack@suse.cz,m:dhowells@redhat.com,m:marc.dionne@auristor.com,m
- :trondmy@kernel.org,m:anna@kernel.org,m:cel@kernel.org,m:jlayton@kernel.org,m:neil@brown.name,m:okorniev@redhat.com,m:Dai.Ngo@oracle.com,m:tom@talpey.com,m:marek.lindner@mailbox.org,m:sw@simonwunderlich.de,m:antonio@mandelbit.com,m:sven@narfation.org,m:razor@blackwall.org,m:pablo@netfilter.org,m:fw@strlen.de,m:phil@nwl.cc,m:johannes@sipsolutions.net,m:matttbe@kernel.org,m:martineau@kernel.org,m:geliang@kernel.org,m:ja@ssi.bg,m:aconole@redhat.com,m:echaudro@redhat.com,m:i.maximets@ovn.org,m:achender@kernel.org,m:jhs@mojatatu.com,m:jiri@resnulli.us,m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:alibuda@linux.alibaba.com,m:dust.li@linux.alibaba.com,m:sidraya@linux.ibm.com,m:wenjia@linux.ibm.com,m:mjambigi@linux.ibm.com,m:tonylu@linux.alibaba.com,m:guwen@linux.alibaba.com,m:jmaloy@redhat.com,m:steffen.klassert@secunet.com,m:herbert@gondor.apana.org.au,m:vikas.gupta@broadcom.com,m:rajashekar.hudumula@broadcom.com,m:justin.chen@broadcom.com,m:bhargava.marreddy@broadcom.com,m:nb@tipi
- -net.de,m:florian.fainelli@broadcom.com,m:hkallweit1@gmail.com,m:krzk@kernel.org,m:rmk+kernel@armlinux.org.uk,m:me@ziyao.cc,m:siyanteng@cqsoftware.com.cn,m:maxime.chevallier@bootlin.com,m:julianbraha@gmail.com,m:a0987203069@gmail.com,m:weishangjuan@eswincomputing.com,m:wens@kernel.org,m:inochiama@gmail.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER(0.00)[fmancera@suse.de,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:hch@lst.de,m:axboe@kernel.dk,m:sagi@grimberg.me,m:kch@nvidia.com,m:anuj20.g@samsung.com,m:linux-block@vger.kernel.org,m:linux-nvme@lists.infradead.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[suse.de:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[purestorage.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fmancera@suse.de,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[134];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi,netdev,kernel];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,suse.de:from_mime,suse.de:dkim,suse.de:mid]
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp,mail.gmail.com:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E191F74CE51
+X-Rspamd-Queue-Id: CE78B74D457
 
-On 7/13/26 4:22 PM, Arnd Bergmann wrote:
-> On Mon, Jul 13, 2026, at 16:00, Fernando Fernandez Mancera wrote:
->> On 7/12/26 1:01 PM, Arnd Bergmann wrote:
->>> On Sun, Jul 12, 2026, at 03:38, Fernando Fernandez Mancera wrote:
->>>> Historically, the IPv4 protocol has been linked to the core INET
->>>> subsystem. Because shared infrastructure like the TCP/UDP engine,
->>>> routing or INET hashtables live inside net/ipv4/, it has been impossible
->>>> to compile a kernel with only IPv6 support.
->>>>
->>>> This patch introduces the CONFIG_IPV4 Kconfig symbol, which is set to
->>>> 'def_bool y' for now. This does not allow to completely disable the
->>>> IPv4 stack yet but it lays the necessary build-system work for that
->>>> goal.
->>>
->>> I expect this will cause additional (trivial) build regression in the
->>> next step when randconfig builds run into obscure corner cases, either
->>> with INET=y IPV4=n IPV6=y or with INET=y IPV4=n IPV6=n.
->>>
->>> I can probably give your patch (with IPV4 visible or disabled) an
->>> early go on the randconfig tree to find these more quickly.
->>> If I run into regressions, should I just add more 'depends on IPV4',
->>> or do you have other plans?
->>>
->>
->> Yes, I have a job running randconfig and verifying nothing breaks. If
->> something breaks and it isn't core networking stack I would just make
->> the Kconfig symbol depend on IPv4.
->>
->> Then later we will have more time to write a dedicate patch so it does
->> not depend on IPv4.
-> 
-> Ok
-> 
->>> Should we have some logic to ensure that at least one of IPV4 or
->>> IPV6 is enabled? I think this would work
->>>
->>> config IPV4
->>>         bool "The IPv4 protocol" if IPV6
->>>         default INET
->>>
->>> which only allows turning IPV4 off if IPV6 has enabled.
->>>
->>
->> I do wonder, should we? I mean, I didn't try it off but I don't see why
->> we should not allow a pure L2 system..
-> 
-> I expected a pure L2 system to be CONFIG_ETHERNET=y CONFIG_INET=n.
-> 
-> Which user-visible parts of CONFIG_INET would you want keep working
-> when both v4 and v6 are disabled?
-> 
+On Sun, Jul 12, 2026 at 4:09=E2=80=AFPM Martin K. Petersen
+<martin.petersen@oracle.com> wrote:
+>
+>
+> Caleb,
+>
+> > The block integrity layer currently sets the integrity seed (initial
+> > reference tag) in units of 512-byte sectors.
+>
+> ... because that is the fundamental addressing unit in the block layer.
+>
+> > However, Type 1 and Type 2 ref tags are actually in units of integrity
+> > intervals.
+>
+> They are not in units of anything until they reach their final
+> protection envelope.
+>
+> > On devices with integrity interval size > 512 bytes, ref tags are
+> > seeded incorrectly.
+>
+> The bip seed is whatever the caller decides it should be. The integrity
+> interval size is irrelevant. As is the destination LBA.
+>
+> > But REQ_OP_ZONE_APPEND operations don't have their ref tags remapped,
+> > so the ref tags using units of sectors will be stored to the device.
+>
+> Then there's a problem with how we handle REQ_OP_ZONE_APPEND. For NVMe,
+> the PIREMAP flag should address this issue by remapping the written ref
+> tags based on their ultimate destination LBA.
 
-Yes, you are right. So I think introducing something as you proposed 
-makes sense. Right now I cannot think about something needed from INET 
-for pure L2.
+Yes, it looks like PIREMAP should allow this to work. But Christoph
+reported that ref tags weren't working correctly with
+REQ_OP_ZONE_APPEND:
+https://lore.kernel.org/linux-block/20260624080014.1998650-3-hch@lst.de/T/#=
+u
 
-Thank you!
-Fernando.
+Christoph, were you testing with an NVMe ZNS device?
+
+Thanks,
+Caleb
 
