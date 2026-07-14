@@ -1,213 +1,250 @@
-Return-Path: <linux-scsi+bounces-26108-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26109-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ZY4zEeqbVWqfqwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-26108-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 04:16:10 +0200
+	id fVY1BTbMVWpOtgAAu9opvQ
+	(envelope-from <linux-scsi+bounces-26109-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 07:42:14 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04E8D750531
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 04:16:09 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50EA77513C9
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 07:42:13 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=h-partners.com header.s=dkim header.b=Yh3uU+7H;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26108-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26108-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=fail reason="SPF not aligned (relaxed), DKIM not aligned (relaxed)" header.from=huawei.com (policy=quarantine);
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=COHQnAmQ;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26109-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26109-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0D4FF301914D
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 02:16:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 924663028B7E
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 05:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40C3637A488;
-	Tue, 14 Jul 2026 02:16:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08D7D33D6F9;
+	Tue, 14 Jul 2026 05:41:28 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3FB184540;
-	Tue, 14 Jul 2026 02:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C569D30BF70;
+	Tue, 14 Jul 2026 05:41:26 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783995365; cv=none; b=gIlUzxDovEBDpG6LEKV5p+rqk8JU84vT4fW+4+m1fCH+lk2QmPM1MwfFNsv8ZsCjdET29pyvlTc4QHMJv2pIJa3+uQIo1CJ6hhT2oXn7Y5EAy7AgGIrblOmTzYwaYlmItBesnHbHbvLONKuEzkIXg6SZymf+tHOSbHNsuDlJeFM=
+	t=1784007687; cv=none; b=Dg+51MrqHrkhg7hQraMllf9h00YV/shpNv+4g95wMNZLxgC7gbEaBwhhbGDlsxLtTL51v9j39dnGNIea7LWX6RQIbRGmmUBm6p2e4tC/PV962hfbDibsxHazRFKi38yKS6iWCkU4lvqsyo3xUOPkZrrDsdNkeVlAcGc5yhgZjc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783995365; c=relaxed/simple;
-	bh=tZX++DfyPVDO/toe/oHXewgONqwFDUfXmOoTF6i2/oY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=tChdU7C2pGTbP33uU8Mhi56RsW7xvQpN2RIorFxAemlX/CyJGUjAZ+8rbSrveIgNlRcWM1/+NIFQVrmjl1XZ6x232JXjwnghwf4S2U9yujU5GqrKKARThwh8qQmQdikYVLOEOxHPLsLzrfEGPHTXSFyUke3geEx8nkWFFA6EpGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=Yh3uU+7H; arc=none smtp.client-ip=113.46.200.225
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=/0mhCrZ7CEJuo4fhtXWSJiqGCZOLSdFGZ1XOIPhZsbo=;
-	b=Yh3uU+7HbDLfuUWQ7Nycu6y6ZbcTn7DpmIzQ6tqlT/SLgTfuDH8nSKc3L1w+JlTDjcrXAU0Mj
-	hxRKkWCooKNMySmvq3GnV9WB9x/diSC90fjYZ2FycX2gZ+gDGvflhDgTBvCzLf5IFNutcLa7uu3
-	pwVso64AUPT31esY8o6DEUY=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4gzjNC6flXz1K96b;
-	Tue, 14 Jul 2026 10:06:35 +0800 (CST)
-Received: from kwepemj100018.china.huawei.com (unknown [7.202.194.12])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3D07E40586;
-	Tue, 14 Jul 2026 10:15:52 +0800 (CST)
-Received: from [10.67.120.108] (10.67.120.108) by
- kwepemj100018.china.huawei.com (7.202.194.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Tue, 14 Jul 2026 10:15:51 +0800
-Message-ID: <e91cdddb-2323-904f-dc63-3d00597b5c8f@huawei.com>
-Date: Tue, 14 Jul 2026 10:15:51 +0800
+	s=arc-20240116; t=1784007687; c=relaxed/simple;
+	bh=4okm+848ls9ZaBkYF9L80q0vDBBKyYp+SCTYHqKBC98=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lVQAno3ViP1GXZpxY55Rtym0DUPL68J2OggYR2qf1qHHhmUdSQVxEa9ajGMSsBlemw2M/bdgGBLRGbf3FoTO0tep73ANWZnZt5mUVwKsK9AY/MlSTVSpxjGVrNlhNjMaAUkURFxkHCG/7kdOYG22+WpiT5flozuJ0hhpvxzOVQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=COHQnAmQ; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 651D51F000E9;
+	Tue, 14 Jul 2026 05:41:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784007686;
+	bh=9dqzQmPd9zn0fg00HGPgmxAGwnP58Nc3j/8g+H3dHsE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=COHQnAmQpUw1avhW9yVcFaAIGw0EpEdDu+pUQnJ2qWeMlKPa7KgSs3bqlLdYyLrNQ
+	 hjIwnrXPaJUg0A0PPUNYbm/paUzoXLR4IXrM7ZbWh3GF+3AdPlJttzwN3vvEdlX3Y3
+	 /dygJuqIYIbWWB9GtwB2pOC//J62CHNcvBllpc+z8dLI6qywFhUo5iH6h8D2QjfE87
+	 uy3gOucMDHXYH5EDOU5rQ6o+5cfSF84ZsiGF+jX3Ckl+OFpWDD77LbYn0fNY6Pl28H
+	 rHyeJFFMg753m193sQwesonFExp3wSnUFn59EPjMkkzQ1519oRYEdqykZF+WKuwv2K
+	 eRsUj5cSbZWBg==
+Message-ID: <f31d12e0-e7e8-4fba-aa6a-9461f7aced4d@kernel.org>
+Date: Tue, 14 Jul 2026 14:41:13 +0900
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2] scsi: libsas: fix HA resume deadlock and hisi_sas
- disk-wake race
-Content-Language: en-CA
-To: John Garry <john.g.garry@oracle.com>, <yanaijie@huawei.com>,
-	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <liuyonglong@huawei.com>, <kangfenglong@huawei.com>
-References: <20260702033211.1743313-1-yangxingui@huawei.com>
- <379091c9-3cd2-7599-baae-8c7f278e7ec3@huawei.com>
- <56d1c5d9-cb3f-4bef-a099-304ef0c49837@oracle.com>
-From: yangxingui <yangxingui@huawei.com>
-In-Reply-To: <56d1c5d9-cb3f-4bef-a099-304ef0c49837@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] ata: libata-scsi: terminate deferred commands on
+ time out
+To: Niklas Cassel <cassel@kernel.org>
+Cc: linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Igor Pylypiv <ipylypiv@google.com>, John Garry <john.g.garry@oracle.com>,
+ Jason Yan <yanaijie@huawei.com>
+References: <20260713041252.463401-1-dlemoal@kernel.org>
+ <20260713041252.463401-2-dlemoal@kernel.org> <alTDGdJMA-XZHeS-@fedora>
+From: Damien Le Moal <dlemoal@kernel.org>
+Content-Language: en-US
+Organization: Western Digital Research
+In-Reply-To: <alTDGdJMA-XZHeS-@fedora>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepemh100017.china.huawei.com (7.202.181.103) To
- kwepemj100018.china.huawei.com (7.202.194.12)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
+X-Spamd-Result: default: False [-5.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[h-partners.com:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-26108-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:cassel@kernel.org,m:linux-ide@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:martin.petersen@oracle.com,m:ipylypiv@google.com,m:john.g.garry@oracle.com,m:yanaijie@huawei.com,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:yanaijie@huawei.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linuxarm@huawei.com,m:liuyonglong@huawei.com,m:kangfenglong@huawei.com,s:lists@lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
+	HAS_ORG_HEADER(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-26109-lists,linux-scsi=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	TAGGED_RCPT(0.00)[linux-scsi];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,h-partners.com:dkim]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 04E8D750531
+X-Rspamd-Queue-Id: 50EA77513C9
 
-Hi, John
-
-On 2026/7/13 19:26, John Garry wrote:
-> On 13/07/2026 04:10, yangxingui wrote:
->> Kindly ping for review...
->>
->> On 2026/7/2 11:32, Xingui Yang wrote:
->>> Commit fbefe22811c3140 ("scsi: libsas: Don't always drain event 
->>> workqueue
->>> for HA resume") introduced sas_resume_ha_no_sync() to avoid a 
->>> deadlock: the
->>> PHYE_RESUME_TIMEOUT handler, running on the HA event workqueue, calls
->>> sas_deform_port() -> sas_destruct_devices(), which removes SCSI 
->>> devices and
->>> waits for the host to become runtime-active. But the host cannot resume
->>> until sas_resume_ha() -> sas_drain_work() returns, and the drain is 
->>> blocked
->>> on that very handler.
->>>
->>> However skipping the drain reintroduces a race: hisi_sas returns from
->>> resume before all PHY UP work and libsas discovery work finish. The
->>> controller may then autosuspend while disks are still waking up. The 
->>> disks
->>> issue IO to a suspended controller, the IO fails, and the disks get
->>> disabled.
->>>
->>> Fix the deadlock at its source by moving the PHYE_RESUME_TIMEOUT
->>> notification to after sas_drain_work(). By then the host resume is 
->>> about to
->>> complete, so device removal through device_link no longer blocks on the
->>> resume and the cycle is broken.
->>>
->>> With the deadlock gone, restore sas_resume_ha() (the draining 
->>> variant) in
->>> hisi_sas and remove sas_resume_ha_no_sync().
->>>
->>> Fixes: fbefe22811c3140 ("scsi: libsas: Don't always drain event 
->>> workqueue for HA resume")
->>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+On 7/13/26 19:51, Niklas Cassel wrote:
+>> +void ata_eh_schedule_deferred_qc_retry(struct ata_port *ap,
+>> +				       struct scsi_cmnd *scmd)
+>> +{
+>> +	struct ata_queued_cmd *qc;
+>> +	struct ata_link *link;
+>> +	unsigned long flags;
+>> +
+>> +	/*
+>> +	 * Trigger EH for retrying any deferred qc that is not the queued
+>> +	 * command for scmd.
+>> +	 */
+>> +	spin_lock_irqsave(ap->lock, flags);
+>> +	ata_for_each_link(link, ap, PMP_FIRST) {
+>> +		qc = link->deferred_qc;
+>> +		if (!qc || qc->scsicmd == scmd)
+>> +			continue;
+>> +
+>> +		link->deferred_qc = NULL;
+>> +		cancel_work(&link->deferred_qc_work);
+>> +		qc->flags |= ATA_QCFLAG_RETRY;
+>> +		ata_qc_schedule_eh(qc);
+>> +	}
+>> +	spin_unlock_irqrestore(ap->lock, flags);
 > 
-> Any idea why this problem has only been discovered after 5 years (from 
-> fbefe22811c3140 being merged)?
+> I was expecting you to modify ata_scsi_requeue_deferred_qc() to also
+> requeue commands using this method, so we only have one of the functions.
 > 
-> Is there some new test case?
+> Would it work if you modify ata_scsi_requeue_deferred_qc() to essentially
+> call this function instead?
 
-Yes, the test environment is connected to more SATA disks. During the 
-wake-up process, the controller wakes up first, and then the disks wake 
-up one by one. Since the number of SATA disks has increased, and the 
-SATA disk enter the EH (Error Handling) process when waking up, the 
-wake-up time has become longer than before. It is possible that the 
-controller has already entered the next suspend state, while many disks 
-are still in the previous wake-up process, leading to a failure in disk 
-wake-up and the disks being disabled.
+Yes, good point. I will do more tests but looks OK so far to do the retry
+through EH. Initially, I did not want to do that to not trigger EH too much,
+but as you pointed out, ata_scsi_requeue_deferred_qc() is called only if EH is
+already scheduled or already running. So there is no point in not using it.
 
-However, we have tested some different kernel versions in between and 
-found that the following patch significantly improves this issue, but it 
-does not completely resolve it.
+> """
+> [Severity: Critical]
+> This is a pre-existing issue, but won't the explicit invocation of this
+> requeue logic on every command timeout make a regression more likely?
+> 
+> When ata_scsi_requeue_deferred_qc() completes a deferred command using
+> ata_scsi_qc_done() with DID_REQUEUE, it unconditionally calls
+> ata_qc_free(), which clears the active flag.
+> """
 
-bede543d2f8a: ACPI: OSL: Use usleep_range() in acpi_os_sleep()
+When I read this comment from Sashiko, it seems to me that it refers to the
+race between command normal completion and timeout timer triggering. Both may
+happen at nearly the same time, and one may "win" depending on which is
+processed first. Though if it is the timeout, we still endup doing a normal
+completion if there was one. The code comment:
 
-In addition, if some disks wake up a bit slowly, it may also lead to 
-ssubsequent disk wake-up failure.
-[  286.932540] hisi_sas_v3_hw 0000:32:04.0: resuming from operating 
-state [D0]
-[  287.732627] hisi_sas_v3_hw 0000:32:04.0: end of resuming controller
-[  293.167893] hisi_sas_v3_hw 0000:32:04.0: entering suspend state
-[  341.760789] sas: Enter sas_scsi_recover_host busy: 0 failed: 0
-[  341.761006] sas: Executing internal abort failed 5000000000000307 (-22)
-[  341.761021] hisi_sas_v3_hw 0000:32:04.0: I_T nexus reset: internal 
-abort (-22)
-[  341.761028] sas: ata4: end_device-3:3: Unable to reset ata device?
-[  341.916134] sas: lldd_execute_task returned: -22
-[  341.916161] ata4.00: failed to IDENTIFY (I/O error, err_mask=0x40)
-[  341.916165] ata4.00: revalidation failed (errno=-5)
-[  346.980523] sas: Executing internal abort failed 5000000000000307 (-22)
-[  346.980542] hisi_sas_v3_hw 0000:32:04.0: I_T nexus reset: internal 
-abort (-22)
-[  346.980552] sas: ata4: end_device-3:3: Unable to reset ata device?
-[  347.136137] sas: lldd_execute_task returned: -22
-[  347.136163] ata4.00: failed to IDENTIFY (I/O error, err_mask=0x40)
-[  347.136169] ata4.00: revalidation failed (errno=-5)
-[  352.356924] sas: Executing internal abort failed 5000000000000307 (-22)
-[  352.357001] hisi_sas_v3_hw 0000:32:04.0: I_T nexus reset: internal 
-abort (-22)
-[  352.357011] sas: ata4: end_device-3:3: Unable to reset ata device?
-[  352.512174] sas: lldd_execute_task returned: -22
-[  352.512255] ata4.00: failed to IDENTIFY (I/O error, err_mask=0x40)
-[  352.512263] ata4.00: revalidation failed (errno=-5)
-[  352.512269] ata4.00: disable device
-[  352.512324] sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 
-tries: 1
-[  352.512408] sas: sas_resume_sata: for direct-attached device 
-5000000000000307 returned -19
+int ata_scsi_cmd_error_handler()
+{
+	...
 
+	/* Normal completion occurred after
+	 * SCSI timeout but before this point.
+	 * Successfully complete it.
+	 */
+	scmd->retries = scmd->allowed;
+	scsi_eh_finish_cmd(scmd, &ap->eh_done_q);
 
-Thanks,
-Xingui
-.
+Which incidentally is the code path we take when retrying deferred QCs.
 
+> I don't see how this patch will address the pre-existing issue Sashiko
+> warned about.
+
+It does not.
+
+> I think that we need to modify ata_scsi_requeue_deferred_qc() to
+> also requeue commands via EH.
+
+Done. Testing now.
+
+> Possibly it works because ata_scsi_requeue_deferred_qc() is currently
+> always called by EH. But I think it would be simpler if we just have
+> one function that always requeues/retries via EH, regardless if we
+> already are in EH context or not.
+
+Yes. Agree.
+
+> 
+> 
+>> +}
+>> +
+>>  /**
+>>   *	ata_scsi_error - SCSI layer error handler callback
+>>   *	@host: SCSI host on which error occurred
+>> @@ -1214,9 +1239,17 @@ static void __ata_eh_qc_complete(struct ata_queued_cmd *qc)
+>>  	struct scsi_cmnd *scmd = qc->scsicmd;
+>>  	unsigned long flags;
+>>  
+>> +
+>> +	/*
+>> +	 * If we are retrying a deferred QC after a timeout, it is not active
+>> +	 * and all we need to do is to complete it directly.
+>> +	 */
+>>  	spin_lock_irqsave(ap->lock, flags);
+>>  	qc->scsidone = ata_eh_scsidone;
+>> -	__ata_qc_complete(qc);
+>> +	if ((qc->flags & ATA_QCFLAG_RETRY) && !(qc->flags & ATA_QCFLAG_ACTIVE))
+>> +		qc->complete_fn(qc);
+>> +	else
+>> +		__ata_qc_complete(qc);
+> 
+> I thought that we had to call scsi_eh_finish_cmd() for a command that was
+> on the SCSI list of failed commands.
+
+The new use of the eh_timed_out operation puts them in shost->eh_cmd_q with
+scsi_eh_scmd_add() because we do not have a abort handler for ATA. commands in
+shost->eh_cmd_q go into the local eh_work_q of ata_scsi_cmd_error_handler() and
+for all deferred QCs, we endup calling scsi_eh_finish_cmd(), which finally move
+the commands into the done_q that ata_eh_finish() uses.
+So this is all good, because we always have scsi_eh_scmd_add() to "unbusy" the
+host so that we do not block SCSI EH task wakeup.
+
+> See e.g. how ata_scsi_cmd_error_handler() currently calls scsi_eh_finish_cmd().
+> 
+> What am I missing?
+
+Nothing.
+
+> Does the code still work if you simply unconditionally call
+> __ata_qc_complete() here?
+
+You get a WARN_ON() because the QC does *not* have ATA_QCFLAG_ACTIVE flag set
+because for deferred QCs, we have not yet issued them. Hence the little change
+above to avoid the warn splat. We could avoid it with a ATA_QCFLAG_DEFERRED flag...
+
+> (Even if it is slightly less efficient, I would prefer a single/unified path.
+> This is only if we have a NCQ error or timeout, so I don't think it is super
+> critical to prioritize efficiency over maintainability here.)
+
+This is not about efficiency. It is to be consistent with the ATA_QCFLAG_ACTIVE
+flag being set or not.
+
+-- 
+Damien Le Moal
+Western Digital Research
 
