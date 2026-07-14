@@ -1,155 +1,189 @@
-Return-Path: <linux-scsi+bounces-26195-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26196-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id tdBGIj0+Vmps2AAAu9opvQ
-	(envelope-from <linux-scsi+bounces-26195-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 15:48:45 +0200
+	id PMRPNgpGVmqb2gAAu9opvQ
+	(envelope-from <linux-scsi+bounces-26196-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 16:22:02 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06A90755568
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 15:48:45 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53028755BA8
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 16:22:02 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26195-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26195-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=lst.de (policy=none);
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=dz6PlF+i;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26196-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26196-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0CC523028B52
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 13:46:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C14F930008B4
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 14:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F7CB18FC80;
-	Tue, 14 Jul 2026 13:46:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF36371873;
+	Tue, 14 Jul 2026 14:21:59 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2554477E28;
-	Tue, 14 Jul 2026 13:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E992E2F7F1E
+	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 14:21:57 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784036767; cv=none; b=PwTmMj2HtGNMPwBL6LkpZC4cSic6LjC7wRooe58XQbj/BI0dV5Xv0NvxMBnc8vbNL31lwp3FhHpnMwFPDfFhVYzzctFRcM+iWMfq1MXsg57LsnYvRCjhpXt2uYHww8HFc/1tRAT+9GiOR6sxVO+gAnRxt0jJ2j6lcVJe5RNYFeM=
+	t=1784038919; cv=none; b=bhtjWYbwaamDB51kGMuN0O5lX88izpfQFSs2DnGEXqsXIPQ6opc1cLOLn7U2SvzdXpmTc71w9cxwMLmL7XuEjGgZzrcXpxPcilKbUieW5675yM2hEY9s6zzCj1BP7wL9fs8dXMf2OcgcB32HMrdS+IPhkjtWZJy+OG4jLhDha50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784036767; c=relaxed/simple;
-	bh=iQ66h0CSnaeDJY+5S4c4RU6btkxvwUiep2IzGUB8V3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c0Hsd/EfKWIrIQP1j6nU3N9XPFBW5aYB1yXUf/4sKKGYJHJ6WfaqAEl53XWvAY9ThgHlGacR7gb3co89eKbZv7LuTLqIhFqHmBbrUPU6Lixkd/vGc0rqN5rdYRqGZhLVf2rqOsGz6Pt/Jiucj7F7WqCu+XL5sgotde+tjfSiYIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 3D70168B05; Tue, 14 Jul 2026 15:45:59 +0200 (CEST)
-Date: Tue, 14 Jul 2026 15:45:58 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Caleb Sander Mateos <csander@purestorage.com>,
-	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	Anuj Gupta <anuj20.g@samsung.com>, linux-block@vger.kernel.org,
-	linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/5] block: use integrity interval instead of sector
- as seed
-Message-ID: <20260714134558.GA714@lst.de>
-References: <20260627054220.2174166-1-csander@purestorage.com> <yq1cxwrdgmx.fsf@ca-mkp.ca.oracle.com>
+	s=arc-20240116; t=1784038919; c=relaxed/simple;
+	bh=iO+UrgKFhct5hE/Diku9mMN4Wm3qk6iq5XmdS6F6FtM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=IvXXf/g3ycVxvqslYAXnjm/qM3rPB/SAWADPKX5yPfZRfjHBkXyAyXyd1wv1GehKKKKRen8UKv9TN8arSqOjCdfS5X8JA542H+JNgYDbl3HTKYQK1Cm/aQPsyD9U19UeuDgBs33GspzNuEShFOdQOFz2hB9ww7QD9Y0kfholJYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dz6PlF+i; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485C71F000E9;
+	Tue, 14 Jul 2026 14:21:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784038917;
+	bh=+Cs1JAFMJm2qn9clBRGH9pX3HL5Ne8QdHTrRvMgDtlw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=dz6PlF+ivvQ0ZHWGkRu5QLAzfd0dQJVRZ9Em4cA6f/4Y32mlmdyBlbn72Z+CsdlBq
+	 HLuneSzmgMLd1S3eAWcOLZbziO+9gF6oFs55bRBirXi261vxZ1NsaPxQwomaMb+cQu
+	 penU2zXbIolW7Dl96dKx7YjwQ6GCYv54UWJcq20cSAWzBuCWj0hpITbxQ5tXaqsS/E
+	 ZGUPK6zZC1SxoSW46+leAVkTtmGpcVKyZT2TKunttaowXXA12lM5tiVwlv98eHokNx
+	 B8X677Y5cfJPP/75mIBVsE0kLZe2dZBg4bVkrncLuPoqGC5/yG5WTMrIqkre8d616U
+	 gMAQzDxHlY1DQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 26/56] scsi: qla2xxx: Update handling of status
+ entries for 29xx series
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nilesh Javali" <njavali@marvell.com>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260714095353.289460-27-njavali@marvell.com>
+References: <20260714095353.289460-1-njavali@marvell.com>
+ <20260714095353.289460-27-njavali@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 14 Jul 2026 14:21:56 +0000
+Message-Id: <20260714142157.485C71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yq1cxwrdgmx.fsf@ca-mkp.ca.oracle.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-1.36 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[lst.de : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:csander@purestorage.com,m:axboe@kernel.dk,m:hch@lst.de,m:sagi@grimberg.me,m:kch@nvidia.com,m:anuj20.g@samsung.com,m:linux-block@vger.kernel.org,m:linux-nvme@lists.infradead.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[hch@lst.de,linux-scsi@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-26195-lists,linux-scsi=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hch@lst.de,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-26196-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:njavali@marvell.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	RCPT_COUNT_TWO(0.00)[2];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lst.de:from_mime,lst.de:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,smtp.kernel.org:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 06A90755568
+X-Rspamd-Queue-Id: 53028755BA8
 
-On Sun, Jul 12, 2026 at 07:09:01PM -0400, Martin K. Petersen wrote:
-> 
-> Caleb,
-> 
-> > The block integrity layer currently sets the integrity seed (initial
-> > reference tag) in units of 512-byte sectors.
-> 
-> ... because that is the fundamental addressing unit in the block layer.
-> 
-> > However, Type 1 and Type 2 ref tags are actually in units of integrity
-> > intervals.
-> 
-> They are not in units of anything until they reach their final
-> protection envelope.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-If that is the assumption we need to clearly specify that somewhere,
-and also explain why that is a good idea.
+Pre-existing issues:
+- [High] Integer underflow in `par_sense_len` calculation allows an out-of-=
+bounds read of the response queue memory into the SCSI command's sense buff=
+er.
+--
 
-Most users of bip_set_seed seem to assume it is in integrity interval
-units, see commits:
+--- Patch [26]: [PATCH v4 26/56] scsi: qla2xxx: Update handling of status e=
+ntries for 29xx series ---
+commit e2f9d1fbc9c40b5adf48f40bcf83f40782a2ac76
+Author: Nilesh Javali <njavali@marvell.com>
 
-e4dc9a4c31fe10d1751c542702afc85be8a5c56a
-c6e3f13398123a008cd2ee28f93510b113a32791
-3d8b5a22d40435b4a7e58f06ae2cd3506b222898
+scsi: qla2xxx: Update handling of status entries for 29xx series
 
-so we'll need to find out a way to come up with interfaces that
-just do the right thing.
+This commit updates the handling of status entries in the qla2xxx driver
+to support the 29xx series. It updates function signatures to accept generic
+pointers for status packets and differentiates between standard and
+extended status entries.
 
-> 
-> > On devices with integrity interval size > 512 bytes, ref tags are
-> > seeded incorrectly.
-> 
-> The bip seed is whatever the caller decides it should be. The integrity
-> interval size is irrelevant. As is the destination LBA.
-> 
-> > But REQ_OP_ZONE_APPEND operations don't have their ref tags remapped,
-> > so the ref tags using units of sectors will be stored to the device.
-> 
-> Then there's a problem with how we handle REQ_OP_ZONE_APPEND. For NVMe,
-> the PIREMAP flag should address this issue by remapping the written ref
-> tags based on their ultimate destination LBA.
+> diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_is=
+r.c
+> --- a/drivers/scsi/qla2xxx/qla_isr.c
+> +++ b/drivers/scsi/qla2xxx/qla_isr.c
+[ ... ]
+> @@ -3429,20 +3454,20 @@ qla2x00_status_entry(scsi_qla_host_t *vha, struct=
+ rsp_que *rsp, void *pkt)
+>  	sense_len =3D par_sense_len =3D rsp_info_len =3D resid_len =3D
+>  	    fw_resid_len =3D 0;
+>  	if (IS_FWI2_CAPABLE(ha)) {
+> +		qla_sts_fwi2_extract(ha, pkt, &sf);
+>  		if (scsi_status & SS_SENSE_LEN_VALID)
+> -			sense_len =3D le32_to_cpu(sts24->sense_len);
+> +			sense_len =3D sf.sense_len;
+>  		if (scsi_status & SS_RESPONSE_INFO_LEN_VALID)
+> -			rsp_info_len =3D le32_to_cpu(sts24->rsp_data_len);
+> +			rsp_info_len =3D sf.rsp_data_len;
+>  		if (scsi_status & (SS_RESIDUAL_UNDER | SS_RESIDUAL_OVER))
+> -			resid_len =3D le32_to_cpu(sts24->rsp_residual_count);
+> +			resid_len =3D sf.rsp_residual_count;
+>  		if (comp_status =3D=3D CS_DATA_UNDERRUN)
+>  			fw_resid_len =3D le32_to_cpu(sts24->residual_len);
+> -		rsp_info =3D sts24->data;
+> -		sense_data =3D sts24->data;
+> -		host_to_fcp_swap(sts24->data, sizeof(sts24->data));
+> +		rsp_info =3D sf.data;
+> +		sense_data =3D sf.data;
+> +		par_sense_len =3D sf.data_sz;
 
-PIREMAP expects the ref tag to be in logical block sized units.
+[Severity: High]
+This is a pre-existing issue, but could this par_sense_len calculation
+lead to an integer underflow?
 
-> Fundamentally, you should be able to set the bip seed for any READ or
-> WRITE bio to 42, regardless of logical block size, and have it work. If
-> it doesn't, then that's a bug.
-> 
-> The fact that the block layer happens to know the start LBA or ZSLBA
-> does not mean that callers above the block layer have access to the same
-> information. Changing the block layer's integrity handling semantics is
-> not the correct approach. Everything above the block layer depends on
-> the existing, format-agnostic, semantics.
+Further down in qla2x00_status_entry(), when checking for FCP transport
+errors, the code adjusts these pointers:
 
-We have 4 callers above the block layer, and all of them know that the
-see is the LBA.  For type 1 that is enforced by hardware, and all the
-Linux code is basically based around a type 1 model, which is emulate
-don type 2 PI and type 3 PI using the available means.
+    if (IS_FWI2_CAPABLE(ha)) {
+        sense_data +=3D rsp_info_len;
+        par_sense_len -=3D rsp_info_len;
+    }
 
+If a maliciously large rsp_info_len is received in the FCP_RSP frame,
+par_sense_len could underflow since there is no validation checking if
+rsp_info_len exceeds par_sense_len.
+
+Later in qla2x00_handle_sense(), this bounds check wouldn't protect against
+the underflowed par_sense_len:
+
+    if (sense_len > par_sense_len)
+        sense_len =3D par_sense_len;
+
+    memcpy(cp->sense_buffer, sense_data, sense_len);
+
+Can this result in an out-of-bounds read of the response queue memory into
+the SCSI command's sense buffer?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714095353.2894=
+60-1-njavali@marvell.com?part=3D26
 
