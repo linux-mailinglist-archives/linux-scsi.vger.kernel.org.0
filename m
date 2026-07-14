@@ -1,158 +1,344 @@
-Return-Path: <linux-scsi+bounces-26092-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26106-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id a5UQDRaFVWpmpgAAu9opvQ
-	(envelope-from <linux-scsi+bounces-26092-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 02:38:46 +0200
+	id jtdwLjORVWq1qAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-26106-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 03:30:27 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE49074FE44
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 02:38:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1426475015C
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 03:30:27 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=QNgOHlQb;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26092-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26092-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=gmail.com;
+	dkim=pass header.d=google.com header.s=20251104 header.b=aA645a01;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26106-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26106-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=google.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 89EB73036754
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 00:38:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7B1DE303ADE4
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 01:30:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A3281A9F8D;
-	Tue, 14 Jul 2026 00:38:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548F78634C;
+	Tue, 14 Jul 2026 01:30:22 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18EE51A8F97
-	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 00:38:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C1F64AA4
+	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 01:30:19 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783989483; cv=none; b=WLWR1uiZPI9a2i+Pd6vVzlwYwlNKhCjQ92cByrnI6+heLjvRBg/oixrDXsbiU2dAeX+gCcehqTbQWbf6tCKM8s1H5xQuEfu7H5yY5Y+oWXZeaHiLVk+W3BUCKBUgUPhdNFvCO/9tm9rPgYPbqPP7SyJ6vShzgIEGBSpz5Zn7C5A=
+	t=1783992622; cv=none; b=CrU2yQjqBdvOnogfi+803KzdhJxCXo+uFtoeJiNE2dfIN0gRplECXtI68hw6JBkQ/V/Ejiq4Pq/05sJWX1A4Kn67Uou9bcUOFS2FeGry9tdiCNGfUO4FxzDRgKp/WfCznA9libyGe7UiK1hrSAWuDQMqRUnilWeO//V5KMqEtPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783989483; c=relaxed/simple;
-	bh=bdwMNcZVjf0I1CDFWjmxuzGycazN9aJDtvxsS5g9hFg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kBwUXERjYrvMFW+hQbMqaaZsvr4t42ln68yy1Q6Ky3J0LyjCF1UyFVxNLHorPw+TJ9xFnvnIvTUQIzm+Q1MVRTLLNizZuQvV03g3FSAj9fHGmsl9AnnN3O6BgBCmlbpeboatH1DjNWOnhX4al848SHl2Jexzq/xuuo3plwd3rr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNgOHlQb; arc=none smtp.client-ip=209.85.219.43
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-9034b6b7674so24065136d6.0
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2026 17:38:01 -0700 (PDT)
+	s=arc-20240116; t=1783992622; c=relaxed/simple;
+	bh=a9DWazs9/MC5PYLQ/mCaTV4MuuSwH8woy8xm/jWnw8c=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Kt8+cq2W8x897t45/kh6j5DQ2PEhy5Ic4cLgsVa+QLDRKyyH7wIwyEj8axx54kAPxQplaeqGz+o6Zlbcut4dLyQp/aaWZk95bcHdjJy2Je0+BUe22Q1woAIPKtVGf/EWp672rNruK+62M1k0YI1k7AIDF39BgbVz8hOZAmKgKoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aA645a01; arc=none smtp.client-ip=209.85.218.74
+Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-c15deb3377eso336669366b.3
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2026 18:30:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783989481; x=1784594281; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=2CQIKIOUNHK4p/kK1ZVRgUxKnjETRbt3AMrCW5x1awc=;
-        b=QNgOHlQbQPijlIFnlsGmiavCoAMkKcVYdiGl8ccUwyqXVmnFyi6Z9mT5Vkb2YATH2U
-         yst4rXYof/LJlC7huBOP8WOqwoCkomWFBGOo8zityvLVPks1AzsW+lBqUfp2i2IZ3Z9J
-         uajPxVKS/GEyBZwR5qMhsdaU3nQzJT3rQYztsB7DkiyRakdub6e9VD3bTXU48vS99/C9
-         ZJ8/Txhv+50YDc7XClvA4BebSAGz1kaPIqT4Qaew4YjqcCc6qqUQlFGzP79rbqbJY3Yl
-         pYuoCmyX/UrjRf9NJRYQ4cRTfIUwPwvdvnazzCt1Vt4ioNUwjtxY8h0xkRg4mY9Q4SLq
-         UVew==
+        d=google.com; s=20251104; t=1783992618; x=1784597418; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=YKrB3Ft0I68hztrro83NH+VbLgEvLq/HYPor88aI49c=;
+        b=aA645a01nIFZh6HAdB3GWVC99WODS4DXkCJ58ebS5fd0sniWOwNr8bjhusHwcx8SNp
+         zDZ18aAeK6guiKpLBxP5Wu3TtXsLST1xVzc0QDXp08uyxFB+9zHsm/zDMvfUlgklzffS
+         UCEWSwnsAgbAT6U+KVPXKUkwvwgHLaEh/UTnlqTJBIeDuhCZxRIDLe8M8r0/0OWGqnTT
+         H54utC5kZSdSTeTAVh2bP8iw6ESMkX0/x4KNH46z4ePgFCh+3QtPCA4Ln0LPSerowxjb
+         8Seoojs0qlHEec6pGfXnKfSWUbK+FxuxWdsNDrUddIHIPX3LitKqbwoA1DxOUFij9YHQ
+         PohQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783989481; x=1784594281;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2CQIKIOUNHK4p/kK1ZVRgUxKnjETRbt3AMrCW5x1awc=;
-        b=TWz+QQAN7H+8sTp+9kyHAl5VsRMyFhqnehCjGzta6UDJ66jqVm59ZZNl+sWpY7IwjD
-         uEtBybn3W0HtsQMnR8mZl2ItA62F6B2R2qRmPU9xH/EsrV/uwjiFyTo/LqMZg9h/FYkM
-         vPzfIK6q9Z6RnnNn9c0mBRg5etFxb5gpdT0+OchMISpqh96ibwsP8Dv20ILd9jgJaLRU
-         wNW5+zyXBuKoMrYi75RtQRiffT8rHOROpRth5YORpNH5w/fFvC1V9bMAMYcVkqmYchkN
-         mvHyJP6Et0aQ2D1uZfvYsxr1GYG3BlPlfKsh03Fn0lwKOkVZrK+hGVNfyQPcs6V8III2
-         ENVQ==
-X-Gm-Message-State: AOJu0Yw2G5907KLb1noRue/1KN60r1fwWcjq4AC0lcVhKKKb5ahpCYLg
-	PZY9+hTi8b4ixVGyZq/Cr/HQ5/d4LSbsaaZetdwr/08VFjyE0XBf7n8uSAd2XpM6uLI=
-X-Gm-Gg: AfdE7ckLbHqoMj9quQ+AhOymDktBRT8xitSaF4L1vWLcNi5HTa/yvn6v0+x40a6ePPN
-	LWhlYyxTF/q0DMJHnah12EmmV5IORCtc2oMzLSaIfKfvikee8JtyGc36X5H3SOq0IAtoFzjh9AP
-	rDRI6Rk7sm54+Hra+Nl5W9T1oo9dBb3UWm6dntjQsRS3mdrDfhhQfgAHxjKBBPkyWrs8xhkQklY
-	bZ/G498ofLoohuXqtXNd4K+SP0UOD01yLu4pLac0nv+mBwsbRmGUK01R5nxIqElNrvOBAmdZsCs
-	m6nd9aFvYgS4VQULEnjbNWqjImeelEfomAag4JbFIPcs+7I/x3sAu3ZFXj/isve2DfqkaosmWY/
-	0czNLgUa3yQq/7opubN17ihHRhdwx+DPHLh7wzMQQM2ZlTHRlfPhDmYr+Xl3jWxctWHgkLySsGq
-	d7Yld60Sz3MyIpnQz246KWe+1m0aXv+7dojmPssS+xSEXEDq+TfvTK5tXV5V4tYMI5NluurnGQO
-	lmEXMI7c3lkKPsu/3/VtHqq301Pf70L7WeUpGfCdpA=
-X-Received: by 2002:a05:620a:40c9:b0:92e:72a4:f291 with SMTP id af79cd13be357-93083c771aamr128567685a.35.1783989480944;
-        Mon, 13 Jul 2026 17:38:00 -0700 (PDT)
-Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5d6c28bsm1289899185a.46.2026.07.13.17.38.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 Jul 2026 17:38:00 -0700 (PDT)
-From: Justin Tee <justintee8345@gmail.com>
-To: linux-scsi@vger.kernel.org
-Cc: jsmart833426@gmail.com,
-	justin.tee@broadcom.com,
-	Justin Tee <justintee8345@gmail.com>
-Subject: [PATCH v3 14/14] lpfc: Update lpfc version to 15.0.0.1
-Date: Mon, 13 Jul 2026 18:18:12 -0700
-Message-Id: <20260714011812.106753-15-justintee8345@gmail.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20260714011812.106753-1-justintee8345@gmail.com>
-References: <20260714011812.106753-1-justintee8345@gmail.com>
+        d=1e100.net; s=20251104; t=1783992618; x=1784597418;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YKrB3Ft0I68hztrro83NH+VbLgEvLq/HYPor88aI49c=;
+        b=rzG8R5UHe9B7lcrNx4Xi0e8laxWDpiLt3pXDrCXUQFDR3SZYcj5+Xq1CiPNSEwji1B
+         Ehcm6a8cd5qvH5EU48ah+N+LY2CqaGtRFQZ54d8O5l+myjY22HbCH957zTTWX+7fb4/i
+         naqYm0kuhtMNLyjIPKC2nEfyVLlQQBGyS6mQzBi4sXc3wD+YtfQlvRuhr8RYMAn8plkA
+         NvrQYzPn1G4lc32pcukkE4D2Qzj+XvKdYhdQpgn6hlURxJkWLmirhoq969RWhmV4/T01
+         43RSwYDxg3PT00Vm9vyHhgpQTzjYoK5/DIy5ZDd8LeCDdYQ04UweajwxzGuhjlnK6JeE
+         VQFw==
+X-Forwarded-Encrypted: i=1; AFNElJ9bAW2SOm45MVXX6vQ2bu/JWsCVuFZj7cdozT4lC+NbLLejltXVVxQhP3hoKDVp0PGuPIhcfJPvWfNN@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk4fmF2Lqcy5YMcg0fpibq8kLwmvz2PPSdIn22d5O+oKiov03a
+	+MmFO06SBFUA0hnb9DpC25gU7EY0qJAOSt5oUSgySw4uLr9v6yTXv9c4HT+UceEXHaCzXFjclNw
+	FT9mJv08EvJleKfYytQ==
+X-Received: from ede14-n1.prod.google.com ([2002:a05:6402:20ce:10b0:698:572e:ccfe])
+ (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:907:940f:b0:c16:242a:4722 with SMTP id a640c23a62f3a-c16679ee252mr12031666b.22.1783992617943;
+ Mon, 13 Jul 2026 18:30:17 -0700 (PDT)
+Date: Tue, 14 Jul 2026 01:30:16 +0000
+In-Reply-To: <20260701141145.52A611F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260701135015.81937-1-djeffery@redhat.com> <20260701135015.81937-4-djeffery@redhat.com>
+ <20260701141145.52A611F000E9@smtp.kernel.org>
+Message-ID: <9huzech6xsrb.fsf@tarunix.c.googlers.com>
+Subject: Re: [PATCH 3/5] driver core: async device shutdown infrastructure
+From: tarunsahu@google.com
+To: sashiko-reviews@lists.linux.dev, David Jeffery <djeffery@redhat.com>
+Cc: linux-pci@vger.kernel.org, linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,broadcom.com];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26092-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:sashiko-reviews@lists.linux.dev,m:djeffery@redhat.com,m:linux-pci@vger.kernel.org,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-26106-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER(0.00)[tarunsahu@google.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[justintee8345@gmail.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:linux-scsi@vger.kernel.org,m:jsmart833426@gmail.com,m:justin.tee@broadcom.com,m:justintee8345@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tarunsahu@google.com,linux-scsi@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	RCPT_COUNT_THREE(0.00)[4];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[justintee8345@gmail.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	ALIAS_RESOLVED(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[google.com:+];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	TO_DN_SOME(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: BE49074FE44
+X-Rspamd-Queue-Id: 1426475015C
 
-Update lpfc version to 15.0.0.1
 
-Signed-off-by: Justin Tee <justintee8345@gmail.com>
----
- drivers/scsi/lpfc/lpfc_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello,
 
-diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
-index d6e6e436fbfc..7df63d118234 100644
---- a/drivers/scsi/lpfc/lpfc_version.h
-+++ b/drivers/scsi/lpfc/lpfc_version.h
-@@ -20,7 +20,7 @@
-  * included with this package.                                     *
-  *******************************************************************/
- 
--#define LPFC_DRIVER_VERSION "15.0.0.0"
-+#define LPFC_DRIVER_VERSION "15.0.0.1"
- #define LPFC_DRIVER_NAME		"lpfc"
- 
- /* Used for SLI 2/3 */
--- 
-2.38.0
+These most of the errors are due to the device_add concurrently can add
+the device and device_shutdown can access it. One of the reason I think
+a device_add will be triggered while being shutdown is inserting the
+physical PCI device or USB stick etc.
 
+But During shutdown, addition of a new device is not valid. So we can
+add a check something like
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 76ba02c26aa5..c3795fa1cc26 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3650,6 +3650,13 @@ int device_add(struct device *dev)
+        if (!dev)
+                goto done;
+
++       if (unlikely(system_state =3D=3D SYSTEM_HALT ||
++                    system_state =3D=3D SYSTEM_POWER_OFF ||
++                    system_state =3D=3D SYSTEM_RESTART)) {
++               error =3D -ESHUTDOWN;
++               goto done;
++       }
++
+        if (!dev->p) {
+                error =3D device_private_init(dev);
+                if (error)
+
+We can also partially resolve the races partially by removing the manual
+kfree(dev->p) from device_add() error path. As put_device free it
+anyway when reference to devices reaches to 0. So if device_shutdown
+path takes reference, dev->p will not be released. And few races will be
+taken care of. But this will not resolve the deadlock and other races
+like the above change.
+
+removing the kfree(dev->p) from device_add can be a independent patch.
+like:
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 4d026682944f..76ba02c26aa5 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2614,6 +2614,7 @@ static void device_release(struct kobject *kobj)
+        struct device *dev =3D kobj_to_dev(kobj);
+        struct device_private *p =3D dev->p;
+
++       dev->p =3D NULL;
+        /*
+         * Some platform devices are driven without driver attached
+         * and managed resources may have been acquired.  Make sure
+@@ -3824,8 +3825,6 @@ int device_add(struct device *dev)
+ parent_error:
+        put_device(parent);
+ name_error:
+-       kfree(dev->p);
+-       dev->p =3D NULL;
+        goto done;
+ }
+ EXPORT_SYMBOL_GPL(device_add);
+
+
+~Tarun
+
+
+sashiko-bot@kernel.org writes:
+
+> Thank you for your contribution! Sashiko AI review found 4 potential issu=
+e(s) to consider:
+> - [High] Modifying the core.async_shutdown module parameter during shutdo=
+wn causes synchronous suppliers to skip waiting for asynchronous consumers.
+> - [High] Unregistered consumer devices will cause a NULL pointer derefere=
+nce during async shutdown dependency waiting.
+> - [High] Adding a new device with async shutdown enabled while its synchr=
+onous supplier is being processed leads to an unresolvable deadlock.
+> - [High] Dereferencing `dev->p->dead` without NULL checks causes a crash =
+if a concurrent `device_add()` fails.
+> --
+>
+> commit cf98cdf76df805443cc885868cb3d9e13da5501c
+> Author: David Jeffery <djeffery@redhat.com>
+>
+> driver core: async device shutdown infrastructure
+>
+> This commit allows devices to opt into asynchronous shutdown, executing i=
+n
+> parallel with unrelated devices after their dependencies shut down. Synch=
+ronous
+> shutdown devices will wait for their asynchronous dependencies. The featu=
+re is
+> enabled by default and can be toggled via the core.async_shutdown paramet=
+er.
+>
+>> diff --git a/drivers/base/core.c b/drivers/base/core.c
+>> --- a/drivers/base/core.c
+>> +++ b/drivers/base/core.c
+> [ ... ]
+>> +static bool wants_async_shutdown(struct device *dev)
+>> +{
+>> +	return async_shutdown && dev_async_shutdown(dev);
+>> +}
+>> +
+>> +static int wait_for_device_shutdown(struct device *dev, void *data)
+>> +{
+>> +	bool async =3D *(bool *)data;
+>> +
+>> +	if (async || wants_async_shutdown(dev))
+>> +		wait_for_completion(&dev->p->complete);
+>> +
+>> +	return 0;
+>> +}
+>
+> [Severity: High]
+> If a user-space process toggles the 0644 core.async_shutdown sysfs parame=
+ter
+> from 1 to 0 during shutdown, could this cause synchronous suppliers to sk=
+ip
+> waiting for their asynchronous consumers?
+>
+> If start_async_shutdown_devices() schedules an async consumer, and then t=
+he
+> parameter is toggled before the sync loop processes its supplier, the cal=
+l to
+> wants_async_shutdown(dev) here would evaluate to false.=20
+>
+> This would skip the wait_for_completion(), potentially causing the suppli=
+er
+> (e.g., a PCI bus) to shut down while its consumer is still active.
+>
+> [Severity: High]
+> Could this result in a NULL pointer dereference if the consumer is not ye=
+t
+> registered?
+>
+> The device_link_add() function allows creating links to consumer devices =
+that
+> haven't been registered yet, meaning their dev->p is NULL because
+> device_private_init() hasn't run.
+>
+> If wait_for_shutdown_dependencies() is called from the async pool, where =
+the
+> async argument is forced to true, the wait_for_completion() will
+> unconditionally evaluate &dev->p->complete, crashing on the NULL pointer.
+>
+> [ ... ]
+>> +static void __shutdown_one_device(struct device *dev)
+>>  {
+>>  	if (dev->p->dead)
+>>  		return;
+>
+> [Severity: High]
+> Could this cause a NULL pointer dereference if a concurrent device_add() =
+fails?
+>
+> If a concurrent device_add() fails after calling kobject_add(), its error=
+ path
+> calls kobject_del() and then frees and nullifies dev->p. Evaluating
+> dev->p->dead without checking if dev->p is valid could crash here.
+>
+> [ ... ]
+>> +static void start_async_shutdown_devices(void)
+>> +{
+>> +	struct device *dev, *next, *ndev, *needs_put =3D NULL;
+> [ ... ]
+>> +			needs_put =3D ndev;
+>> +			spin_lock(&devices_kset->list_lock);
+>> +			/*
+>> +			 * If the next device has been marked dead while the
+>> +			 * spinlock was released, it may no longer be on the
+>> +			 * devices_kset list. Restart the list walk to be safe
+>> +			 */
+>> +			if (ndev && ndev->p->dead)
+>> +				goto restart;
+>
+> [Severity: High]
+> Could ndev->p be NULL if a concurrent device_add() fails?
+>
+> If start_async_shutdown_devices() obtains a reference to next via
+> get_device(), and concurrently device_add() fails and clears dev->p,
+> reacquiring the lock and evaluating ndev->p->dead here could result in a =
+NULL
+> pointer dereference.
+>
+> [ ... ]
+>>  void device_shutdown(void)
+>>  {
+> [ ... ]
+>> -		shutdown_one_device(dev);
+>> +		if (!wants_async_shutdown(dev) || !shutdown_device_async(dev)) {
+>> +			wait_for_shutdown_dependencies(dev, false);
+>> +			shutdown_one_device(dev);
+>> +		}
+>> =20
+>>  		spin_lock(&devices_kset->list_lock);
+>>  	}
+>>  	spin_unlock(&devices_kset->list_lock);
+>
+> [Severity: High]
+> Can this sequence lead to an unresolvable deadlock if a new device is add=
+ed
+> concurrently?
+>
+> If a new device 'C' with DEV_FLAG_ASYNC_SHUTDOWN is added via hotplug
+> after its synchronous supplier 'S' has already been popped from
+> devices_kset by this loop, 'C' is appended to devices_kset.
+>
+> 'S' will call wait_for_shutdown_dependencies() and find 'C', blocking on
+> wait_for_completion(&C->p->complete) because wants_async_shutdown(C) is t=
+rue.
+>
+> Since 'C' was added after start_async_shutdown_devices() ran, it is not
+> running in the async pool. Because the sync loop is blocked on 'S', it wi=
+ll
+> never reach 'C' to start it, deadlocking the shutdown process permanently=
+.
+>
+> --=20
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260701135015.81=
+937-1-djeffery@redhat.com?part=3D3
 
