@@ -1,181 +1,281 @@
-Return-Path: <linux-scsi+bounces-26077-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26093-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id kqm6JIF7VWpipAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-26077-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 01:57:53 +0200
+	id d2LiIvqHVWripgAAu9opvQ
+	(envelope-from <linux-scsi+bounces-26093-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 02:51:06 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76A7F74FCEE
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 01:57:52 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B170274FEB4
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 02:51:05 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=fq7zOW9x;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26077-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26077-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="FczcjBC/";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26093-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26093-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 652DD3007AE5
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2026 23:57:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D4FE0303E8C4
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 00:50:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 141B1388393;
-	Mon, 13 Jul 2026 23:57:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96795223707;
+	Tue, 14 Jul 2026 00:50:30 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67C42E8B9B;
-	Mon, 13 Jul 2026 23:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3E126B973
+	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 00:50:28 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783987066; cv=none; b=t1JS698JUO5zrFigJwX+4ID9ngTW5efY6bD4TWcA9dSc/oAtuZQ7Mo7wZWECC9gPoyq6/NkqgGHC0pvTt+s7/c4ouzmciHUkqi6PG4DnOtYf64NdM3kzACaFUz63uEuqpjVmgd1AbowOWDNwchIsZXJIlsC1Pz6OQQLlzPT+0Kw=
+	t=1783990230; cv=none; b=l5PsmkCxF2O4UM8lqPjbAIeLoAmAMCymJTluckrxlWpHJxp8Vm82srTNWi/nP2gKuvpWj9BOwUD5oigvWcT9GLz1mvRG7FpaIz017FtOWq68XPNz/xyUddMYmNv8Vsg2y39AHy6g3GuAWPUGHd/NQ71HZGEej4G1jZFD0ehjCLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783987066; c=relaxed/simple;
-	bh=024uMThOd6cyS6qgBSZV8Ud/4QoWdnppLmUJ/jWWSvg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K4KOOi2zjaqoatnQ19zM5hcAiQ6GjUWiO5rP04lUPhtJPk+Zbzeq1SfeKrEvjUYoXEeBo5nTNvwnGdkxIIS1Mw6djRe802IJy8rRTr454qI1EOxQgP9XnUXhvwHozpF0mPq419YtSf+kUPnmBx2I8Lnvf07y66lJ54yyot8XPm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fq7zOW9x; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1FE21F000E9;
-	Mon, 13 Jul 2026 23:57:43 +0000 (UTC)
+	s=arc-20240116; t=1783990230; c=relaxed/simple;
+	bh=UN8xvMKmg9igDVqcgc36F9krbjPMAevqlOjfNt0MA5A=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=U55v7QAj3bkmB4kJsqoFiCLNae0DUdLSHoKf1U1sFK6Q4LK5Zz/il51KeIS3KfDLfzbleSHf9ZZEQUQrVP8bt5eDJlXKoQDHIXnp7vpGIr1PnhO3CsNLPhr9eJIbJ4nC+xEPeF/9LQqYnB5Y6dj6v5EBvimURo2N445Zyf+MzNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FczcjBC/; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A21F71F000E9;
+	Tue, 14 Jul 2026 00:50:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783987064;
-	bh=xIhyR3zgIocehUTam0YtcBB6EqA+r73EXcnFWOui1a4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fq7zOW9xN/onRd4/dFSQRSTXLCOxG14Xv/GM3rN4tHxAaVmnlvkQkaMZvRc5tkni/
-	 OmgLQuza8B/thbJq8udck8bYCe2DrMcooTzy28LTcKkDE6c43PVO8w52FDiqolhibu
-	 wTPypcN3vs9GoQRP32YsTmjSVfcJkS78xZc8HjTn/uwtr0TGKMirpvK7d63tASXw90
-	 GCXbPFkqqySHnXWKNDb7GNCHj0111QOz+PBD/2cx7YOGADFadkD92F0lEmAkoPoz9O
-	 pnbIGwJYdNUSdP7qBrxzem0u5tGaLwtXuqBh40GVMuLLzL+d4LfEI7cY/6TZmNMGCy
-	 Vq2LNGgiUdlcA==
-Date: Mon, 13 Jul 2026 23:57:42 +0000
-From: Yixun Lan <dlan@kernel.org>
-To: Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@sandisk.com>,
-	Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Add UFS Host driver support for SpacemiT K3 SoC
-Message-ID: <20260713235742-GKE106000@kernel.org>
-References: <20260702-08-k3-ufs-support-v1-0-1a64a3ab128f@kernel.org>
- <wjbz5tp7vjrsjwjaiu3n7du5ksbrlsduuxhwg2wriyxshkrqd5@t3sdxr6ua2sg>
- <20260713123759-GKD106000@kernel.org>
- <CAEev2e-g3bZcohFf_7b5CaVyi0BeWi5uwLGj6MuhQXp16jiyEQ@mail.gmail.com>
+	s=k20260515; t=1783990228;
+	bh=KHeiczKj1rkTLwyLiYaIMjtY5wPnrLdk0wFfUPXAgoo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=FczcjBC/x4f3CuL04sfduwryaPeVyOkzxmp68tSFsm/1/MnWD7YBFtKumgRdcrURX
+	 Pmq8zzPottZfDL5S1HTwaAldZiI5n7Kv+BgWEvWRy58FRHa2HPBPEjOURr+QyFwx3O
+	 B8PNVNOlQwKJIHdoQqfSrbzrCrOMss4H3/nfw1Hd33wCBJRX3ap0JvW7gMJX75seUS
+	 WNI5m0dvAlqngTX0MyNj1SmHk/gDCIHDgkl29SLej3iaPXnMJHz+0FOGzz1I48oTy/
+	 3RHGI5EleX3YfmKgx5GXqDTcX/3fH5qCPR62e/xwbwvGLdAoFzPR2ZE+yGDbxlvh72
+	 yY+Fz7WOSrIUQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 11/14] lpfc: Put iocbq on phba->txq when ELS WQ is
+ full or ELS SGL unavailable
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Justin Tee" <justintee8345@gmail.com>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260714011812.106753-12-justintee8345@gmail.com>
+References: <20260714011812.106753-1-justintee8345@gmail.com>
+ <20260714011812.106753-12-justintee8345@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 14 Jul 2026 00:50:28 +0000
+Message-Id: <20260714005028.A21F71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEev2e-g3bZcohFf_7b5CaVyi0BeWi5uwLGj6MuhQXp16jiyEQ@mail.gmail.com>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.66 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORWARDED(0.00)[lists@lfdr.de];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-26093-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:justintee8345@gmail.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26077-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER(0.00)[dlan@kernel.org,linux-scsi@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FORWARDED(0.00)[lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:asrinivasan@oss.tenstorrent.com,m:alim.akhtar@samsung.com,m:avri.altman@sandisk.com,m:bvanassche@acm.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:p.zabel@pengutronix.de,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:linux-scsi@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:spacemit@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dlan@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[spacemit.com:url,vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,smtp.kernel.org:mid,sashiko.dev:url,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 76A7F74FCEE
+X-Rspamd-Queue-Id: B170274FEB4
 
-Hi Anirudh,
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] Incomplete refactoring of __lpfc_sli_issue_iocb_s4 return codes ca=
+uses unpatched callers to leak IOCBs.
+- [High] Early returns on IOCB_FAILED_PUT in patched callers bypass critica=
+l state machine updates and counter increments.
+- [Medium] The logic in lpfc_drain_txq to queue an IOCB to the head of the =
+txq when the SGL pool is empty is dead code.
+--
 
-On 09:56 Mon 13 Jul     , Anirudh Srinivasan wrote:
-> Hi Yixun,
-> 
-> On Mon, Jul 13, 2026 at 7:38 AM Yixun Lan <dlan@kernel.org> wrote:
-> >
-> > Hi Anirudh,
-> >
-> > On 22:40 Sun 12 Jul     , Anirudh Srinivasan wrote:
-> > > Hi Yixun,
-> > >
-> > > On Thu, Jul 02, 2026 at 02:31:34AM +0000, Yixun Lan wrote:
-> > > > This series try to add UFS support for SpacemiT K3 SoC, the controller
-> > > > components consists of System Bus Interface Unit, UFS Host Controller
-> > > > Interface, UFS Transport Protocol Layer, UFS Host Registers, Device
-> > > > Management Entity (DME), Transport Layer, Network Layer, Data Link
-> > > > Layer, PHY Adapter Layer, and M-PHY Interface. A more detail functional
-> > > > block diagram can be found in SpacemiT website, chapter 9.7.3 [1]
-> > > >
-> > > > Please note, in order to test this driver, the UFS clock driver[2] here
-> > > > should be applied first as a prerequisite patch.
-> > > >
-> > > > One known issue is that the device will occasionally raise BKOPS interrupt
-> > > > when doing some high load test, log from dmesg shows
-> > > >
-> > > > [  806.710763] ufshcd-spacemit c0e00000.ufshc: ufshcd_bkops_exception_event_handler: device raised urgent BKOPS exception for bkops status 1
-> > > >
-> > > > Link: https://spacemit.com/community/document/info?nodepath=hardware/key_stone/k3/k3_docs/k3_usermanual/09_memory_storage.md&lang=en [1]
-> > > > Link: https://lore.kernel.org/all/20260630-06-clk-ufs-support-v1-0-cf7521d1d0fe@kernel.org/ [2]
-> > > > Signed-off-by: Yixun Lan <dlan@kernel.org>
-> > >
-> > > I see this during probe on a k3-pico-itx. Does the UFS chip on board
-> > > have an RPMB block on it? Is this error of any concern.
-> > >
-> > It's probably true of having a RPMB block, but not used in K3 platform, so can ignore
-> >
-> > > [    5.957864] ufshcd-spacemit c0e00000.ufshc: ufshcd_scsi_add_wlus: BOOT WLUN not found
-..
-> > > [    5.963319] bus_add_device: cannot add device 'ufs_rpmb0' to unregistered bus 'ufs_rpmb'
+--- Patch [11]: [PATCH v3 11/14] lpfc: Put iocbq on phba->txq when ELS WQ i=
+s full or ELS SGL unavailable ---
+commit e664b47bccd196f6d682ce56b8b0fe9c32e4c4a8
+Author: Justin Tee <justintee8345@gmail.com>
 
-Just checked code under drivers/ufs/, and couldn't find where ufs_rpmb bus is registered,
-so this kind of warning/error message is expected, or could UFS maintainer confirm this?
+lpfc: Put iocbq on phba->txq when ELS WQ is full or ELS SGL unavailable
 
-> > > [    5.971155] ufshcd-spacemit c0e00000.ufshc: Failed to register UFS RPMB device 0
-> > >
-> > Maybe disable CONFIG_RPMB to silent this? I've not tested this option locally
-> 
-> I'm testing on a distro defconfig, so it has this option enabled.
-> 
-> Is there anything we can do in the driver to have it ignore the RPMB?
+When ELS/CT commands can't be sent due to ELS WQ full, queue the iocbq on
+the phba->txq tail for retrying submission later in lpfc_drain_txq.
+lpfc_drain_txq is also updated to queue an iocbq back on to the head of
+phba->txq when observing ELS WQ full or SGL unavailable events.
 
-No, but why not disable CONFIG_RPMB in the first place
+> diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+> --- a/drivers/scsi/lpfc/lpfc_els.c
+> +++ b/drivers/scsi/lpfc/lpfc_els.c
+> @@ -2766,7 +2780,21 @@ lpfc_issue_els_prli(struct lpfc_vport *vport, stru=
+ct lpfc_nodelist *ndlp,
+>  	}
+> =20
+>  	rc =3D lpfc_sli_issue_iocb(phba, LPFC_ELS_RING, elsiocb, 0);
+> -	if (rc =3D=3D IOCB_ERROR) {
+> +	if (rc) {
+> +		lpfc_vlog_msg(vport, KERN_NOTICE,
+> +			      LOG_ELS | LOG_DISCOVERY | LOG_NODE,
+> +			      "0155 PRLI WQE Put returned %d\n",
+> +			      rc);
+> +
+> +		/* Under heavy vpi counts, the driver's host_index can catch up
+> +		 * to the hba_index causing a put error. Catch this case and
+> +		 * put the IO on phba->txq.
+> +		 */
+> +		if (rc =3D=3D IOCB_FAILED_PUT && phba->sli_rev =3D=3D LPFC_SLI_REV4) {
+> +			lpfc_sli4_queue_io_for_retry(phba, elsiocb, false);
+> +			return 0;
+> +		}
 
-> If the error is a red-herring, we shouldn't be displaying it at all in
-> the first place.
-> 
+[Severity: High]
+Does this early return bypass state machine updates?
 
-Either fix the code or just ignore it..
+By returning 0 here, the function skips setting the NLP_PRLI_SND flag,
+incrementing the outstanding PRLI counters (vport->fc_prli_sent and
+ndlp->fc4_prli_sent), and looping to send the NVMe PRLI.
 
--- 
-Yixun Lan (dlan)
+When the retried IO eventually completes, the completion handler could decr=
+ement
+counters that were never incremented, potentially causing an integer underf=
+low
+that breaks lpfc_scan_finished(). Also, it appears the second PRLI for NVMe
+targets would never be sent.
+
+> +
+>  		lpfc_els_free_iocb(phba, elsiocb);
+>  		lpfc_nlp_put(ndlp);
+>  		return 1;
+> diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+> --- a/drivers/scsi/lpfc/lpfc_sli.c
+> +++ b/drivers/scsi/lpfc/lpfc_sli.c
+> @@ -10793,12 +10839,18 @@ __lpfc_sli_issue_iocb_s4(struct lpfc_hba *phba,=
+ uint32_t ring_number,
+>  			return IOCB_ERROR;
+>  	}
+> =20
+> -	if (lpfc_sli4_wq_put(wq, wqe))
+> -		return IOCB_ERROR;
+> + retry_io:
+> +	piocb->cmd_flag &=3D ~LPFC_IO_IN_RETRY;
+> =20
+> -	lpfc_sli_ringtxcmpl_put(phba, pring, piocb);
+> +	/* Push the wqe to the wq.  If the push fails with -EBUSY it means
+> +	 * the WQ is full.  Pass this status back to enable a retry.
+> +	 */
+> +	rc =3D lpfc_sli4_wq_put(wq, wqe);
+> +	if (rc =3D=3D -EBUSY)
+> +		return IOCB_FAILED_PUT;
+> =20
+> -	return 0;
+> +	lpfc_sli_ringtxcmpl_put(phba, pring, piocb);
+> +	return rc;
+>  }
+
+[Severity: High]
+Will unpatched callers leak resources by treating IOCB_FAILED_PUT as succes=
+s?
+
+Several existing ELS/CT callers, such as lpfc_issue_els_logo() and
+lpfc_issue_els_adisc(), explicitly check if the return value is exactly
+IOCB_ERROR:
+
+drivers/scsi/lpfc/lpfc_els.c:lpfc_issue_els_logo() {
+	...
+	rc =3D lpfc_sli_issue_iocb(phba, LPFC_ELS_RING, elsiocb, 0);
+	if (rc =3D=3D IOCB_ERROR) {
+		lpfc_els_free_iocb(phba, elsiocb);
+		...
+	}
+	...
+}
+
+Because IOCB_FAILED_PUT (7) is not equal to IOCB_ERROR (1), these functions
+might treat the failure as a successful submission. Could this cause the dr=
+iver
+to permanently leak the IOCB buffer/SGL/DMA mappings and hang the ELS state
+machine?
+
+> @@ -21277,7 +21329,7 @@ lpfc_drain_txq(struct lpfc_hba *phba)
+> =20
+>  		ret =3D __lpfc_sli_issue_iocb(phba, pring->ringno, piocbq, 0);
+
+[ ... ]
+
+> +		if (txq_cnt =3D=3D 0 || ret =3D=3D IOCB_BUSY ||
+> +		    ret =3D=3D IOCB_FAILED_PUT) {
+> +			/* If ELS WQ was full (IOCB_FAILED_PUT), then an SGL has
+> +			 * been assigned.  If SGL pool was empty (IOCB_BUSY),
+> +			 * then all we need is to put back on phba->txq to try
+> +			 * again later.
+> +			 */
+
+[ ... ]
+
+> +			switch (ret) {
+> +			case IOCB_FAILED_PUT:
+> +				piocbq->cmd_flag |=3D LPFC_IO_IN_RETRY;
+> +				__lpfc_sli_ringtx_put(phba, pring, piocbq,
+> +						      true);
+> +				break;
+> +			case IOCB_BUSY:
+> +				__lpfc_sli_ringtx_put(phba, pring, piocbq,
+> +						      true);
+> +				break;
+
+[Severity: Medium]
+Is this IOCB_BUSY case dead code?
+
+The call to __lpfc_sli_issue_iocb() above passes 0 for the flag argument.
+If an SGLQ cannot be allocated, __lpfc_sli_issue_iocb_s4() evaluates:
+
+	if (!(flag & SLI_IOCB_RET_IOCB)) {
+		__lpfc_sli_ringtx_put(phba, pring, piocb, false);
+		return IOCB_SUCCESS;
+	} else {
+		return IOCB_BUSY;
+	}
+
+Since flag is 0, it silently requeues the IO to the tail of txq and returns
+IOCB_SUCCESS (0). Therefore, lpfc_drain_txq() would never receive IOCB_BUSY,
+and the intended optimization to queue the IOCB to the head when the SGL po=
+ol
+is empty would be bypassed.
+
+> +			}
+> +			spin_unlock_irqrestore(&pring->ring_lock, iflags);
+>  			break;
+> +		}
+> +
+> +		spin_unlock_irqrestore(&pring->ring_lock, iflags);
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714011812.1067=
+53-1-justintee8345@gmail.com?part=3D11
 
