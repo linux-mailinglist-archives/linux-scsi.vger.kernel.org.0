@@ -1,265 +1,178 @@
-Return-Path: <linux-scsi+bounces-26105-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26078-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id J66PEU6LVWpxpwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-26105-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 03:05:18 +0200
+	id 412UB9WEVWpRpgAAu9opvQ
+	(envelope-from <linux-scsi+bounces-26078-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 02:37:41 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E46474FF54
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 03:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 652E974FE04
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 02:37:40 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=VPbRCCJb;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26105-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26105-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=ZDQ8DzvW;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26078-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26078-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5207A301DB97
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 01:05:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 11D9B304ED75
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 00:37:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75EF6353A81;
-	Tue, 14 Jul 2026 01:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0A091E7C23;
+	Tue, 14 Jul 2026 00:37:38 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3719012C534
-	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 01:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E5B5CDF1
+	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 00:37:37 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783991107; cv=none; b=h0qMb9D6xOk7x9082sQzooH4ZFL2T7B+WsekFK3yhaOZYNcenJl8Q2HIQkPZeNlYEIS+wZmT+9wsI68fLLbhp704Px+bHCbsELDG2ayGfghS+HMLbGdUnvQvfL81ju3aRZJKxqFvXmh/wDzynmcXv+Z1RgNeSTpcTE+cPDXuSNs=
+	t=1783989458; cv=none; b=Qqf5IWibchENTA9tNbktyrycVxC9mcrPobDCeW4RBiqHua3nwFREVxMkrd50Iqbe2OBsupBZ53TjsGEKvtB5tD/LBZNfl3GEhAEQC6zxknk4E9bmD+0DTudPdRCBJpqrfVq4Wqu9pI2HhoSWIIC8S6xzPirCm22FB8m4AtxWWto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783991107; c=relaxed/simple;
-	bh=TxAvt2U/a++yBNfj7+KhkpF/uClaRBFU7YPBSN8cmjM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MHpd0//ezAencxVLaQO1huXHa1U8gJ+GL2xi6MCqVq9mIDiZBkPK7XWCnuioMcClIgFM3ACyNpDySYDSO7ECvDQk3dv+ec+Sy7ZRcM9jAjXAhv4WQmdUPjAz0ndLZ8zQzOe6XkYSUn3D9m/F4NgHRhjtMQlqK8S7arN+qMQY1ZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VPbRCCJb; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD51E1F00A3A;
-	Tue, 14 Jul 2026 01:05:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783991105;
-	bh=5SY78+aLE8IqwGamDlIqdA7NmKVJxb8OUGnEnSoL7jg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VPbRCCJbedRQ9Y0t2Pxj6S9uK0gt6UqSc2aa4EZKbKFBDvEExjHcCnZGbAp4EUaDk
-	 drT0x202bkGLaoon4fCji6XEU5EJ/dcJtdmAtPsUN1RFFUDpT2wyoj9uAAh4eWp9n7
-	 7gMDLD6nVvIdiGnXmhgIwaHClePAug1CWAxYeM5Q4ngzKzhAzqB6AhlhY7hUwT4kEY
-	 Y5eBdhqumSySoSnkdS6KNadQnFrbxr0EGy7KfvmvofK4fa63R6NWEJ7CNvSV5kxfqx
-	 kI7bP8zrU819TACx4eLTcm0KwXsKwfrEhekFpxl6GXg/gJoDHn2oVuhSFg23dzkj59
-	 YXLQAF6HXvztg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 09/14] lpfc: Send inhibited ABORT_WQE when PLOGI CQE
- SEQUENCE_TMO is received
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Justin Tee" <justintee8345@gmail.com>
-Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260714011812.106753-10-justintee8345@gmail.com>
-References: <20260714011812.106753-1-justintee8345@gmail.com>
- <20260714011812.106753-10-justintee8345@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 01:05:05 +0000
-Message-Id: <20260714010505.AD51E1F00A3A@smtp.kernel.org>
+	s=arc-20240116; t=1783989458; c=relaxed/simple;
+	bh=gL26ypMnCp5VAvNpHSgGG/Tq61PupH19CC8JGdI9p1Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DORo+2geCOFKyLvHsMec87xz57bdqCUMVb9SJqIAwNxHDSyLJSr+Uf0HxqlZKBKdjjUdNRGLKV6xTTvybD/ePBsn7eIirbsG+rlAmZYeBKJz8xCS3lye3L9/QTS92RrQ5WoVYn0ioSWAI7lqzXBUPS5zlTeU9J+4JEOttm3350k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZDQ8DzvW; arc=none smtp.client-ip=209.85.219.47
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8efb708b1a0so32741866d6.3
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2026 17:37:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783989456; x=1784594256; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9xFOnU32GAqB1xS8MMbFM4u+DhEfa1EjML4o7aYcIHs=;
+        b=ZDQ8DzvW4gDjYkqrETblSfIm6YjIM790PVERnI++KrdfuRb09OFAEIBb0bVMOzQon9
+         ZmoGbhbs+AouWGkdu+SwVzjTWuUDbEB1GTJKOtvZJvwOQQ8rtsaHHbPj5yVRwxwhV/w4
+         qs9c8ZBYT3NYwmGNzRRHifPYAGd4pHyh6SifPyiRyIMVNCpNJxfWLuZBiXYilCcNlbPh
+         YYScqT6hl2wSB2F4kiBLRvlCl4kaeY4h/tfdQI1yc2hSyrnWSAecWrT5KKI+PWlQ0byA
+         KcfVmHT9GEeJmri77yo4ALQcSZ8A+vmKVglLpnrsKvDc3xpFuTE0pv/pNsibntVPYaSO
+         4vfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783989456; x=1784594256;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9xFOnU32GAqB1xS8MMbFM4u+DhEfa1EjML4o7aYcIHs=;
+        b=DgjT51dz6SW7SN8M7L1Iug/L7LwrDkbnf4PtWx7t/Jv3NffXepaNyS56jFg/KX+3bm
+         oqW/pL0zPy1E4UbCjn5ENtM8V0UqMA2eJW4DAR5Mr6BjOQbCeFp4lT+gAt5eSfmos5+Q
+         WUoP8wO1U9Kc6HyqslEEvbu7TmdOSr7jcJ5710pq0ZK50sYoynqp8LIzEoeaWzrH+djz
+         okY7bR1uQ199pRJ96y7bppmkmxTNYlweeGpAqS+piWvh9TBExCsB09rqWuDCXl1ifmMo
+         f1yobQucvy2lQQS/LUdATwBRa1ZgKQLRIWyYwOKY4Q7yjWlkBNMWysIokx8/fqOeRSi+
+         itLQ==
+X-Gm-Message-State: AOJu0Yyx972s0DGcJ22sFAUSzhJRQifTxYaBBcx0GUji02YhpkpAWMHx
+	ExDBBz+RndYcm+I0wvnlooI/VskMNkA8cJIyOnutpopCCvVDpChq5zojq1F+0EkY63M=
+X-Gm-Gg: AfdE7cmjPSPEZWzijqU/NXUxMzmZN5vrebfiPDJ25c1f1Vbyz/dpzziz9aPUUfmvo5I
+	eUbNGShvV0uyxC3vxuFpKn7O3x2p83ejwXAdUnHvj0HAY9qoDJjL/ESr/k2m9oOfhvNAxIJdCal
+	1JItuiiEdMT6H0AYrRJMDp8FDmjO4aJwaixBAzrxBRIKKuX6F4Yvcv8A88Z+Nb3ZlBOjrlx5Miu
+	alIOHpemLcZ9gCe5ONAgvFm2ZSYYUiwScRdlgJ5UARFF6TUXrj9TMpT7jaSm8PSiAj30qsAwfqc
+	VuXB+BCpShRYufJ4wfXVOMzj82zLgb0PW/egTlxExn5JRfrqBFO5sfgtNDqRi5LgyKIsT0xjcvh
+	sO+6b0IfxTogyXTpDtySu+2c4QoAl1FzpNDNK2hQ0THQZvNSCF0q7pyCqWpNJTKGaLf9Fv58Jai
+	/wPZYraoCPCjbdC+Cb6JHq8F2lxasCwmzrAdGpGpJGesNG1K7lEk0biDgbvtj2c9iXoG4ZNJbZX
+	vjRg/sWkrxMhx51JgM9uRRHKpcw5NdP
+X-Received: by 2002:a05:620a:7002:b0:92e:4a63:d7ef with SMTP id af79cd13be357-93086be1deemr32685985a.48.1783989456209;
+        Mon, 13 Jul 2026 17:37:36 -0700 (PDT)
+Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5d6c28bsm1289899185a.46.2026.07.13.17.37.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 13 Jul 2026 17:37:35 -0700 (PDT)
+From: Justin Tee <justintee8345@gmail.com>
+To: linux-scsi@vger.kernel.org
+Cc: jsmart833426@gmail.com,
+	justin.tee@broadcom.com,
+	Justin Tee <justintee8345@gmail.com>
+Subject: [PATCH v3 00/14] Update lpfc to revision 15.0.0.1
+Date: Mon, 13 Jul 2026 18:17:58 -0700
+Message-Id: <20260714011812.106753-1-justintee8345@gmail.com>
+X-Mailer: git-send-email 2.38.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,broadcom.com];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26105-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-26078-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:justintee8345@gmail.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[justintee8345@gmail.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:linux-scsi@vger.kernel.org,m:jsmart833426@gmail.com,m:justin.tee@broadcom.com,m:justintee8345@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ALIAS_RESOLVED(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_NO_DN(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[justintee8345@gmail.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lists.linux.dev:replyto,smtp.kernel.org:mid]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8E46474FF54
+X-Rspamd-Queue-Id: 652E974FE04
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+Update lpfc to revision 15.0.0.1
 
-New issues:
-- [High] Issuing an unconditional abort on an already-completed ELS command=
- introduces a tag-reuse race condition that can inadvertently abort a newly=
- allocated command.
+This patch set contains bug fixes related to cleanup handling in both
+normal and error paths, discovery rework for large SAN configurations, and
+refactoring of duplicate code.
 
-Pre-existing issues:
-- [High] Deadlock in `lpfc_sli_abort_iocb_ring` due to non-recursive double=
- acquisition of `pring->ring_lock`.
-- [High] Data race and list corruption from unlocked iteration of `pring->t=
-xcmplq` in `lpfc_sli_host_down`.
---
+The patches were cut against Martin's 7.3/scsi-queue tree.
 
---- Patch [9]: [PATCH v3 09/14] lpfc: Send inhibited ABORT_WQE when PLOGI C=
-QE SEQUENCE_TMO is received ---
-commit faea8f503d6a5b239d2ea58d59fefef913f41aeb
-Author: Justin Tee <justintee8345@gmail.com>
+Justin Tee (14):
+  lpfc: Fix use-after-free in lpfc_cmpl_ct_cmd_vmid
+  lpfc: Early return out of lpfc_els_abort when HBA_SETUP flag is not
+    set
+  lpfc: Fix kernel oops when unmapping scsi dma buffers for an aborted
+    cmd
+  lpfc: Check fc4_xpt_flags before decrementing ndlp kref on FDISC error
+  lpfc: Add handling for when PLOGI or PRLI is dropped during link
+    failure
+  lpfc: Fix ndlp use-after-free during repeated RSCN and rediscovery
+    sequence
+  lpfc: Rework I/O flush ordering when unloading driver
+  lpfc: Improve PLOGI retry handling for large SAN configurations
+  lpfc: Send inhibited ABORT_WQE when PLOGI CQE SEQUENCE_TMO is received
+  lpfc: Remove slowpath cqe process limiter in slow ring event handler
+  lpfc: Put iocbq on phba->txq when ELS WQ is full or ELS SGL
+    unavailable
+  lpfc: Update ELS ACC logging for diagnostic troubleshooting
+  lpfc: Refactor calls on fc_disctmo to lpfc_set_disctmo in RSCN handler
+  lpfc: Update lpfc version to 15.0.0.1
 
-lpfc: Send inhibited ABORT_WQE when PLOGI CQE SEQUENCE_TMO is received
+ drivers/scsi/lpfc/lpfc_bsg.c       |   5 +-
+ drivers/scsi/lpfc/lpfc_crtn.h      |  12 +-
+ drivers/scsi/lpfc/lpfc_ct.c        |  19 +-
+ drivers/scsi/lpfc/lpfc_disc.h      |   2 +-
+ drivers/scsi/lpfc/lpfc_els.c       | 427 +++++++++++++++++++++++------
+ drivers/scsi/lpfc/lpfc_hbadisc.c   | 100 +++----
+ drivers/scsi/lpfc/lpfc_init.c      |  16 +-
+ drivers/scsi/lpfc/lpfc_nportdisc.c |  86 +++++-
+ drivers/scsi/lpfc/lpfc_nvme.c      |   2 +-
+ drivers/scsi/lpfc/lpfc_scsi.c      |   2 +-
+ drivers/scsi/lpfc/lpfc_sli.c       | 245 ++++++++++++-----
+ drivers/scsi/lpfc/lpfc_sli.h       |   4 +-
+ drivers/scsi/lpfc/lpfc_version.h   |   2 +-
+ 13 files changed, 706 insertions(+), 216 deletions(-)
 
-This commit updates the driver to send an inhibited ABORT_WQE when a PLOGI
-CQE SEQUENCE_TIMEOUT is received. This allows the aborted CQE to return
-immediately instead of waiting for a BA_ACC.
+-- 
+2.38.0
 
-> diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-> index 16b10377a0953..11c36968a2bed 100644
-> --- a/drivers/scsi/lpfc/lpfc_els.c
-> +++ b/drivers/scsi/lpfc/lpfc_els.c
-[ ... ]
-> @@ -4893,7 +4897,38 @@ lpfc_els_retry(struct lpfc_hba *phba, struct lpfc_=
-iocbq *cmdiocb,
->  				/* Reset the Link */
->  				link_reset =3D 1;
->  				break;
-> +			} else if (cmd =3D=3D ELS_CMD_PLOGI) {
-> +
-> +				/* if invalid ndlp, do not retry */
-> +				if (unlikely(!ndlp)) {
-> +					retry =3D 0;
-> +					break;
-> +				}
-> +
-> +				lpfc_printf_vlog(vport, KERN_INFO, LOG_ELS,
-> +						 "0159 PLOGI Sequence TMO for "
-> +						 "ndlp x%px x%lx x%x x%x x%x "
-> +						 "x%x x%x %u x%x\n",
-> +						 ndlp, ndlp->nlp_flag,
-> +						 ndlp->nlp_DID, ndlp->nlp_type,
-> +						 ndlp->nlp_fc4_type,
-> +						 ndlp->nlp_rpi, ndlp->nlp_state,
-> +						 kref_read(&ndlp->kref),
-> +						 ndlp->fc4_xpt_flags);
-> +
-> +				/* Abort all outstanding ELS and auto-ABTS.  If
-> +				 * no response for E_D_TOV, then it is unlikely
-> +				 * auto-ABTS would receive a response too.  So,
-> +				 * inhibit the abort for faster XRI release.
-> +				 * However, still proceed with delayed retry.
-> +				 */
-> +				pring =3D lpfc_phba_elsring(phba);
-> +				spin_lock_irqsave(&phba->hbalock, iflags);
-> +				lpfc_sli_issue_abort_iotag(phba, pring, cmdiocb,
-> +							   true, NULL);
-
-[Severity: High]
-Could this unconditional abort introduce a tag reuse race condition?
-
-When a PLOGI command fails with a sequence timeout, this new logic issues
-an asynchronous abort and then returns 1 to retry.
-
-Because lpfc_els_retry() returns 1, the caller lpfc_cmpl_els_plogi()
-immediately jumps to out_freeiocb and calls lpfc_els_free_iocb(), freeing
-the command.
-
-The command is returned to the free list since the exchange busy flag is
-only set on the response, not the command itself. Its tag then becomes
-available for reallocation. Since the abort is processed asynchronously by
-the HBA, could the firmware erroneously abort a newly allocated ELS command
-if the tag is reused quickly?
-
-> +				spin_unlock_irqrestore(&phba->hbalock, iflags);
->  			}
-> +
->  			retry =3D 1;
->  			delay =3D 100;
->  			break;
-[ ... ]
-> diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-> index 54bc5d8984fc2..0a300efc92401 100644
-> --- a/drivers/scsi/lpfc/lpfc_sli.c
-> +++ b/drivers/scsi/lpfc/lpfc_sli.c
-> @@ -4608,7 +4608,8 @@ lpfc_sli_abort_iocb_ring(struct lpfc_hba *phba, str=
-uct lpfc_sli_ring *pring)
->  	} else {
->  		/* Issue ABTS for everything on the txcmplq */
->  		list_for_each_entry_safe(iocb, next_iocb, &pring->txcmplq, list)
-> -			lpfc_sli_issue_abort_iotag(phba, pring, iocb, NULL);
-> +			lpfc_sli_issue_abort_iotag(phba, pring, iocb, false,
-> +						   NULL);
-
-[Severity: High]
-This is a pre-existing issue, but does this lead to a deadlock on the ring
-lock?
-
-In lpfc_sli_abort_iocb_ring(), the ring lock is acquired before this loop:
-
-spin_lock_irq(plock);
-list_for_each_entry_safe(iocb, next_iocb, &pring->txcmplq, list)
-
-Inside the loop, lpfc_sli_issue_abort_iotag() is called, which then
-evaluates the ring and unconditionally acquires the exact same lock for
-SLI-4:
-
-spin_lock_irqsave(&pring->ring_lock, iflags);
-
-Since these spinlocks are not recursive, won't this cause an immediate
-deadlock?
-
->  	}
->  	spin_unlock_irq(plock);
-> =20
-[ ... ]
-> @@ -11998,7 +11999,7 @@ lpfc_sli_host_down(struct lpfc_vport *vport)
->  				if (iocb->vport !=3D vport)
->  					continue;
->  				lpfc_sli_issue_abort_iotag(phba, pring, iocb,
-> -							   NULL);
-> +							   false, NULL);
-
-[Severity: High]
-This is a pre-existing issue, but does this unlocked traversal of the
-completion queue invite data races or list corruption?
-
-In lpfc_sli_host_down(), the code explicitly drops the ring lock for SLI-4
-just before this loop:
-
-spin_unlock(&pring->ring_lock);
-list_for_each_entry_safe(iocb, next_iocb, &pring->txcmplq, list) {
-    ...
-}
-
-However, the completion queue is actively modified by concurrent completion
-handlers like lpfc_sli_sp_handle_rspiocb() which rely on the ring lock for
-synchronization. Is it safe to iterate this list while it could be
-modified concurrently?
-
->  			}
->  			pring->flag =3D prev_pring_flag;
->  		}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714011812.1067=
-53-1-justintee8345@gmail.com?part=3D9
 
