@@ -1,64 +1,64 @@
-Return-Path: <linux-scsi+bounces-26199-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26200-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 7QzuA2tNVmpf3AAAu9opvQ
-	(envelope-from <linux-scsi+bounces-26199-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 16:53:31 +0200
+	id te89GxBQVmrt3AAAu9opvQ
+	(envelope-from <linux-scsi+bounces-26200-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 17:04:48 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65B11756195
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 16:53:30 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67A1F756354
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 17:04:47 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=jON0tyjZ;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26199-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26199-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=DI8OVj34;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26200-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26200-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4CCFA304DCE1
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 14:49:28 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C750A3010DE6
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 15:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F80D481A8A;
-	Tue, 14 Jul 2026 14:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4957635EDA4;
+	Tue, 14 Jul 2026 15:00:29 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE192F7F1E
-	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 14:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCCD23504B
+	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 15:00:28 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784040566; cv=none; b=q+2UULBMbu7ieVbn7i6UymaoLmeWhXDXy+tkK9WdCjbA0sSrv9sVppEWTGM/tPwTdC0y90yZIx7M7d1HhXNvOeFXQ1EknxnNVwDyNrfuyjoTdoNcjFg1GGRc0BfLyK+kY4QQvo9mrY9TtpH1vTfhf0tIOZpwL6dCpH2RDL6ce3Q=
+	t=1784041229; cv=none; b=bf0wW7h4DObC5n/KNtvWE18XlggeT/d0P4AnKRbTxwdvu7472w+O0iEjP7JYtt6f+/Nd5oq2dkfEUSgeuSXrfIa9s9aMBzG47yS+oNc2CkiOE3MM0lGqGYso04TymAEjdiFCB0XWVGRRnFLd+2krDnLaeTIOC94ko1HJtfTNXWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784040566; c=relaxed/simple;
-	bh=2yiluNnD5KP+oPUT2er1pYI1KnzVPraeGjGeER+EpY0=;
+	s=arc-20240116; t=1784041229; c=relaxed/simple;
+	bh=nzrts5gDNg8NVrQ86uaOjQ2+zQTfafyOarMJZXbTfLU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Cz+P2ISGEhm5gOvo+59XdaCNlN+bs3uP7Mxdk7mSdtCSteUhMyFzaWLGK79dK8tjCGv9znAfs3vkLhwAXqciHF7Y25YCMVNNZlOBlyivVnyzX5wHJQemfF1loQjo2d8+pac4LRuLE4mY+FoBIGXHifnQyOP6FHP7P3kSolsdqrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jON0tyjZ; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D11DC1F000E9;
-	Tue, 14 Jul 2026 14:49:22 +0000 (UTC)
+	 Message-Id; b=EhScN2TVqmw+fLc15f6qq1vNAwKshrbTtjIKNalKPI5Jq7t89JOR3mNXZFaPfgDT3aorC8yyhha1gfWOcO4IjDSPXlIV3RzANr6u84OgeQpw6YD9zHAymtErsSJD/80D1Bjz+J2B6uxKtngH+0W6cVz4xLc5OpDFBRDlggGfNlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DI8OVj34; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A2F1F00A3A;
+	Tue, 14 Jul 2026 15:00:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784040563;
-	bh=4VXoOoIiJbJ5wLv+GtJ7reXLwrbzMvngkPcTteY3ntY=;
+	s=k20260515; t=1784041228;
+	bh=RIpxoNzhYt0FrDWfI3wJYwwZTpy5Ji0mnab6PL2uYIY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jON0tyjZ00nshW2pNvGRvOAkKIx92cNj5cUizBwtzra5LO9eoW7wuUsN5+SRNt0Ge
-	 AcBcZog74MWNngUvHKCgiAn6LRAraxxvTgqje2qdDd23o+jL1pXnELzcyANyM2F3IA
-	 IGkgN5ws0KMnPLw9Q3z0/VukyOSBUUtU9Ym/gIWgTbQoNuqZquLlGxVf9zzwuaODbm
-	 jqSs2iYtdfpHV73tokMZJwaxCMGi1J2T+K3T03N/qTlWXK5ilzcvAw0fXi3QT5+y3c
-	 9maR81vzqzniRLzt/qc1k4M2F4YoJlUCBnmNWSggChxW+JMZuQZPbfinP1wLSY5ykV
-	 B9vUwlEV2XavA==
+	b=DI8OVj3409F6OBsn2hJxmsqayFHY7pTz5phrogOWGKmxjnI+z9pwdPN9ShUFiGKHo
+	 0XPmnAJseSVB2uIVmxa/Wopm72fw3H10pcPL83IjVgJ/945X3hKcynVrPuJKp2po60
+	 gMUfDfcStP7afEzLZvVV9e2I4QI3WBkPz5oUCBcLi+MxOzwZ7ZcyZ6lWkY3xJAvvkd
+	 QhMgcq0p4lw1jPplvPQ0P21YZKthuwbz6l/UgpHLQsdTB2Ht6MEls5O9pwI5oNABjO
+	 qUWxFA0mLEWN77fLcfWhzzIHaGoOodg8s/90hoGDHbcuot1NqKC7/viLlpPx8qDgqp
+	 OLRcKnYUFG7cA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 31/56] scsi: qla2xxx: Add 29xx extended logio IOCB
- support
+Subject: Re: [PATCH v4 29/56] scsi: qla2xxx: Update handling of ELS IOCBs
+ for 29xx series
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Nilesh Javali" <njavali@marvell.com>
 Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260714095353.289460-32-njavali@marvell.com>
+In-Reply-To: <20260714095353.289460-30-njavali@marvell.com>
 References: <20260714095353.289460-1-njavali@marvell.com>
- <20260714095353.289460-32-njavali@marvell.com>
+ <20260714095353.289460-30-njavali@marvell.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 14:49:22 +0000
-Message-Id: <20260714144922.D11DC1F000E9@smtp.kernel.org>
+Date: Tue, 14 Jul 2026 15:00:27 +0000
+Message-Id: <20260714150027.C0A2F1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -71,14 +71,14 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26199-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-26200-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:njavali@marvell.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
 	RCPT_COUNT_TWO(0.00)[2];
@@ -98,91 +98,94 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,lists.linux.dev:replyto,vger.kernel.org:from_smtp,smtp.kernel.org:mid,marvell.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,smtp.kernel.org:mid,marvell.com:email,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 65B11756195
+X-Rspamd-Queue-Id: 67A1F756354
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but DMA memory corru=
-ption occurs due to freeing the IOCB buffer before the firmware is reset on=
- a timeout.
+- [High] Endian-unsafe use of C bitfields for hardware-facing DMA descripto=
+rs in `qla_els_set_vp_sof()`.
 --
 
---- Patch [31]: [PATCH v4 31/56] scsi: qla2xxx: Add 29xx extended logio IOC=
-B support ---
-commit fd255e4f21f55aa8baef081e73e914c2d628d372
+--- Patch [29]: [PATCH v4 29/56] scsi: qla2xxx: Update handling of ELS IOCB=
+s for 29xx series ---
+commit c4548b60cd936f5a4a71288b8a287eb9009e46b8
 Author: Nilesh Javali <njavali@marvell.com>
 
-scsi: qla2xxx: Add 29xx extended logio IOCB support
+scsi: qla2xxx: Update handling of ELS IOCBs for 29xx series
 
-This commit adds extended logio IOCB support for the 29xx series, which uses
-a wider IOCB stride (128 bytes vs 64 bytes). It updates various logio IOCB
-builder and completion functions to accept a void pointer and cast dynamica=
-lly
-to accommodate both layouts.
+Update ELS IOCB handling to support the extended 128-byte
+els_entry_24xx_ext structure used by 29xx series adapters.
 
-> diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mb=
-x.c
-> index f9b326c020557..7dff227899a52 100644
-> --- a/drivers/scsi/qla2xxx/qla_mbx.c
-> +++ b/drivers/scsi/qla2xxx/qla_mbx.c
+> diff --git a/drivers/scsi/qla2xxx/qla_inline.h b/drivers/scsi/qla2xxx/qla=
+_inline.h
+> index 49b858e7cf2a1..2ade5e8522516 100644
+> --- a/drivers/scsi/qla2xxx/qla_inline.h
+> +++ b/drivers/scsi/qla2xxx/qla_inline.h
+
 [ ... ]
-> @@ -2678,7 +2680,7 @@ qla24xx_login_fabric(scsi_qla_host_t *vha, uint16_t=
- loop_id, uint8_t domain,
->  						 */
+
+> @@ -863,3 +863,31 @@ qla_sts_fwi2_extract(struct qla_hw_data *ha, void *p=
+kt,
+>  		host_to_fcp_swap(s->data, sizeof(s->data));
 >  	}
-> =20
-> -	dma_pool_free(ha->s_dma_pool, lg, lg_dma);
-> +	dma_pool_free(ha->s_dma_pool, lg_buf, lg_dma);
-
-[Severity: High]
-This is a pre-existing issue, but could this lead to DMA memory corruption =
-if
-the command times out?
-
-If qla2x00_issue_iocb_timeout() times out, it schedules an asynchronous DPC
-reset and returns, causing lg_buf to be immediately freed back to the DMA
-pool here in qla24xx_login_fabric().
-
-If the firmware is merely slow and completes the command before the adapter
-reset fully finishes, won't it write the completion status to the physical
-address (lg_dma) of this freed buffer?
-
-This could corrupt whatever new allocation is currently using that DMA memo=
-ry.
-
-> =20
->  	return rval;
 >  }
-[ ... ]
-> @@ -2898,7 +2903,7 @@ qla24xx_fabric_logout(scsi_qla_host_t *vha, uint16_=
-t loop_id, uint8_t domain,
->  		    "Done %s.\n", __func__);
->  	}
-> =20
-> -	dma_pool_free(ha->s_dma_pool, lg, lg_dma);
-> +	dma_pool_free(ha->s_dma_pool, lg_buf, lg_dma);
-
+> +
+> +/*
+> + * qla_els_set_vp_sof() - write the vp_index / sof_type pair into an ELS
+> + *    pass-through IOCB (els_entry_24xx{,_ext}).
+> + *
+> + * Both layouts have the same 16-bit slot at offset 14, but it is encoded
+> + * differently:
+> + *   - 24xx: separate u8 vp_index + u8 sof_type with EST_SOFI3 (1 << 4)
+> + *   - 29xx: __le16 with bitfields { vp_index:9, reserved_1_sof:3,
+> + *           sof_type:4 } and ELS_EXT_EST_SOFI3
+> + * so this is the single point in the driver that knows about that
+> + * encoding split.
+> + */
+> +static inline void
+> +qla_els_set_vp_sof(struct scsi_qla_host *vha, void *pkt, u16 vp_idx)
+> +{
+> +	if (IS_QLA29XX(vha->hw)) {
+> +		struct els_entry_24xx_ext *ext =3D pkt;
+> +
+> +		ext->vp_index =3D vp_idx;
+> +		ext->sof_type =3D ELS_EXT_EST_SOFI3;
 [Severity: High]
-This is the same pre-existing issue, but in qla24xx_fabric_logout().
+Can the use of C bitfields here cause endianness issues on big-endian
+architectures?
 
-Does freeing lg_buf here after a timeout expose the system to use-after-free
-DMA corruption if the hardware writes to lg_dma before the asynchronous res=
-et
-completes?
+Since the hardware DMA descriptor struct els_entry_24xx_ext defines these
+fields as:
 
-> =20
->  	return rval;
->  }
+    __le16 vp_index : 9;
+    __le16 reserved_1_sof : 3;
+    __le16 sof_type : 4;
+
+the compiler will pack the bitfields starting from the most significant bit
+of the word on big-endian systems (such as s390x or PowerPC). However, the
+little-endian 29xx hardware expects vp_index to occupy the lowest 9 bits.
+
+Could this mismatch cause the adapter firmware to read corrupted Virtual Po=
+rt
+(VP) indices and SOF types when qla_els_set_vp_sof() is called on the ELS
+issue paths, potentially routing ELS commands to the wrong VP and leading to
+login failures, cross-VM traffic leakage, or firmware crashes?
+
+> +	} else {
+> +		struct els_entry_24xx *e =3D pkt;
+> +
+> +		e->vp_index =3D vp_idx;
+> +		e->sof_type =3D EST_SOFI3;
+> +	}
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714095353.2894=
-60-1-njavali@marvell.com?part=3D31
+60-1-njavali@marvell.com?part=3D29
 
