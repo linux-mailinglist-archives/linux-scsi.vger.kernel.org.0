@@ -1,74 +1,74 @@
-Return-Path: <linux-scsi+bounces-26164-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26166-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id AZMmB9YHVmoJyQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-26164-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 11:56:38 +0200
+	id ndiXMCMJVmpZyQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-26166-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 12:02:11 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF73D7531F9
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 11:56:37 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED0507532DC
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 12:02:10 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=IjwWn+Je;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26164-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26164-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=fkIQpiaE;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26166-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26166-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=marvell.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 72A02300899C
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 09:56:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1F832319B183
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 09:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D300355813;
-	Tue, 14 Jul 2026 09:56:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709DC32A3D7;
+	Tue, 14 Jul 2026 09:56:38 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C1C3E5EEE
-	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 09:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146B33F1AC0
+	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 09:56:36 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784022990; cv=none; b=QAcu3DFwY5kRnTmRNUjMgUmGFWAcQ/SnTZUuXWkW7KdeYlaki9q3SFxe7711gYF7rBd6wbvAn2SF2J9Kd3SUro2wvi0Nc0jIQE8cH66sWg8HCcl6CenCSTyQZyZRajdK6rQ/xjx+Lr6SuQTu+NC3nC/OK4MUIwT0BeIkuIn1GcM=
+	t=1784022998; cv=none; b=OlfUkUBsIVJQb5/2ZmS+KmZ8ojsqv+NC4W1w8ptxL3PfuZ0HfzihU7k2+W9rEa3FJkTAcXXfql9DrXCoijyeXLIvOPxlYfZ4X/WlmlR7Pb0kVxQuu4rrMDi82KeTGKddigGqVUEZr9RJFZvj8cTM+26wjKb+BOW2AhEQaw76m4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784022990; c=relaxed/simple;
-	bh=2g0OZbzyNlcbpl6670X4NvJXIlwPRy3To/9y5PdLKf0=;
+	s=arc-20240116; t=1784022998; c=relaxed/simple;
+	bh=oA9qojIXPBb6ZIjKMCGUFrMHQDv5TGB63ZwklOZfOJI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZDVz3qROj9Dauungd9O6p4LrsfQ/wVH2r/l6zmGr9Sy8WovqbtvYHzzsro5HRHPQwGoQxjN4TFvrzJ73yep8qlxj8gSQK2U9n5vZWWxJAnXFpWDXLIF80HEF4wvJnPJecnewHHLkz8X3gvw4eXRyWKeQtROyr7ME5iPr/hXhplU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=IjwWn+Je; arc=none smtp.client-ip=67.231.156.173
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66E6Ukr33693372;
-	Tue, 14 Jul 2026 02:56:26 -0700
+	 MIME-Version:Content-Type; b=RBiD4v2u/idJZQH+0rDOkFnBiyt+8mh+4nXdpPej09T5RidNgXESOPY+ErtDEDes+fGYmDtEYv0Ec4d463wlHEJDxDprGEq2jB6URjgIfLIEUj5uEt+oFfvWY2GviuGfig1uq999KlcBvnjVnAjqiF39uCFbXjI+lEUNVB5GyEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=fkIQpiaE; arc=none smtp.client-ip=67.231.156.173
+Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66E6UDUg2407822;
+	Tue, 14 Jul 2026 02:56:34 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=O
-	JPGqqbn5HindJKnJV9QtnYkoZD0K9Y87bszxDmyilI=; b=IjwWn+Jeve1zDEzgG
-	fX5MiTI33e31nCa+ejYcThG04VFy6cJZkJWKb4/jglYDCLcx4z2hoqYru4WKc/Ha
-	i7iCh7QngUYxRq/OgXwH5ANBS3e97YFd6AXZJPs6OGSSsYWvUqwi+jpMNlX9Wdn5
-	/bWeo9/um7r71Gt6a7S2pXiBFdXKGEBz+xFjOWaiDpnUfqZqRTLgB5jfkjpbMDGB
-	3nes0qZhqr7ZPV/E9XZt1hM2Wq8mM8MV2hcq3oCJaktiI6HwIlYn6h/zSbOG5Hzt
-	mmN+VPQdA+2hxlFalpU4COHvtdCWL4+QiA0v+O0tofLr75dGpFXBlJzlZpqAE7D1
-	esBWQ==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4fbnbey8wr-1
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=x
+	5xqfcSay3Wt7bGO65WBJAK5Rtfg0FHph9h6ATSSbSE=; b=fkIQpiaEZc43+7Qes
+	AffgUUL9SpDZP7eo243mwyjbx5Ey1oM0lm/rRQ56thmAFbwuB0wt14TqD+AJMRFz
+	aDXY7Kda1ZjCgCiTs+jFHtfFuPUvRNOCBgRKS19Z9FDsdmBwte/32VkJ5vOiye+J
+	IPvbhr2TizFZpfV/4+zEy07sZPHzIUjRCKQuSAZPH1vE1ovbiSnYvb0QcKXdIr2T
+	pQYKYmMmYugT+dLwKJsGY0YoEH6kCT837T7s4kmfFr29z1pVYJk1JD8xw04Xk/RH
+	CT4RAOOt+NhXPOcLM4LLkyVSD10Rc0/tGLXFELgDBcXIFB1GdPJ6LsjpOG1Uog39
+	Sat0A==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4fc6k9nq93-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Jul 2026 02:56:26 -0700 (PDT)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+	Tue, 14 Jul 2026 02:56:34 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Tue, 14 Jul 2026 02:56:25 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Tue, 14 Jul 2026 02:56:25 -0700
+ 15.2.1544.25; Tue, 14 Jul 2026 02:56:33 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Tue, 14 Jul 2026 02:56:33 -0700
 Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.164])
-	by maili.marvell.com (Postfix) with ESMTP id 04DA85E6867;
-	Tue, 14 Jul 2026 02:56:22 -0700 (PDT)
+	by maili.marvell.com (Postfix) with ESMTP id DCE125E6867;
+	Tue, 14 Jul 2026 02:56:25 -0700 (PDT)
 From: Nilesh Javali <njavali@marvell.com>
 To: <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <GR-FC-Storage-Upstream@marvell.com>,
         <agurumurthy@marvell.com>, <emilne@redhat.com>, <jmeneghi@redhat.com>,
         <hare@suse.com>
-Subject: [PATCH v4 46/56] scsi: qla2xxx: edif: Fix NULL pointer deref in RX SA delete check
-Date: Tue, 14 Jul 2026 15:23:43 +0530
-Message-ID: <20260714095353.289460-47-njavali@marvell.com>
+Subject: [PATCH v4 47/56] scsi: qla2xxx: Fix Name Server logout detection on FWI2 adapters
+Date: Tue, 14 Jul 2026 15:23:44 +0530
+Message-ID: <20260714095353.289460-48-njavali@marvell.com>
 X-Mailer: git-send-email 2.23.1
 In-Reply-To: <20260714095353.289460-1-njavali@marvell.com>
 References: <20260714095353.289460-1-njavali@marvell.com>
@@ -80,24 +80,24 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: _7aESip7yjuz1mRYF8bdV8Q3nBM_VMJO
-X-Authority-Analysis: v=2.4 cv=WOdPmHsR c=1 sm=1 tr=0 ts=6a5607ca cx=c_pps
- a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
+X-Proofpoint-ORIG-GUID: 0pq3i_ARboIDgIcbayK6FTzuOEkt8U9H
+X-Proofpoint-GUID: 0pq3i_ARboIDgIcbayK6FTzuOEkt8U9H
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzE0MDEwMyBTYWx0ZWRfX6JlXaMcLwiBr
+ PbUNugl4Q87WU6XHP7oQ2zbwlDECy3KzLWkwHrMb6lhp7CtLvYc4MP5mn+3emT3k3DoW2RSuGUX
+ f4O+18Q6vIzGJFpHxaM+QgqgABr9BbE=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzE0MDEwMyBTYWx0ZWRfX1zEUYyQpyaZN
+ SSYRr1OWFNWS1BipHUVlc/cNHp37lp13Ggz9uGMgCy38Oq2UM8GSgLGH8GCbfaZNMZMiSV324od
+ 9938Lf6slOvXMaKcqa5w+RxCJBpHL2A9pZozn5Qr+3FLnhNdpCYmrBAFBdxdACeej1c5OI76TEV
+ i0ue4m4RgbTk6nbI+hZQPseRJWj1yY4+50fiqIXWEsdet9Yyxy9D/DD0unA/nFfDDEflTRF+icy
+ joXm8j2mHeIeHB5IgMV21m83919EDGdsHvD/eek7KcAEb6oDx4Tu/vbftc2fjLSE6oHeYMC4GqQ
+ kyXLPpTNjwZ85fUhmt/p8w6bTEwoAPHAtLuxzNIpeJdXEEYbVgof4pYKYUu42LWCTgk75EqROFC
+ TkOQzDyUpiOaqhxRNpmJZXewe7ULO2FxhY+Qu1AJMiCl8pdR0edkul1YMSqHGaZdsJq+6u726ok
+ qbGqfmJtV08f7KPd/ZA==
+X-Authority-Analysis: v=2.4 cv=ULLt2ify c=1 sm=1 tr=0 ts=6a5607d2 cx=c_pps
+ a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
  a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
- a=QXcCYyLzdtTjyudCfB6f:22 a=VwQbUJbxAAAA:8 a=M5GUcnROAAAA:8
- a=reP9pj-AO4Wx2xJZjeUA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-ORIG-GUID: _7aESip7yjuz1mRYF8bdV8Q3nBM_VMJO
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzE0MDEwMyBTYWx0ZWRfX7/Tk6/NElPcf
- 9QfnGZAwec+oYHAKTJw24y2GFjmvLE5aQHPcca6COo09l3XVFOdNvw7txKMgUvwq6lLN8oXOGwq
- MAlrh8mzcsRyZsiFzo2ooCfyqUrrCVE=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzE0MDEwMyBTYWx0ZWRfX3SajVGIfkXY4
- T0hSn/ooJCRtK2Ozw3gfwEqeqRd8bC4E5ajrNzU/s9s5ykIEIMFfToPsJxYF8zP0EK/cJFXN+nE
- uVPAO6daa6iI6uKSPxi7hiGmR8TLu5uR9s4XfL0NeGsKQgQ2e6A2kQJDJ0edVVn60Wd7WsDYTeb
- Y9RiOi8kJea/bblGzHj3U3DJFq0qmm3xKdzLqdBFD2Buz80bG6LMn23U/242YezMIdn6+3Tn4lc
- PJPhh/eauyLF71VIjs/v8bN3WjrMGVvPIJOWmw875f4eC7m+MqBklPWbQYPXwq+aWnj65PIdF9o
- IlkXh7Tqcya57vbDD5+UVKHvlLLz9ZgiU0kB0A2F7DVANKG7bvLQqf7uvgNsneDp8/LZF6L9JLK
- VUEZrgEtzL4fDpZdHDY0mivTogkEI/kPF5d1cEMjapxMX0zlmrg4sqn+STKaZkmilx/u2qgvF4v
- Kp9DkX87eeA9+vKd94g==
+ a=qit2iCtTFQkLgVSMPQTB:22 a=VwQbUJbxAAAA:8 a=M5GUcnROAAAA:8
+ a=emg_xM9YeQN3qHWuWUkA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-14_02,2026-07-10_01,2025-10-01_01
@@ -108,12 +108,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[marvell.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[marvell.com:s=pfpt0220];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26164-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-26166-lists,linux-scsi=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[njavali@marvell.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:GR-FC-Storage-Upstream@marvell.com,m:agurumurthy@marvell.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:hare@suse.com,s:lists@lfdr.de];
@@ -123,10 +123,10 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[marvell.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[marvell.com:from_mime,marvell.com:mid,marvell.com:email,marvell.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[marvell.com:from_mime,marvell.com:mid,marvell.com:email,marvell.com:dkim,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -134,43 +134,52 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CF73D7531F9
+X-Rspamd-Queue-Id: ED0507532DC
 
-qla_chk_edif_rx_sa_delete_pending() obtains the SCSI command via
-GET_CMD_SP(sp) and immediately dereferences cmd->sc_data_direction.
-That command pointer can be NULL: the firmware may post a status
-completion for a command that has already been returned or aborted.
-The caller qla2x00_status_entry() acknowledges this on the very same
-status path, re-fetching GET_CMD_SP(sp) and bailing out with the
-"Command already returned" message when it is NULL -- but that check
-runs only after qla_chk_edif_rx_sa_delete_pending() has already
-dereferenced the pointer, so a NULL cmd crashes the kernel in
-interrupt context.
+In the CS_PORT_LOGGED_OUT case of qla2x00_chk_ms_status(), the
+FWI2-capable branch compared ms_pkt->loop_id.extended against NPH_SNS
+to decide whether the Name Server had logged out. On FWI2 and later
+adapters the response is a ct_entry_24xx / ct_entry_24xx_ext, where
+loop_id.extended (via the legacy ms_iocb_entry_t view) aliases offset 8,
+which is comp_status, not nport_handle (offset 10). As this code runs
+under CS_PORT_LOGGED_OUT, the field read back 0x29 (CS_PORT_LOGGED_OUT)
+and the comparison against NPH_SNS (0x7fc) was always false.
 
-Return early when cmd is NULL, before touching cmd->sc_data_direction.
+As a result the driver never recognized a Name Server logout on FWI2/
+29xx adapters: it returned the generic QLA_FUNCTION_FAILED instead of
+QLA_NOT_LOGGED_IN and skipped setting LOOP_RESYNC_NEEDED /
+LOCAL_LOOP_UPDATE, so the fabric rediscovery triggered by an SNS logout
+did not happen.
 
-Fixes: dd30706e73b7 ("scsi: qla2xxx: edif: Add key update")
+Read nport_handle from the ct_entry_24xx layout (offset 10) instead.
+nport_handle is at the same offset in ct_entry_24xx and
+ct_entry_24xx_ext, so a single cast covers 24xx-class and 29xx. The
+non-FWI2 branch keeps using loop_id.extended, which is correct for the
+ms_iocb_entry_t response on those adapters.
+
+Fixes: b98ae0d748db ("scsi: qla2xxx: Fix name server relogin")
 Cc: stable@vger.kernel.org
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Reviewed-by: Hannes Reinecke <hare@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_edif.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/qla2xxx/qla_gs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_edif.c b/drivers/scsi/qla2xxx/qla_edif.c
-index ade1d8178573..bfa520f936a2 100644
---- a/drivers/scsi/qla2xxx/qla_edif.c
-+++ b/drivers/scsi/qla2xxx/qla_edif.c
-@@ -3540,6 +3540,9 @@ void qla_chk_edif_rx_sa_delete_pending(scsi_qla_host_t *vha,
- 	uint32_t handle;
- 	uint16_t sa_index;
- 
-+	if (!cmd)
-+		return;
-+
- 	handle = (uint32_t)LSW(sts24->handle);
- 
- 	/* find out if this status iosb is for a scsi read */
+diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
+index 7a4d2fdc095f..20b1aef455c4 100644
+--- a/drivers/scsi/qla2xxx/qla_gs.c
++++ b/drivers/scsi/qla2xxx/qla_gs.c
+@@ -192,8 +192,8 @@ qla2x00_chk_ms_status(scsi_qla_host_t *vha, ms_iocb_entry_t *ms_pkt,
+ 			break;
+ 		case CS_PORT_LOGGED_OUT:
+ 			if (IS_FWI2_CAPABLE(ha)) {
+-				if (le16_to_cpu(ms_pkt->loop_id.extended) ==
+-				    NPH_SNS)
++				if (le16_to_cpu(((struct ct_entry_24xx *)
++				    ms_pkt)->nport_handle) == NPH_SNS)
+ 					lid_is_sns = true;
+ 			} else {
+ 				if (le16_to_cpu(ms_pkt->loop_id.extended) ==
 -- 
 2.47.3
 
