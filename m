@@ -1,74 +1,74 @@
-Return-Path: <linux-scsi+bounces-26141-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26142-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id VLjkHmIIVmouyQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-26141-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 11:58:58 +0200
+	id 9OyFFmkIVmowyQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-26142-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 11:59:05 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A7A2753277
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 11:58:58 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE33F75327F
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 11:59:04 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=hzw0Mpg2;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26141-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26141-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=N6SiIOYr;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26142-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26142-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=marvell.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7DBEE307E2CD
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 09:55:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0EA713156555
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2026 09:55:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 129162E2840;
-	Tue, 14 Jul 2026 09:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DA283EC2EF;
+	Tue, 14 Jul 2026 09:55:24 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C0732A3D7
-	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 09:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA59432A3D7
+	for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2026 09:55:22 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784022922; cv=none; b=joVlGBRRkSKSjNEjWoKSb5DsgEWqQoiZF5Z/ARqVsWP0wzYv6dibTxMGQoQlhvYNJ/NMqiLs+cNGTXpwcnhSglbiBr3xvO3Y8Wj2g/0Xfv1k2sfFLcSoy2Odc4vgREjH5gH+otysyOUbISQIZlL4FKg6IcWTCPNXmUmT06voFVk=
+	t=1784022924; cv=none; b=EW+f7egX6CLxfpIjF+rYcv0N18ijm/KUPKQ67LaNVMLtbd6KFYiyUYpwhhRulKcy1hoMEhcQt0R8KYXO1kUwc8AJKGmqVfHwdAMs7/67uvQxEbnmdh7qPsFjjGKwHsuFeRozcoyWl1M7d4rVwZPhbeVZPXm+pzejjuVLmhqkF4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784022922; c=relaxed/simple;
-	bh=G6IwbmWILAY0i6RA6QdZI2TUa73HGC8W81qYhqz8uaw=;
+	s=arc-20240116; t=1784022924; c=relaxed/simple;
+	bh=R5ExyK3VVMaRtV+MkzMOQwzegStDLaVDJrUVLJ1/lyE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LBAr6VPkmkCkUfhg37mUcuXVKyt+x2w5OyV2deqnyOGA4/56AoyDdqis8EIpcicr9OXfC95PbYSdUGIJqFW+d79NcAMt3sqTfZnKMnoiWwAA9Bp80M9riXe6hGWIE7vPmRbfFvvXvni99t2v2apaPEfOlt28GqW5tEA7cE/d8cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=hzw0Mpg2; arc=none smtp.client-ip=67.231.148.174
-Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66E6URw52353949;
-	Tue, 14 Jul 2026 02:55:17 -0700
+	 MIME-Version:Content-Type; b=H60LHId0e7ddIlOzjDnPm17PF3XPS2vxExqGj36VHa7Ir9jHlG6//nIqMM2l2mMW7EIwSkVvDDepKImNcAalm97gYR6Iz3W30EAZy64CwHTseRI16mq1rjCF8VMivmjyRkEJJk8P/SESgQ09sI/rH+iOO4SuhI4aYpDLXVrZ9pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=N6SiIOYr; arc=none smtp.client-ip=67.231.156.173
+Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66E6UM4r2408068;
+	Tue, 14 Jul 2026 02:55:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=7
-	6nQHS2XaPB5RmNTf2weDS9yVzLEYnhIBdqFVZA9GW0=; b=hzw0Mpg2zsx0efX7B
-	lQynawvpSg2mjwa9jipP/0jtaRaGLoALOWBi997e8BeVe2gxzsspJjq63RIzhKFa
-	NvxssVbLnt2ovoOj4qbt6BlIXGfM0XLJ76LPfmOg25BhmLyKBC6Gf2tS4AKMX9PP
-	QHXXQI6S0bF9X6mJSAS13tY3lNWKo2ngvrwTmNAh0u3jhTPj2wJ74PyR7IDgOA8T
-	Oqsy+bhOihun3R9DMgiWXkFeUojVpV/2enUOYW4l64MFP1y72BW57pRMxg5BLh7e
-	6K0qEz+IQeSexEfxl2d7zOR4kU7fqsdEptubBu/8dtTrWFsKkNqkCpvfJy4qZGRY
-	jHqUA==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4fca36nhvy-1
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=f
+	kYL3mWnzUepfErZNQYAHkvnNkDwMcNCXvYYOZhmCyo=; b=N6SiIOYrLhvkRdp/l
+	3yxVD2AoyMYXO36/wBw8cEj/kVyGUou84KLHm9hMOnqDLXY42jEc0YJBb2qF2kFw
+	qEvezz9lno89Z5sem6LJMC7vtTil6NGhUrJj6YrAzYZqJnl9/2WhwN98LRRjIVQb
+	5m9SKSpPaL5R756zrmuD6G+GkoeoeEDaPExWhYrjKAGZs/ErTgWHB8E9rxJhrgmY
+	4ZQwvzLduc3EfrAOc3tFsYm6CXeKWOpoACZIwjR0AtRWiWv5GDcTaDB+2SWp6o1+
+	N0nKUmt1USE/d6QYAkfXBNzhTioCh8Tft7Ekpcf/xF9jM6WYFbJWtMFsF7pwceb9
+	CjUBw==
+Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4fc6k9npwy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Jul 2026 02:55:16 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+	Tue, 14 Jul 2026 02:55:19 -0700 (PDT)
+Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
+ DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Tue, 14 Jul 2026 02:55:15 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Tue, 14 Jul 2026 02:55:15 -0700
+ 15.2.1544.25; Tue, 14 Jul 2026 02:55:19 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
+ (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Tue, 14 Jul 2026 02:55:19 -0700
 Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.164])
-	by maili.marvell.com (Postfix) with ESMTP id 367635E6867;
-	Tue, 14 Jul 2026 02:55:12 -0700 (PDT)
+	by maili.marvell.com (Postfix) with ESMTP id 1A75E5E6870;
+	Tue, 14 Jul 2026 02:55:15 -0700 (PDT)
 From: Nilesh Javali <njavali@marvell.com>
 To: <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <GR-FC-Storage-Upstream@marvell.com>,
         <agurumurthy@marvell.com>, <emilne@redhat.com>, <jmeneghi@redhat.com>,
         <hare@suse.com>
-Subject: [PATCH v4 23/56] scsi: qla2xxx: Use ring-slot helpers in __qla2x00_alloc_iocbs
-Date: Tue, 14 Jul 2026 15:23:20 +0530
-Message-ID: <20260714095353.289460-24-njavali@marvell.com>
+Subject: [PATCH v4 24/56] scsi: qla2xxx: Add support for QLA29XX in memory allocation
+Date: Tue, 14 Jul 2026 15:23:21 +0530
+Message-ID: <20260714095353.289460-25-njavali@marvell.com>
 X-Mailer: git-send-email 2.23.1
 In-Reply-To: <20260714095353.289460-1-njavali@marvell.com>
 References: <20260714095353.289460-1-njavali@marvell.com>
@@ -80,24 +80,24 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzE0MDEwMyBTYWx0ZWRfX2CANG53F2iXc
- e3OcCsXtG27sACixzamgpJKVCwtwSPC88ZWfza8SrI2k15ZTalXEzBKAghZesZCr+9CvQ94zss9
- /cCfkHMXnHKfhWZv3OU1N3PKRdU2W0BQYj2B7mlsRFMNnkPs1r6ReFTVEHyMBO+ssIstQ7bFn8Q
- QjGLBR8gjb735kqpYtB6wkJ8NHypyKoDVbUDi7COPOpEb8m9lT1+RvzKSnvMt0uX7Rd0VMvBZJS
- LqXo1F4eak9DcfOUTp33H9HewUlTkDgdS9UkqLyLviHFCIaS8LmvDKYF6PD0vkBpibdChh6rZq1
- khXeReF/Jtw2az5MHLtjsujLyUcDCwdyKFdR0KmTcvJbp7EDH+ytMpKldMJicmhxEFdAn9f67vv
- J4ob3Gh8cssUI0/oDNFG0t3GYAE0U0SPr0lwT1BUfmxAjsBW/9ImI4nIqCeUERiXTiSCPxPeLTP
- hidae31pGnQju0ojdgw==
-X-Authority-Analysis: v=2.4 cv=EeT4hvmC c=1 sm=1 tr=0 ts=6a560784 cx=c_pps
- a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
+X-Proofpoint-ORIG-GUID: KyzxaWeNLCOH4UCdOjJd7ob5oNDsmgXr
+X-Proofpoint-GUID: KyzxaWeNLCOH4UCdOjJd7ob5oNDsmgXr
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzE0MDEwMyBTYWx0ZWRfX6RT3j0IReGMz
+ jt/eJuCRZ5OnH8pkS4TlM+VIZYOGVrSc4snnUK9Fj8TZSnRM1meEhedXk86tmHyoHwdyVWFEAN4
+ KUvdJuDKXqJIE18cf4UyuqeSI+7a+wc=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzE0MDEwMyBTYWx0ZWRfX9MymBdXugEoi
+ bYnsqZExOYhXAGx9yreD67vxj8XJJtuUACeBIt+7LwUoFOuhXmOYHTTAXmix2CXejsV0vl2FJ21
+ LkdNXYsPMbJpihbNzmQ4o9ygpmqaA2jIkSczA/mWb0ZfwtrdsqkHHRsVa28neeMjplKDMXxeiJ6
+ aGZNamSir07ey56J68/8+1Nc+92dtFfaK2Zq1m8/AHKjG+p6fLAq3PZJ24U9OLCelvgrQBFM7ZF
+ mIWGBtveXVDVMhp/Eh7+hATMhviUiO8ZJ3eawwpRGoTuYYwZdyXNX3VO5es8WBgm9TsqXiJZ+WK
+ lG1JPj8X1w0Sw59VOIGuRYxPfIZlfUUbPZmzQ0zeZD90anr77RZ26+/aYoluCOkqQ+Whufdl8y0
+ daTi04AnrYrdy6sg2Iv/k1VuukNM6za19T5Gxcmv4gK7FcCeutLX7i1HQqj3bSeJlwHudWPxyLp
+ pzaE7TLQzQHQDDdkKOQ==
+X-Authority-Analysis: v=2.4 cv=ULLt2ify c=1 sm=1 tr=0 ts=6a560787 cx=c_pps
+ a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
  a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
- a=TtqV-g6YmW1Jfm2GSLaY:22 a=M5GUcnROAAAA:8 a=VwQbUJbxAAAA:8
- a=x7bcZWNirRMrbHSgiDIA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzE0MDEwMyBTYWx0ZWRfX4Mz2J/3E7mas
- bqLe4WCDK3DkYZ1UnJnWoTGfBMF8/ZNTuc+aic4ndISHrfdTmxiPma48YeFoEHNp/8LqYp4QtcT
- IYV7OBYVQuuNtJ09VKeFuPpdx7AHC+8=
-X-Proofpoint-ORIG-GUID: o_Ggo72DrUC6CbsGOgD4RqY4AqD41IzW
-X-Proofpoint-GUID: o_Ggo72DrUC6CbsGOgD4RqY4AqD41IzW
+ a=qit2iCtTFQkLgVSMPQTB:22 a=M5GUcnROAAAA:8 a=VwQbUJbxAAAA:8
+ a=TERegcne-j9u77qtkYEA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-14_02,2026-07-10_01,2025-10-01_01
@@ -108,12 +108,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[marvell.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[marvell.com:s=pfpt0220];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26141-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-26142-lists,linux-scsi=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[njavali@marvell.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:GR-FC-Storage-Upstream@marvell.com,m:agurumurthy@marvell.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:hare@suse.com,s:lists@lfdr.de];
@@ -123,7 +123,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[marvell.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	ALIAS_RESOLVED(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[marvell.com:from_mime,marvell.com:mid,marvell.com:email,marvell.com:dkim,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
@@ -134,59 +134,58 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0A7A2753277
+X-Rspamd-Queue-Id: BE33F75327F
 
-__qla2x00_alloc_iocbs() open-codes ring pointer selection and entry
-size based on IS_QLA29XX(ha): 29xx reaches the slot via ring_ext_ptr
-and zeroes REQUEST_ENTRY_SIZE_EXT bytes, while other adapters use
-ring_ptr with REQUEST_ENTRY_SIZE bytes.
-
-Replace the two branches with the qla_req_ring_slot() and
-qla_req_entry_size() helpers, and initialise pkt at declaration.
-The IS_QLAFX00 register-mapped writes remain guarded because
-IS_QLAFX00 and IS_QLA29XX cannot be true simultaneously.
-
-No functional change: the bytes written to the firmware-visible IOCB
-are identical.
+Enhance the qla2x00_mem_alloc function to include checks for
+QLA29XX adapters.  This modification updates the conditions for
+memory allocation and cleanup, ensuring proper handling of the
+new adapter series alongside existing QLA27XX and QLA28XX checks.
 
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Reviewed-by: Hannes Reinecke <hare@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_iocb.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ drivers/scsi/qla2xxx/qla_os.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index 7136ad4ec9a8..71fb6f3584ea 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -2465,10 +2465,9 @@ __qla2x00_alloc_iocbs(struct qla_qpair *qpair, srb_t *sp)
- 	struct req_que *req = qpair->req;
- 	device_reg_t *reg = ISP_QUE_REG(ha, req->id);
- 	uint32_t handle;
--	request_t *pkt;
- 	uint16_t cnt, req_cnt;
-+	request_t *pkt = NULL;
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 5450c40259bf..3be59179a024 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -4285,7 +4285,8 @@ qla2x00_mem_alloc(struct qla_hw_data *ha, uint16_t req_len, uint16_t rsp_len,
+ 	if (!ha->srb_mempool)
+ 		goto fail_free_gid_list;
  
--	pkt = NULL;
- 	req_cnt = 1;
- 	handle = 0;
+-	if (IS_P3P_TYPE(ha) || IS_QLA27XX(ha) || (ql2xsecenable && IS_QLA28XX(ha))) {
++	if (IS_P3P_TYPE(ha) || IS_QLA27XX(ha) ||
++	    (ql2xsecenable && (IS_QLA28XX(ha) || IS_QLA29XX(ha)))) {
+ 		/* Allocate cache for CT6 Ctx. */
+ 		if (!ctx_cachep) {
+ 			ctx_cachep = kmem_cache_create("qla2xxx_ctx",
+@@ -4319,7 +4320,8 @@ qla2x00_mem_alloc(struct qla_hw_data *ha, uint16_t req_len, uint16_t rsp_len,
+ 	    "init_cb=%p gid_list=%p, srb_mempool=%p s_dma_pool=%p.\n",
+ 	    ha->init_cb, ha->gid_list, ha->srb_mempool, ha->s_dma_pool);
  
-@@ -2529,13 +2528,8 @@ __qla2x00_alloc_iocbs(struct qla_qpair *qpair, srb_t *sp)
- 	 * layout-compatible once we return the pkt as request_t *.
- 	 */
- 	req->cnt -= req_cnt;
--	if (IS_QLA29XX(ha)) {
--		pkt = (request_t *)req->ring_ext_ptr;
--		memset(pkt, 0, REQUEST_ENTRY_SIZE_EXT);
--	} else {
--		pkt = req->ring_ptr;
--		memset(pkt, 0, REQUEST_ENTRY_SIZE);
--	}
-+	pkt = qla_req_ring_slot(ha, req);
-+	memset(pkt, 0, qla_req_entry_size(ha));
- 	if (IS_QLAFX00(ha)) {
- 		wrt_reg_byte((u8 __force __iomem *)&pkt->entry_count, req_cnt);
- 		wrt_reg_dword((__le32 __force __iomem *)&pkt->handle, handle);
+-	if (IS_P3P_TYPE(ha) || ql2xenabledif || (IS_QLA28XX(ha) && ql2xsecenable)) {
++	if (IS_P3P_TYPE(ha) || ql2xenabledif ||
++	    ((IS_QLA28XX(ha) || IS_QLA29XX(ha)) && ql2xsecenable)) {
+ 		ha->dl_dma_pool = dma_pool_create(name, &ha->pdev->dev,
+ 			DSD_LIST_DMA_POOL_SIZE, 8, 0);
+ 		if (!ha->dl_dma_pool) {
+@@ -4681,12 +4683,12 @@ qla2x00_mem_alloc(struct qla_hw_data *ha, uint16_t req_len, uint16_t rsp_len,
+ 	}
+ 
+ fail_dif_bundl_dma_pool:
+-	if (IS_QLA82XX(ha) || ql2xenabledif) {
++	if (IS_QLA82XX(ha) || IS_QLA29XX(ha) || ql2xenabledif) {
+ 		dma_pool_destroy(ha->fcp_cmnd_dma_pool);
+ 		ha->fcp_cmnd_dma_pool = NULL;
+ 	}
+ fail_dl_dma_pool:
+-	if (IS_QLA82XX(ha) || ql2xenabledif) {
++	if (IS_QLA82XX(ha) || IS_QLA29XX(ha) || ql2xenabledif) {
+ 		dma_pool_destroy(ha->dl_dma_pool);
+ 		ha->dl_dma_pool = NULL;
+ 	}
 -- 
 2.47.3
 
