@@ -1,307 +1,251 @@
-Return-Path: <linux-scsi+bounces-26245-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26247-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id dEppB9tuV2rFNwEAu9opvQ
-	(envelope-from <linux-scsi+bounces-26245-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 13:28:27 +0200
+	id MtZoElB6V2qdOwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-26247-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 14:17:20 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13F7F75D8F9
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 13:28:26 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id AACE675E003
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 14:17:19 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=oracle.com header.s=corp-2025-04-25 header.b=Gofyk7zl;
-	dkim=pass header.d=oracle.onmicrosoft.com header.s=selector2-oracle-onmicrosoft-com header.b=M7nMjPFj;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26245-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26245-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=oracle.com;
-	arc=reject ("cv is fail on i=2")
+	dkim=pass header.d=iokpp.de header.s=strato-dkim-0002 header.b=sdGMsn5x;
+	dkim=pass header.d=iokpp.de header.s=strato-dkim-0003 header.b=JDQOyGmN;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26247-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26247-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=iokpp.de;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1CBBB3004069
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 11:28:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6AD8C300B54A
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 12:15:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A1A03C3BEE;
-	Wed, 15 Jul 2026 11:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 715F1446845;
+	Wed, 15 Jul 2026 12:15:23 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFBA44682F;
-	Wed, 15 Jul 2026 11:28:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDAA7449EB8
+	for <linux-scsi@vger.kernel.org>; Wed, 15 Jul 2026 12:15:18 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784114898; cv=fail; b=h39okieVEbPHoCkujzwXezODniVu6DwVxzmqzss/ZGEgEYs96VfU9AwKWOBAWGnc7NP3K2YlG/4iOFaixKXzdhfbriv1NPP5nMOqWlpvXmqITrZDb9arCyPdPYIFAw1vDCZjqoug2lw9/Ks8/mGQGerfqgftVBkyslsYfLMNe5c=
+	t=1784117722; cv=pass; b=lx8yKQKmkvKzDhHqXNlarjs1phqdONJ7PCXdFdvVQTaEzAew2pESwxwUevOnQJ/AvpgYsKhT9RzX3/JtVcPNWchHKps9UOqGXUBOc78mLP76avXronDdoQhLMsiGpQmeAvR35im8E+dQbNzvvYuYLFVze7hZ9aEHGD0pCW04U7I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784114898; c=relaxed/simple;
-	bh=BPvCqB8/HG+ZLSgeVe/tdFFFW9XTECwPi0mXGb37vIQ=;
-	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Q/4wXqAX9crBK0tVnJMlWbMSb/CIHBskGABnrlkaw1Wgcc2Ame3vt3YgtTjLdHjwQrB7yFBqsd+VUKsTcPFmee4x3389WjJndE3idXAYFmXpLQH7f5FBMMLeJhX77DIMTAi8OncIlNWtlJtv6AlmsHiE/mjLLxL1Z7FidSaQ478=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Gofyk7zl; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=M7nMjPFj; arc=fail smtp.client-ip=205.220.165.32
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66F9iUEh231225;
-	Wed, 15 Jul 2026 11:28:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=TJFo2zoAdPgTofxfVlYmBCvNkZgJ+Ztf0OnsmoxCfzs=; b=
-	Gofyk7zlKUtE45ug2wqqpNdGldwrFcfbbfM+YwPmh2U+hSFfleQxy7nqFS6060iW
-	8Mz2d656ym3BnffnGg87ucmOkRslXkHn7gvCksp1t/i7LbdsgKNDKT6/q5sZTpAV
-	7XaYNP0Ce6u7wMSmrnZc6bg8oJJMQrywu7ZcdVsLueC+AJpWKaW2ggGOKMVS+Q4e
-	d5TqzuPWjQpDXTWusJLrmOomI5anrrcZPHvtoex+pGz4PHmvkRuANA8TTYuKQLi1
-	cNgQnt04/Z0Kl+nD7anuQYyCceCIFhn7vAncX7cU0nh4so5WI9NYQyEgTKklOCGx
-	B2tFkbDM4SqaJPj9STDaag==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fbed2ek5t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 15 Jul 2026 11:28:15 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66FBRxhV033530;
-	Wed, 15 Jul 2026 11:28:15 GMT
-Received: from mw6pr02cu001.outbound.protection.outlook.com (mail-westus2azon11012018.outbound.protection.outlook.com [52.101.48.18])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4fbc9fa6ju-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 15 Jul 2026 11:28:14 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lwYDM+743kzu9ViC5O7BdBlZoCnKaPKCZqOqVhBSgoxjNC1i+RPH5P2YlQUZ1xxZe6Ptyh/7EsvOaTC9vxjv6HnTMq971NFwdvIOiX1kbGMWBhaKUTP8brIqwEFSjD7Cqq5u6swn/rAQc1ORUnnyAvKCBqsr0VQSrddfhFMcfDTi4DlcoK5UYzwAOP/Sqeu3iqH6y7svFxMgcp8LAgH98kN4Og03iIhcCzg8k6Fz9IpIBHya+zt+pU6qnMcjvSo+AKmlikNNSYB6E3Sv3SxbX8e9vJIYpbM11Q+ONPE3h9Xw+3C/MOi2PIXbXHYVIbb1C4KMfHxBorizp2lUeWYa8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TJFo2zoAdPgTofxfVlYmBCvNkZgJ+Ztf0OnsmoxCfzs=;
- b=SLeZLp1xRdwEn+oW2mnyWWu5umHfuB5LAmDCFRDxHn26u7bRN6C3kEmlwd/AnOR6K0q89pJjX/mu09JFcDZ1R4yMLnGVU8TcwhbootwhLtgNX+33fQ00yZsfZ/+WUm+yG+ChxVS8QMimoTwWPAJ9wbS1XWgy5LfR2OKwZqX2KMfJG7PTTfIhstbtbRKt2GofYSUV2igOzNcShvaJSHP7jccyMya5vQQgbtmqx6rPM1QbHCBGgluuP7AhEGqq2CaSXmhdQ9uVkVJEVFnE6DVuusvk/GYnyfrX9Xwh8fBTscotDoBt2CNq8Bj6zqzoKCNhoQHLJC9j0bl6KGoNSoKLHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TJFo2zoAdPgTofxfVlYmBCvNkZgJ+Ztf0OnsmoxCfzs=;
- b=M7nMjPFjQbw9iCJtpBVFlHb0+TlbsUj4hPfr2CGe9G07N0ax1UojfDij9/vGcIahlEjZP7ub4YtqiYXXGBVIIL7B7D+RuM9faDepHoXk3WwJ1BOhrXP+dXdCMwMP94xa/ENDdgmUVgEraO8hc7n9kUlgrhsoDqQPxwZ9AR70wFg=
-Received: from DM4PR10MB6229.namprd10.prod.outlook.com (2603:10b6:8:8c::12) by
- BLAPR10MB5153.namprd10.prod.outlook.com (2603:10b6:208:330::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.9; Wed, 15 Jul
- 2026 11:28:11 +0000
-Received: from DM4PR10MB6229.namprd10.prod.outlook.com
- ([fe80::867:63e7:13fa:fa7d]) by DM4PR10MB6229.namprd10.prod.outlook.com
- ([fe80::867:63e7:13fa:fa7d%6]) with mapi id 15.21.0202.018; Wed, 15 Jul 2026
- 11:28:11 +0000
-Message-ID: <5bf49e1b-ccd9-4d49-a982-6c288e03a9a6@oracle.com>
-Date: Wed, 15 Jul 2026 12:28:05 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 13/17] scsi: sd: support multipath disk
-From: John Garry <john.g.garry@oracle.com>
-To: sashiko-reviews@lists.linux.dev
+	s=arc-20240116; t=1784117722; c=relaxed/simple;
+	bh=aOrVeHtXzsM1pRkqxNNddE3wD/FxMb2Yh1OYwAbAeQs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XvCF8EM60+JhvhydlZszl/Wpm752ArAb+wiCbniHogUdEIymXMEuTb2EXF6UL94sLhEMptckSH6HFJXlICVt3whe47dj5th/8H7iZqGMeqrdaIFyX6li9Zccy6nTLt292+9xJntCvRgP/t02nIx7t75/sBF0HP2X3Z6KItHaO8o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=sdGMsn5x; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=JDQOyGmN; arc=pass smtp.client-ip=85.215.255.23
+ARC-Seal: i=1; a=rsa-sha256; t=1784117530; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=a/C6r5DF3R+Y1Ks3iNwIJUapFpxCwF4w4LEQy7Id4OV73TFXevynSp+tpko9vnipk+
+    Wuz684JOYaB2PIzILyCEnWXXOU5K2AdsgiTYcXXdCy1ynDqaGR/fCoxHFSwPsgOhXydl
+    IzwQvmMB69B5Xn3ZcP0Eyz0zLuMT0Zsmro+mePA6K5fvLsG1AQ24acsbWQft+c0WpIYK
+    j5BLh993byIw0H6/8zufmJQOEsMAlS9fk0YjpSWIz64tHKIBLWmSZ3vXnMyrEYi2WeS1
+    44a6h/N2Odb8i84pSzMV/2T9XCY63Zp3e7R/p9vhtp9jzDnDmIEc3r7kqusgAXe90GBs
+    0S7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1784117530;
+    s=strato-dkim-0002; d=strato.com;
+    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=aOrVeHtXzsM1pRkqxNNddE3wD/FxMb2Yh1OYwAbAeQs=;
+    b=EDHUgpEisSGRdDMQi2oDId6oAmXsHlRVkPLExcEuB4MuYuAXmi+6+Jep/zsws2VHqj
+    kdQpwGv1xi1k75lELtCCZhlTTzJchBYWNuxiEXKNceUMzAh5QJCHG8++xs6KWm5pPRKs
+    r4xT7mPTnXuTpJ+F9AKdPUWxL4sU5VJZdpvc/zYeTPz7ASmb6f76s3eHj/y9jxZjHCjf
+    Pk3wyldM9tQqHa7Y7y6Y5cWOYHuVH+0D9Q+msFstoFF1SwvZUN6aUZaMhZkDhKTGPa9t
+    xCAQbuDwzOXs4HS/LI/CEJPBMcWGs8H0jh2bHduYjS6NvHA23g9R+VzPAmrA+YSDUlse
+    BMQA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1784117530;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=aOrVeHtXzsM1pRkqxNNddE3wD/FxMb2Yh1OYwAbAeQs=;
+    b=sdGMsn5xkczACH78Z7fAcNGkGwI/KgPW1YgVGUJyA0OAZuG48mx3ds+5z5AkUGV95w
+    /wjnFrLpl5Nfh+2isLfNZHaBzHPwzr6UBtj8CFnWOoGUeZQOKbdMyGF5PNmAuQjJpqkA
+    5b+Dhi55WGeeWA//tYW6aGyLagIid5KxeGhanu3TdPhJVgOXGCQVt19YbUuCRVBHR+zX
+    iReyS7aLk9fYk7VrFClmu3tNGcE1qALJU3PMCP6LAuS18+ev3PcoPdfpZrWKn/BY9Ftf
+    E237ZX49KCvAC9QrcdmTXK+FvL1QhOy0DgNe9FM7MDS3WfsQOiAaqs0tAp7EEpjhPPTu
+    5i6A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1784117530;
+    s=strato-dkim-0003; d=iokpp.de;
+    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=aOrVeHtXzsM1pRkqxNNddE3wD/FxMb2Yh1OYwAbAeQs=;
+    b=JDQOyGmNwcfLVpvak6VZpFpjVubp/cOk7Ux5rnaBJTSodl/A/bKx/zdA4kmsnjyymS
+    FmT18xHC7dRuhqx3juCw==
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSe9tgBDSDt0V0DBslXBtZUxPOub3IZik"
+Received: from [10.176.237.62]
+    by smtp.strato.de (RZmta 55.5.6 AUTH)
+    with ESMTPSA id z4d38826FCCAOLg
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Wed, 15 Jul 2026 14:12:10 +0200 (CEST)
+Message-ID: <c3b5899213c76c62fa0c7f9dffdf56607c3ae1f0.camel@iokpp.de>
+Subject: Re: [PATCH v2] scsi: ufs: core: cancel RTC work in active-active
+ suspend
+From: Bean Huo <beanhuo@iokpp.de>
+To: sashiko-reviews@lists.linux.dev, Guangshuo Li <lgs201920130244@gmail.com>
 Cc: linux-scsi@vger.kernel.org
-References: <20260703103402.3725011-1-john.g.garry@oracle.com>
- <20260703103402.3725011-14-john.g.garry@oracle.com>
- <20260703122406.84E0E1F000E9@smtp.kernel.org>
- <c64a4c05-6f00-4249-9cf4-94a222429b0a@oracle.com>
-Content-Language: en-US
-Organization: Oracle Corporation
-In-Reply-To: <c64a4c05-6f00-4249-9cf4-94a222429b0a@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DX1P273CA0034.AREP273.PROD.OUTLOOK.COM
- (2603:1086:300:20::21) To DM4PR10MB6229.namprd10.prod.outlook.com
- (2603:10b6:8:8c::12)
+Date: Wed, 15 Jul 2026 14:12:09 +0200
+In-Reply-To: <20260714174406.6FD471F00A3A@smtp.kernel.org>
+References: <20260714172726.1736967-1-lgs201920130244@gmail.com>
+	 <20260714174406.6FD471F00A3A@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2.1 
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR10MB6229:EE_|BLAPR10MB5153:EE_
-X-MS-Office365-Filtering-Correlation-Id: 65d8b3c0-2c6a-4a29-4786-08dee26426de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|23010399003|1800799024|366016|4143699003|56012099006|18002099003|22082099003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	3c4gqkr4IgvIcw1Z3ku720XFMnvfyHSMxFeRMS9Mt1EeuL3gos6BPVFtR5jrmyDaaKfL3uQexfoPm2vN1kkbi4NlR0wvf0Zx4upGKKs9LLC8idHHIWqgEjofnC5Nes5lrmlzvICTQ2y9U0WgNTbD+VRTjyqX/HA47eFBZaHRsKlPGWroLqwO3Ui2S1ujE/BNjZTnGGDDdO0b7Yw9kPspDCiYLpi85NQbOU74AFmmcgrpZ1I5DO2IIiSX0fkRBmXwBZipGtERVD2VCb1d+kQfpmNmPuzwJMlG7bw6aCLilba/SyhKQdvtWe7/mgate0dyv2OG1MOpZ5JJxOUZWY7bbW1Bfiwu4RJUXwrZnu4HASBpYwY6yCsWE66xBoTxzQKpsb7Dg3FwkD+vYnZadBst1ikhMVcHhLGw99/TK90K5BIuCvyKbKcEBRlpHyV6GOllF8OMp4oOS8zEVn4rpIF13sYTKPhSyob5kYT07mbuhuCaiikhG2o0VatdEZZILlnzTgJyzm+/uTAr2mWhz0NmwglIpv8h9xaUn/2cjatLdjpleCHyJ80UVQiHFEQjvPQOlumOLlT1le3grxdI5osusKlACf0qYs6WvzuHKXQR9xpoK28O+Ri1lIIsOZC/arST2A+3qJL0jbQs696WMxKj0NqAHQx43nCmqb6yqkT2Jv0=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB6229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(1800799024)(366016)(4143699003)(56012099006)(18002099003)(22082099003)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?L2Y3a29sdHZ3ckpXRGxpVHVUckVMa1c1YnF4VzE0Z0w0WC9oRmpWVytNOWU5?=
- =?utf-8?B?cDdHWm9ob29GTlV5NFhya2lRa09NemlVOW9IWlhFWHltQ0dhTlExRzJ4N2JE?=
- =?utf-8?B?cEFhVlc3d3E0SUxEajFvQ25mTHFZdUt4VGlYVHBVVUNxejVWZFk2bHI2NmhM?=
- =?utf-8?B?VzVycXp1SmczS1RFeElkTTlJanRjb0RRVjRoNmJUM0htZ21OWUl6Mkh0RDl1?=
- =?utf-8?B?OEVrOWxzQ3RFTWdYbUVaL01pdDBpb2FiUDcza0pvdnNSZ0NEZnRBMW1SSUtt?=
- =?utf-8?B?RHdaS0hzeEF2d3NzY3BNbFFKWGZxaVBCd0h0T3FoQkdMZkhmZDJGdEt6Y3NY?=
- =?utf-8?B?V0hyTWZlZ1hpdWZUOEhPRkdsZ0o1R0FIUGZYcG9NU2RZS29KVFB5T0JUNjVo?=
- =?utf-8?B?cTUrenJHb3FPSnVLRFdrVk5SQzRITDBycnZvcWtYZ0lPdTMxNTdGZGx2OE5G?=
- =?utf-8?B?aEpISWF3U1lwZlhCcDRKK1ZkcUxRby9pUjZWY2JUSUw5VDk3S29DVUdtZC9u?=
- =?utf-8?B?MmhqakwrdjdDaldrY2Nxb00xQjVOWnpUMld3WGp5cDhrL0g0MkFOWHlGaEN1?=
- =?utf-8?B?OCtiNFp5S1FzUm9OMk5TeVhFMXVuNHFoWU1jZlRqQmh0T1JqUTRZdE8vYmMy?=
- =?utf-8?B?TDM4bWtyUG9yMTRGQm14cDBxblAySHk1MVFUdkFVUzIzUTI1YnNrdVJGc2Yv?=
- =?utf-8?B?dGNXalpBNWVyNUlqN1dMVVpKdVdhRVFXMmt2VWlaMHRUaEk5NmNwYlQra3Ay?=
- =?utf-8?B?ei9JUHBKWThqODNCUUIyMXQzZWFXUEZPUndJNk1BYnVncTNaZzJaU2pwbmhx?=
- =?utf-8?B?ZEFNR1h2NFVReXM1Rkh3MFl0ZWcyQndjZHBkazJMMjZhNDZEY3B4ZWUvcUtU?=
- =?utf-8?B?U1VpcXRxUUN2bmxwMGpUTUY5c0R1c3VLdXorWVhtTVNBM0dQVERuUDNqVUQr?=
- =?utf-8?B?b3pjRENFcDdIaUppSnZvVGtQWVFuck9KVGdsekk0VThzd3pkZUU5Q01PRGxX?=
- =?utf-8?B?MEM5NzN0SExacnczcTNPRGcxZXVpYWdwSndnOWdIS0pUQnFIRnpadTdYdTlR?=
- =?utf-8?B?NXNSMnFZd3Bvc2NYL3lPbXFSY3dYVWs4TnFaOHBlUGFCUlREUHFJd2g5bVkv?=
- =?utf-8?B?TUhOSXQrMEdyTWUrbldHNXVGTnNxWGlnSFFPZ1pBQzlrREZtR2FTc3hFQmNW?=
- =?utf-8?B?bFpPN2lhN2k2dFlHNVBxMG5QQlViSHhZVW5VNnNpK0ZkWnlRMm53Sjc0Zm12?=
- =?utf-8?B?SUZRazlsK0J2WDlibnhzQ3BJQVAxamc3VmJVd1J3Q3BtQ1B5a1lqRFAveTdh?=
- =?utf-8?B?WXJIckJRMUtKN0ZVc0J6T0pnbERDUHlET2VpdzJNY0JJQ2o1VUMvdmZhakF6?=
- =?utf-8?B?aUY5KzhRRTZhSUhMS2cySFVWd2xmSUNUWWg3dEt6OUViQUR1TnhXVU42Vys4?=
- =?utf-8?B?SGV0ZFJTS1pwTU0yZWdQUzA0dXczckE5Z0dEOWlZdFk1MkJhTit3RWFtTzc0?=
- =?utf-8?B?YVJNenFzYmxrRkwzd1BlbnE1UFFsdGFHRXZZbUVmMmpha3pPR3BsUzF1Q2M1?=
- =?utf-8?B?bi8rUDJudnA5VEdWeW1IeTZ0SThjMDVJWVdSUXJsa3lCbm5LOGtOS0tiNmU3?=
- =?utf-8?B?MGJmWE5UcTBIcFJtWXhPcFNpZyt4d0VNOFRKN2Myc0puNFdneDY3Q01RZVlT?=
- =?utf-8?B?LzFzNEI1NTNkVmxaa1FENERFcWVlZ2k3SnY1TlMwejJZY0VRWHJpcE9pMUxK?=
- =?utf-8?B?NkYyN2h6VWZjUmRjeVNQK2pmSU1LNmtHQzJiQXRGMXVMVUpHNnF0MlBPK01T?=
- =?utf-8?B?dEVjRmNGdE51UTFwU2J0cDZYUTBQWlpHcHZuN0NaekZoL1l2aXl4N3JGLzVE?=
- =?utf-8?B?N1d1OUVFdkZIdHEvei9HSnRVZCtQMTk2ZGVod3RubWdOcjZxTUdPVWp2SHBR?=
- =?utf-8?B?bmJlRlJEM0gyM0JhWTJWTmx4a3NqSklyOXpQdmtCU0diUGlKdW1RSWtRS1pV?=
- =?utf-8?B?bDBuSU14NkluWUZXUWZ2QVRaaDB1Wjd5bVlHZ0NLZmhCNHNyakRpMktnTzVi?=
- =?utf-8?B?eWU0eGJKOURHeHMzRTg0cXZVYjgvNkI2aVNxZGRGQ2I0NnlrZ3FKME0yQVJq?=
- =?utf-8?B?SlVpMWpJcVhhS2ZvV2U5UG1lRVZBVlh1QlMvVmhhUDJnM1VUNTZwOVJhMFJT?=
- =?utf-8?B?NEk0YkdBR2tuNi8wLzR2aWZ0bUhaWWtLOVhaMEROK0pZZXArVnBzMHA2d0hv?=
- =?utf-8?B?aC82amZVR25ENks0ZzZtQnNSdDllVlQ5a0hXQ1NBZXN2QWZQbFB5cWFITmlx?=
- =?utf-8?B?Q1dkVGhjOENOSm9lWFpCRHE1Z3h4NEFBWVNPNmkybXRGN3hnTENRQURla05B?=
- =?utf-8?Q?wPYvcrGorB2dj9Wo=3D?=
-X-Exchange-RoutingPolicyChecked:
-	N9DpTveLlzRG3qCYgh84SF6SJojALBApK2xOmmzmh1kcOyEvmry+SxBU7YhABmPE4lJRWEHScOVqDiMjUSgyO66ISHzIIEvCThXGAmSnDnr5eWbHU6z/SX3jlmNadujVnHulQ5JJilVDRj68Q2XZb28mLjLRqJgW8a0vKWljcvT43nEWqOXKDG+ozoWmX/xr4r/JdB2R6bZ3abawRhKhScjcVf0agu60jnfCWCkKnGOKLSIhhHmfNprFkxWm700Cf4X5WPhmjuS3dDbZty42HvmKPNzrpt7AJRovBquqhPzgYblRdR4glRY0d9ItIllz/Vien/H6nGp9ekn7S0p8Dg==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	dSLpTL5CQsgZR21IB5eLFjGdjMnmx2VibdWfjupLPdEMzbxBBNPP0JsTfhzh7X6jxBVT6kVtw7YuFc2sDVG+H5y/xHcrLPC6GYJxU2Q3NrNIKBgoqS5gFsmBhTkNMk15kxqHJKK1H7c9pjXCkR/1O0RDmWaJz/YVBHZsa1q8VzvAMEtF5Zr+C1j6DqV0dT2cf+e6x+RAPxynBSVAIsjMWLgv1r6G8pty0Lo5Kmi/R/cWLRkCWxcWaIKMFLaO7n+rSgffN7HfGJaDNrnvax76Oo31+PnXifbpQXk+WUv6hDGaokMXIDTPWiWxp9TXahc/5tagJ3cCB21U/Bn9nHN4bywMt7tgBIpHv6JMLHDSfxh/L3aUprisevJ8VepVgpV6/UuR7SP6r9829587btgVBhsDA4V7DrcDNzZDLEr/Bxupn8LpVyxbREnE3whIMRqqR+/CN5oWrFfXCZ60MRA26OrRcY3xLWKaR9QN1W9VjIXZ4DnnwphVWJ6mwSB7gYoD/o8aF2nAHx+dJ6yQjBGEFtu4f9hcVFazPq05eFhW21HiXsJUTRHem+0mL1K6dG7WJpTRRlpQGd7Ueg/QFBtPvg9cisQDfSgH8KVKNO1A4UY=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65d8b3c0-2c6a-4a29-4786-08dee26426de
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB6229.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2026 11:28:11.2227
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: okT3Oufr6GoJ3mnQdQ61IWB8uV0GbDleocOiCTPj6Sc4WBvPYz4WYMofO3bi3/r3Tlt8uLy+ae/PHlM/fIWzpg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5153
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-15_02,2026-07-15_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 adultscore=0 spamscore=0 mlxlogscore=853
- malwarescore=0 suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2606160000 definitions=main-2607150113
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzE1MDExMyBTYWx0ZWRfX306mifs/oYfZ
- i4CpHHfNnHN2ouxUQAtoJ+nrzZDrRigoKb6d575KeY1ZYUDFXgU9GIcXUKp4IxbN4+rm55ZVFLH
- oFBQLy+idGyBQBy/CTIhHqihRm4UMFNuNQpjTe8Bi85lOj06zZghwT2Og/wxGyG184FQ4qwMIbO
- W0bx2kT8yTYrHYptPBi0GkRdT9wwNRI6fjA2YiASfEk5IRzWqKAnS6Tu+irQUfVLRR5NOdZsBVT
- Npbb6BWshdEH9iksYudAh6HlA6k1dsyhiu6W2pO7aMRAP+C3bXCqtgryRScDjK4gRIj5b6cphM/
- DurjCnxc8JXbQNoMDsqiepZ5i4po4NbhC/mey/0CbC4EO2m93epi3izgE2Iqpw1fNtSciPItXJW
- pPT1woIxuBYGmO2qJsplGg8fWCS5c6v98m8oQXc0X2lT/RYuxa1tbI7Mqbt0tjKzsJyk7IXwUxe
- G10FErgGuo2ZlTsTIpQ==
-X-Authority-Analysis: v=2.4 cv=GcknWwXL c=1 sm=1 tr=0 ts=6a576ecf cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=RAioF0-LDSMA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=qysrUgcoccCelITg0qcA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: R38AjOrOvIFwlYQLwDg7X9wqyYfjaXWk
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzE1MDExMyBTYWx0ZWRfX1ji+SccMF3ep
- 0i4net3czfw82MEnmDAPz70ARFCWAReUTW3foTB6HZKgJJh2WLURGoPZewzdieAJ4gpWKeWYJJ4
- tJ/ejPe9m3Ts0lIb58MHgAeuzEu0iky7aw4HWfLP+g8qhc5lruUG
-X-Proofpoint-ORIG-GUID: R38AjOrOvIFwlYQLwDg7X9wqyYfjaXWk
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-7.16 / 15.00];
-	WHITELIST_DMARC(-7.00)[oracle.com:D:+];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[iokpp.de,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[iokpp.de:s=strato-dkim-0002,iokpp.de:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-26247-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26245-lists,linux-scsi=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,oracle.com:from_mime,oracle.com:dkim,oracle.com:mid];
-	FORGED_RECIPIENTS(0.00)[m:sashiko-reviews@lists.linux.dev,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWO(0.00)[2];
-	FORWARDED(0.00)[lists@lfdr.de];
-	HAS_ORG_HEADER(0.00)[];
-	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:sashiko-reviews@lists.linux.dev,m:lgs201920130244@gmail.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[lists.linux.dev,gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[iokpp.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[9]
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,iokpp.de:from_mime,iokpp.de:dkim,iokpp.de:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 13F7F75D8F9
+X-Rspamd-Queue-Id: AACE675E003
 
-On 07/07/2026 10:18, John Garry wrote:
->>
->>> +    mutex_lock(&sd_mpath_disks_lock);
->>> +    sd_mpath_disk->disk_count--;
->>> +    if (!sd_mpath_disk->disk_count && 
->>> mpath_can_remove_head(mpath_head)) {
->>> +        list_del_init(&sd_mpath_disk->entry);
->>> +        remove = true;
->>> +    }
->>> +    mutex_unlock(&sd_mpath_disks_lock);
->>> +    mpath_remove_sysfs_link(mpath_device);
->>> +    mpath_device->disk = NULL;
->>> +
->>> +    if (remove) {
->>> +        device_del(&sd_mpath_disk->dev);
->>> +        mpath_remove_disk(mpath_head);
->>> +    }
->>> +    sd_mpath_put_disk(sd_mpath_disk);
->>> +}
->>> +
->>> +static void sd_mpath_remove_head(struct scsi_mpath_head 
->>> *scsi_mpath_head)
->>> +{
->>> +    struct mpath_head *mpath_head = &scsi_mpath_head->mpath_head;
->>> +    struct sd_mpath_disk *sd_mpath_disk;
->>> +    struct device *dev = &scsi_mpath_head->dev;
->>> +
->>> +    mutex_lock(&sd_mpath_disks_lock);
->>> +    sd_mpath_disk = sd_mpath_find_disk(scsi_mpath_head);
->>> +    if (!sd_mpath_disk) {
->>> +        dev_warn(dev, "could not find mpath disk\n");
->>> +        mutex_unlock(&sd_mpath_disks_lock);
->>> +        return;
->>> +    }
->>> +
->>> +    list_del_init(&sd_mpath_disk->entry);
->>> +    mutex_unlock(&sd_mpath_disks_lock);
->>> +
->>> +    device_del(&sd_mpath_disk->dev);
->>> +    mpath_remove_disk(mpath_head);
->>
->> [Severity: High]
->> Can this lead to a double-free or sysfs splat if sd_mpath_remove() and
->> sd_mpath_remove_head() run concurrently?
->>
->> If disk_count drops to 0 inside sd_mpath_remove(), it sets remove = true,
->> drops the lock, and unconditionally calls device_del() and
->> mpath_remove_disk().
+On Tue, 2026-07-14 at 17:44 +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s)
+> to consider:
+> - [Medium] The `ufs_rtc_update_work` is permanently lost if
+> `__ufshcd_wl_suspend()` fails after cancelling it in the active-active su=
+spend
+> path, stopping periodic UFS RTC updates until the next successful
+> suspend/resume cycle.
+> --
+>=20
+> --- Patch [1]: [PATCH v2] scsi: ufs: core: cancel RTC work in active-acti=
+ve
+> suspend ---
+> commit 9a4850975ce80edc6032f13153aa50eb19b4cc19
+> Author: Guangshuo Li <lgs201920130244@gmail.com>
+>=20
+> scsi: ufs: core: cancel RTC work in active-active suspend
+> =C2=A0=C2=A0=C2=A0=20
+> This commit cancels the UFS RTC update work in the active-active suspend
+> path before calling the vendor suspend callback to prevent an SError.
+>=20
+> > diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> > index d3044a3089b53..c3b105b2678e4 100644
+> > --- a/drivers/ufs/core/ufshcd.c
+> > +++ b/drivers/ufs/core/ufshcd.c
+> > @@ -10269,6 +10269,7 @@ static int __ufshcd_wl_suspend(struct ufs_hba *=
+hba,
+> > enum ufs_pm_op pm_op)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+req_link_state =3D=3D UIC_LINK_ACTIVE_STATE) {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0ufshcd_disable_auto_bkops(hba);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0flush_work(&hba->eeh_work);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0cancel_delayed_work_sync(&hba->ufs_rtc_update_work);
+>=20
+> [Severity: Medium]
+> If the active-active suspend path fails after this point, is the
+> ufs_rtc_update_work permanently lost?
+>=20
+> When this jumps to the vops_suspend label, if ufshcd_vops_suspend() retur=
+ns
+> an error, the function branches to the error handling path:
+>=20
+> __ufshcd_wl_suspend() {
+> =C2=A0=C2=A0=C2=A0 ...
+> vops_suspend:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D ufshcd_vops_suspe=
+nd(hba, pm_op, POST_CHANGE);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0goto set_link_active;
+> =C2=A0=C2=A0=C2=A0 ...
+> out:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0...
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ufshcd_update_evt_hist(hba, UFS_EVT_WL_SUSP_ERR, (u=
+32)ret);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0hba->clk_gating.is_suspended =3D false;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ufshcd_release(hba);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0hba->pm_op_in_progress =
+=3D false;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
+> }
+>=20
+> The error path doesn't appear to re-arm the canceled RTC update work befo=
+re
+> returning the error code. Does this mean periodic UFS RTC updates will st=
+ay
+> stopped until the next successful suspend and resume cycle?
 
-It also removes the sd_mpath_disk entry from the list of sd_mpath_disks 
-under the lock.
+This is not a real issue, for the following reasons:
 
->>
->> Concurrently, sd_mpath_remove_head() could acquire the lock, remove 
->> the entry,
+1\ The RTC work is not permanently lost. If suspend fails, the device stays=
+ in
+the active state and the PM core will retry the suspend later (runtime PM
+retries once the device idles again; a failed system suspend is simply retr=
+ied
+on the next suspend attempt). The next successful suspend/resume cycle re-a=
+rms
+the work via the now unconditional schedule_delayed_work() in
+__ufshcd_wl_resume().
 
-It will not be able to find the entry as it has been deleted (above) and 
-then just bail out - see "could not find mpath disk" print
+2\ RTC updates being paused between a failed suspend and the next successfu=
+l
+cycle is harmless. The device only uses the RTC for internal housekeeping/a=
+ge
+estimation, and periodic updates are opt-in anyway: rtc_update_period defau=
+lts
+to 0 and must be enabled via sysfs.
 
->> drop the lock, and also unconditionally call device_del() and
->> mpath_remove_disk() on the same device without mutual exclusion.
-> 
-> I'll check this.
+3\ This behavior is not introduced by this patch. The common suspend path h=
+as
+worked exactly the same way since commit b0bd84c39289 ("scsi: ufs: core: Fi=
+x
+SError in ufshcd_rtc_work() during UFS suspend"): it cancels the work befor=
+e the
+PRE_CHANGE vendor callback and does not re-arm it on the error paths either=
+. If
+anything, this could be a separate follow-up cleanup, but it should not hol=
+d
+this bug fix.
 
 
