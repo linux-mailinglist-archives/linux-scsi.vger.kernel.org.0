@@ -1,63 +1,62 @@
-Return-Path: <linux-scsi+bounces-26239-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26242-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 2I+sBtpNV2rFIwEAu9opvQ
-	(envelope-from <linux-scsi+bounces-26239-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 11:07:38 +0200
+	id GU2RNSpMV2o+IwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-26242-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 11:00:26 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AC2375C3D0
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 11:07:37 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F65775C23A
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 11:00:24 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=nUKj9TgK;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26239-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26239-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=MSqRYOzh;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26242-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26242-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BC24B323D83C
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 08:59:19 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A53FA3003823
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 09:00:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A973D8902;
-	Wed, 15 Jul 2026 08:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99F313D16E6;
+	Wed, 15 Jul 2026 09:00:19 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63F43D9526
-	for <linux-scsi@vger.kernel.org>; Wed, 15 Jul 2026 08:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC45037E5CB
+	for <linux-scsi@vger.kernel.org>; Wed, 15 Jul 2026 09:00:16 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784105922; cv=none; b=WZxGjtSrX3EKt5oeaRYNdny01HL/HCn5glOFkitDWog0Asm4ORSjyOVf1XCIoCDmCMW9+D6mqezHfbJkoYm/CwRGwNI+3VMdNgJCB8/8YX8ngxUDLTghG+oF8JssMffyE1/BNiH1X9LeJJgkaIDQ5NHQPvxZ13cJx/eW2eo2LOE=
+	t=1784106018; cv=none; b=oaDj+usvRVonoDH/TfCVcjZ3DKXTg2xeMO2dN5OT03y6RtjozVySwoGe3+++QV0+qr+AH+LAeybaV066GcKOFX5C4wNWmKZmrcdLqTlbzq4SVJ0F1qkNtAbi9w0MHz82qnZsvjPSks4Sye+AN7g0PW6u5ZaIfyOVF2leI7H0Sls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784105922; c=relaxed/simple;
-	bh=T1+W2WNw+3qv0DU1s/Xee7+cNyJHpqkcumiHQ9YbWF0=;
+	s=arc-20240116; t=1784106018; c=relaxed/simple;
+	bh=uoG56waQ8o6608eV8pKV1LNLFO9CEqlPYOydoyvqvcI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ScuhYHtwGhRjbjDq1kE6znAjOdHBPP56iGri8Oitq9w5qhXNeEwoUw5D9isFi5GuRa+lTDgSVfhTTwlbYlx7l/A4BZn5jWxn1n7LXI7IY/IPyw5ex1Ji+vFPf9QptNqI3RTaBPpET4XhNNEe2HyWmmdq3CFTZfV2cyocglz4fLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nUKj9TgK; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2ADF1F00A3D;
-	Wed, 15 Jul 2026 08:58:37 +0000 (UTC)
+	 Message-Id; b=C3eeIhl+uRVIyVI2+MkQEcZf+7Na8Tyj2UArmsfo+S/MKRoLJqEA23tu70wSPZkMP+1WA0ejcu9MyJbFwDBotAqXOo4RFhudW8wsQqvvxQvm0DToTqdu7lCwutmqsnCpYGo+XgIYBAqXyWs7PetGhFQdzPTMt5VobGwfE/y8cZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MSqRYOzh; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76FD11F000E9;
+	Wed, 15 Jul 2026 09:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784105918;
-	bh=bVBbKkf5mygc9Wt38+HlHI6hPyB1rUFWa9DtkH0ZnPQ=;
+	s=k20260515; t=1784106015;
+	bh=z7tTZkeaxWo/++P3j/aNlCZPGPSjO5VezH08ZmTH5yM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nUKj9TgKgYhDKxqECzMKeCU4NMrZ379eaDS5t6abBAmDdBOQgKRnWAUgyIJO7qluR
-	 M6n0y3A+HpVeUJICKrghy4mpRJAROC4J9lDmPxebtRc51i93Ysbz/Rh+ASuYcAfAYl
-	 vrDK3cRxvGPhl5QqW7S/ca2znDIKnoPur5Qcy5vPxV5zwx2hzdUpgXSZ2I7mPh822P
-	 FABhEG7cnKX0sFwGl6PLojfnHYoVSgovbGSbgNx2RmnVxfknrh6n0Y9V366x0O0lw0
-	 EJX4XL8ZFnmnuffHzM0po6rOpz2gU3RhksTuSjFplVQs3GFHKBYicf0ZOFUQqCJ31Z
-	 gQJFClUpqtfAQ==
+	b=MSqRYOzhnCn9HIQnBTgQo/M8JoR83xr6UjgaO4bJpucZZccNUZbaKkJERq8bvawzX
+	 knj60ow9tfF45HSJLaXhb+hxpc3i5HYtluDSDxvQfoPAgCj3wRGHrzeMh//qugx6iY
+	 d6HQp93qnPFtuk1hC4YicpzHv4is6H2gkcxeP9eYt2qAlPB/RHLwqOk+2arVxKDaWU
+	 QdF5XMfp1frSigYLcduTP+bpi41dV5+zayuDajGTZwlD1QfdkG0P8W3WMMEschxHZe
+	 pPQp4eQ+0xgOJn3ebCuY3aQSmqTOYzEqY+lltOlBSkpC9ey9d0ENhv58Xp7A4tM36O
+	 uDKoY1lkhikAA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/2] scsi: 3w-sas: bound firmware error strings
+Subject: Re: [PATCH] scsi: libfc: validate FCP response payload length
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Pengpeng Hou" <pengpeng@iscas.ac.cn>
 Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260715084652.47248-3-pengpeng@iscas.ac.cn>
-References: <20260715084652.47248-1-pengpeng@iscas.ac.cn>
- <20260715084652.47248-3-pengpeng@iscas.ac.cn>
+In-Reply-To: <20260715084548.45278-1-pengpeng@iscas.ac.cn>
+References: <20260715084548.45278-1-pengpeng@iscas.ac.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Jul 2026 08:58:37 +0000
-Message-Id: <20260715085837.F2ADF1F00A3D@smtp.kernel.org>
+Date: Wed, 15 Jul 2026 09:00:14 +0000
+Message-Id: <20260715090015.76FD11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -70,24 +69,25 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-26239-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:pengpeng@iscas.ac.cn,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-26242-lists,linux-scsi=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCPT_COUNT_TWO(0.00)[2];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	ALIAS_RESOLVED(0.00)[];
@@ -96,89 +96,95 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:email,smtp.kernel.org:mid,lists.linux.dev:replyto,sashiko.dev:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,lists.linux.dev:replyto,sashiko.dev:url,smtp.kernel.org:mid,vger.kernel.org:from_smtp,iscas.ac.cn:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8AC2375C3D0
+X-Rspamd-Queue-Id: 8F65775C23A
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] The driver extracts `request_id` from hardware-controlled data and=
- uses it to directly index multiple fixed-size arrays without any bounds ch=
-ecking, leading to potential out-of-bounds memory reads and writes.
+- [Critical] Processing of FCP_SNS_LEN_VAL and FCP_RESID_UNDER blindly assu=
+mes fsp->cmd is valid, leading to a NULL pointer dereference during malform=
+ed Task Management Function (TMF) responses.
 --
 
---- Patch [2]: [PATCH v2 2/2] scsi: 3w-sas: bound firmware error strings ---
-commit a511ca86b3f57014015bb5a807df12ea03ffd7bc
+--- Patch [1]: [PATCH] scsi: libfc: validate FCP response payload length ---
+commit 62a5c62c9541198f09e35c7317ed519450b54ee2
 Author: Pengpeng Hou <pengpeng@iscas.ac.cn>
 
-scsi: 3w-sas: bound firmware error strings
+scsi: libfc: validate FCP response payload length
 
-This patch prevents out-of-bounds reads when parsing firmware error strings=
- by
-properly terminating the description field. It introduces the helper functi=
-on
-twl_error_string() to safely calculate lengths without scanning past the
-98-byte field.
+This commit adds bounds checking for FCP response payloads. It ensures
+that the response-info and sense lengths declared by the device do not
+exceed the current frame length, preventing out-of-bounds memory accesses.
 
-> diff --git a/drivers/scsi/3w-sas.c b/drivers/scsi/3w-sas.c
-> index 52dc1aa639f7e..5fc46a90e0262 100644
-> --- a/drivers/scsi/3w-sas.c
-> +++ b/drivers/scsi/3w-sas.c
+> diff --git a/drivers/scsi/libfc/fc_fcp.c b/drivers/scsi/libfc/fc_fcp.c
+> index 5121272f28fd8..7e4c3c152f5d2 100644
+> --- a/drivers/scsi/libfc/fc_fcp.c
+> +++ b/drivers/scsi/libfc/fc_fcp.c
 
 [ ... ]
 
-> @@ -861,13 +878,13 @@ static int twl_fill_sense(TW_Device_Extension *tw_d=
-ev, int i, int request_id, in
->  	TW_Command_Apache_Header *header;
->  	TW_Command_Full *full_command_packet;
->  	unsigned short error;
-> -	char *error_str;
-> +	const char *error_str;
-> =20
->  	header =3D tw_dev->sense_buffer_virt[i];
->  	full_command_packet =3D tw_dev->command_packet_virt[request_id];
+> @@ -869,6 +872,8 @@ static void fc_fcp_resp(struct fc_fcp_pkt *fsp, struc=
+t fc_frame *fp)
+>  			if (flags & FCP_SNS_LEN_VAL) {
+>  				snsl =3D ntohl(rp_ex->fr_sns_len);
+>  				if (snsl > SCSI_SENSE_BUFFERSIZE)
+>  					snsl =3D SCSI_SENSE_BUFFERSIZE;
+> +				if (plen < sizeof(*fc_rp) + sizeof(*rp_ex) + respl + snsl)
+> +					goto len_err;
+>  				memcpy(fsp->cmd->sense_buffer,
+>  				       (char *)fc_rp_info + respl, snsl);
 
-[Severity: High]
-This is a pre-existing issue, but I noticed request_id is used here as an
-unvalidated index. Is it possible for a compromised or malfunctioning device
-to supply an out-of-bounds request_id?
+[Severity: Critical]
+This is a pre-existing issue, but does this code lead to a null pointer
+dereference if a malformed Task Management Function response is received?
 
-Looking at twl_interrupt(), request_id is extracted directly from the hardw=
-are
-without bounds checking:
+When fc_eh_device_reset() allocates an fsp for a LUN reset, it leaves
+fsp->cmd as NULL and sets fsp->wait_for_comp =3D 1.
 
-    request_id =3D le16_to_cpu(
-            tw_dev->sense_buffer_virt[i]->header_desc.request_id);
-    if (tw_dev->srb[request_id] !=3D NULL)
-        error =3D twl_fill_sense(tw_dev, i, request_id, 1, 1);
+If a target responds with a frame where FCP_SNS_LEN_VAL is set but
+FCP_RSP_LEN_VAL is clear, the early return for TMF completions is bypassed
+and execution falls through to process sense data.
 
-Or alternatively from the MMIO response:
+Because fsp->cmd is NULL in this path, will the memcpy() above crash when
+attempting to access fsp->cmd->sense_buffer?
 
-    request_id =3D TW_RESID_OUT(response);
-    full_command_packet =3D tw_dev->command_packet_virt[request_id];
+>  			}
+>  		}
+>  		if (flags & (FCP_RESID_UNDER | FCP_RESID_OVER)) {
+>  			if (plen < sizeof(*fc_rp) + sizeof(rp_ex->fr_resid))
+>  				goto len_err;
+>  			if (flags & FCP_RESID_UNDER) {
+>  				fsp->scsi_resid =3D ntohl(rp_ex->fr_resid);
+>  				/*
+>  				 * The cmnd->underflow is the minimum number of
+>  				 * bytes that must be transferred for this
+>  				 * command.  Provided a sense condition is not
+>  				 * present, make sure the actual amount
+>  				 * transferred is at least the underflow value
+>  				 * or fail.
+>  				 */
+>  				if (!(flags & FCP_SNS_LEN_VAL) &&
+>  				    (fc_rp->fr_status =3D=3D 0) &&
+>  				    (scsi_bufflen(fsp->cmd) -
+>  				     fsp->scsi_resid) < fsp->cmd->underflow)
 
-    if (tw_dev->state[request_id] !=3D TW_S_POSTED) {
+[Severity: Critical]
+This is a pre-existing issue, but similarly, if the response has
+FCP_RESID_UNDER set but FCP_RSP_LEN_VAL clear, will checking
+scsi_bufflen(fsp->cmd) and fsp->cmd->underflow also crash when fsp->cmd
+is NULL?
 
-If a device returns a request_id greater than or equal to TW_Q_LENGTH (256),
-wouldn't this result in out-of-bounds memory accesses against arrays like
-tw_dev->srb, tw_dev->command_packet_virt, and tw_dev->state?
-
->  	/* Get embedded firmware error string */
-> -	error_str =3D &(header->err_specific_desc[strlen(header->err_specific_d=
-esc) + 1]);
-> +	error_str =3D twl_error_string(header);
-> =20
->  	/* Don't print error for Logical unit not supported during rollcall */
->  	error =3D le16_to_cpu(header->status_block.error);
+>  					goto err;
+>  				expected_len -=3D fsp->scsi_resid;
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715084652.4724=
-8-1-pengpeng@iscas.ac.cn?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715084548.4527=
+8-1-pengpeng@iscas.ac.cn?part=3D1
 
