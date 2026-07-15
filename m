@@ -1,41 +1,41 @@
-Return-Path: <linux-scsi+bounces-26237-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26236-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id JAV3BBVJV2qBIgEAu9opvQ
-	(envelope-from <linux-scsi+bounces-26237-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 10:47:17 +0200
+	id bpHYGARJV2p+IgEAu9opvQ
+	(envelope-from <linux-scsi+bounces-26236-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 10:47:00 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A617375C07A
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 10:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EEEAE75C071
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 10:46:59 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26237-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26237-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26236-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26236-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 274CA3031ABA
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 08:47:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 620663033829
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 08:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7C33D3CEE;
-	Wed, 15 Jul 2026 08:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C764C3D330B;
+	Wed, 15 Jul 2026 08:46:56 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E6B3D1CA5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D103D16F0;
 	Wed, 15 Jul 2026 08:46:54 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784105217; cv=none; b=YCvWlPDx7o5rziu0/8cz55g9a0rJ3YRnJ5lYpQFMa94o/PM8ERLnXgsx+tdSRPfaXHIh8gQbegfv+FiS1emXZdXjQKrW6vRzlEarGKU4/QwdPsxO2jnsWBMI02lCedjdZO7fEqA+Iudb6mk3wopR2gvjDKo9Q/YUR1BxDzlySfI=
+	t=1784105216; cv=none; b=jONBZ61wUv3ju4bQ5r/bs83sfnOjPdGdHSAggHMpHr1fH5p8357csyketZ0l1SQX7wsBCpFFmO58aB6hRntgkPWZir1Nex4Ns8q1CPBuD1Q0NPk+YKdZKQg3hlFDUpfE9w7xQu0d+Wrct4afTNZ9P9J9kxLkMeY2m+CGW+49iBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784105217; c=relaxed/simple;
-	bh=9SzdnOwYA3YlA2tYEuzblU42E5wHGj+qmFzgUI/Z/LU=;
+	s=arc-20240116; t=1784105216; c=relaxed/simple;
+	bh=uNk6L6GKzEOaVOBLX7Nwz5vsh20+Zo+t/TviSdKLsL8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sl7PvcOQvM7LJ3TdSGGYngSwPDTU5TQrXBzupYNiH8oZ8XaVs+4GQqiCxcTJ0cnG7hniFN+sX9KIuUuHss1VOR065gqU0qb/c0zLbsOEzM2oHD+vJ5w4nHOgz6EvQJFQbQLpuVqA71CS6XTAa6owtFR90DBY4OxarcPaxx/4F/g=
+	 MIME-Version; b=UeWpuB+05HbBoYZruo8lRIWhnaASNLVKvKHovj7EyLUvwkUzPQbT4lRukaNiFd9o0QhoZFwx99T5J6etWtDZuuOLQplcrHU60Hlck9j/dE2PFvSimGd16iuKcl/hqDfAHtNcZX99Gh5gkYXYcUR4bj6xbGQtAWjhyVWYsvto6Kg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
 Received: from localhost.localdomain (unknown [111.196.245.140])
-	by APP-05 (Coremail) with SMTP id zQCowACXB+v8SFdqE4JHGA--.7917S3;
+	by APP-05 (Coremail) with SMTP id zQCowACXB+v8SFdqE4JHGA--.7917S4;
 	Wed, 15 Jul 2026 16:46:52 +0800 (CST)
 From: Pengpeng Hou <pengpeng@iscas.ac.cn>
 To: martin.petersen@oracle.com
@@ -44,9 +44,9 @@ Cc: Pengpeng Hou <pengpeng@iscas.ac.cn>,
 	aradford@gmail.com,
 	linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] scsi: 3w-9xxx: bound firmware error strings
-Date: Wed, 15 Jul 2026 16:46:51 +0800
-Message-ID: <20260715084652.47248-2-pengpeng@iscas.ac.cn>
+Subject: [PATCH v2 2/2] scsi: 3w-sas: bound firmware error strings
+Date: Wed, 15 Jul 2026 16:46:52 +0800
+Message-ID: <20260715084652.47248-3-pengpeng@iscas.ac.cn>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260715084652.47248-1-pengpeng@iscas.ac.cn>
 References: <20260715084652.47248-1-pengpeng@iscas.ac.cn>
@@ -57,13 +57,13 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowACXB+v8SFdqE4JHGA--.7917S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF1fur13AF1xCF47CF45Wrg_yoWrXr4fpw
-	48Kas8ArW8J3WrAr93uw1UZF45Ca92ya9Yg34UXa4IvFWUGr90vF1Skr18uFyj9ryxAw4j
-	qrsYv39xuF1IyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-	x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+X-CM-TRANSID:zQCowACXB+v8SFdqE4JHGA--.7917S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw13tr1fWFWxArW5WryfZwb_yoWrGF13pw
+	4rKas8JrW8JF15Jr9xCw1UZr45C3Z2yayFg34UX342vFWUGr90qFySkr109ryjkryxAw4j
+	qF4Fv39xuF18ArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPj14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
 	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
 	A2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
 	e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
@@ -73,7 +73,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxXF1fur13AF1xCF47CF45Wrg_yoWrXr4fpw
 	JVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7V
 	AKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4U
 	JVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMI
-	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfU8v38UUUU
+	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRRLvuDUUU
 	U
 X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 X-Rspamd-Action: no action
@@ -87,7 +87,7 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[iscas.ac.cn];
-	TAGGED_FROM(0.00)[bounces-26237-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-26236-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:pengpeng@iscas.ac.cn,m:James.Bottomley@HansenPartnership.com,m:aradford@gmail.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -107,44 +107,44 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:from_mime,iscas.ac.cn:email,iscas.ac.cn:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,iscas.ac.cn:from_mime,iscas.ac.cn:email,iscas.ac.cn:mid,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A617375C07A
+X-Rspamd-Queue-Id: EEEAE75C071
 
 The controller response header stores the description and optional firmware
 error string in its fixed 98-byte err_specific_desc field.
-twa_aen_queue_event() used strlen() to find the second string before
-forcing the final byte to NUL, while twa_fill_sense() used the same
-unbounded layout directly.
+twl_aen_queue_event() and twl_fill_sense() use strlen().  They derive an
+optional second string without first proving a terminator lies in the
+firmware-owned field.
 
-If a response does not contain a terminator, strlen() can scan past
-the field.
-If the first string reaches the last field byte, adding one also forms a
+Without a terminator, strlen() can scan past the field.
+A first string reaching the last field byte also makes adding one form a
 pointer past the array.
 
 Terminate the field before parsing it and use a shared helper that treats a
-full first string as having no optional second string. This keeps both AEN
+full first string as having no optional second string.  This keeps both AEN
 and sense reporting paths within the response field.
 
+Fixes: f619106bdd9d ("[SCSI] 3w-sas: Add new driver for LSI 3ware 9750")
 Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
 ---
- drivers/scsi/3w-9xxx.c | 31 ++++++++++++++++++++++++-------
+ drivers/scsi/3w-sas.c | 31 ++++++++++++++++++++++++-------
  1 file changed, 24 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
-index 9b93a2440af8..b2462ee43008 100644
---- a/drivers/scsi/3w-9xxx.c
-+++ b/drivers/scsi/3w-9xxx.c
-@@ -149,6 +149,24 @@ static int twa_scsiop_execute_scsi(TW_Device_Extension *tw_dev, int request_id,
- static void twa_scsiop_execute_scsi_complete(TW_Device_Extension *tw_dev, int request_id);
- static char *twa_string_lookup(twa_message_type *table, unsigned int aen_code);
+diff --git a/drivers/scsi/3w-sas.c b/drivers/scsi/3w-sas.c
+index 52dc1aa639f7..5fc46a90e026 100644
+--- a/drivers/scsi/3w-sas.c
++++ b/drivers/scsi/3w-sas.c
+@@ -92,6 +92,24 @@ MODULE_PARM_DESC(use_msi, "Use Message Signaled Interrupts. Default: 0");
+ /* Function prototypes */
+ static int twl_reset_device_extension(TW_Device_Extension *tw_dev, int ioctl_reset);
  
 +/*
 + * The firmware field contains two NUL-terminated strings in one fixed-size
 + * array.  Make the last byte a terminator before finding the optional second
 + * string, and never form a pointer one byte past the array.
 + */
-+static const char *twa_error_string(TW_Command_Apache_Header *header)
++static const char *twl_error_string(TW_Command_Apache_Header *header)
 +{
 +	size_t description_len;
 +
@@ -159,8 +159,8 @@ index 9b93a2440af8..b2462ee43008 100644
 +
  /* Functions */
  
- /* Show some statistics about the card */
-@@ -376,7 +394,7 @@ static void twa_aen_queue_event(TW_Device_Extension *tw_dev, TW_Command_Apache_H
+ /* This function returns AENs through sysfs */
+@@ -226,7 +244,7 @@ static void twl_aen_queue_event(TW_Device_Extension *tw_dev, TW_Command_Apache_H
  	TW_Event *event;
  	unsigned short aen;
  	char host[16];
@@ -169,7 +169,7 @@ index 9b93a2440af8..b2462ee43008 100644
  
  	tw_dev->aen_count++;
  
-@@ -404,10 +422,9 @@ static void twa_aen_queue_event(TW_Device_Extension *tw_dev, TW_Command_Apache_H
+@@ -250,10 +268,9 @@ static void twl_aen_queue_event(TW_Device_Extension *tw_dev, TW_Command_Apache_H
  	tw_dev->error_sequence_id++;
  
  	/* Check for embedded error string */
@@ -177,27 +177,28 @@ index 9b93a2440af8..b2462ee43008 100644
 -
 -	header->err_specific_desc[sizeof(header->err_specific_desc) - 1] = '\0';
 -	event->parameter_len = strlen(header->err_specific_desc);
-+	error_str = twa_error_string(header);
++	error_str = twl_error_string(header);
 +	event->parameter_len = strnlen(header->err_specific_desc,
 +				       sizeof(header->err_specific_desc));
- 	memcpy(event->parameter_data, header->err_specific_desc, event->parameter_len + (error_str[0] == '\0' ? 0 : (1 + strlen(error_str))));
+ 	memcpy(event->parameter_data, header->err_specific_desc, event->parameter_len + 1 + strlen(error_str));
  	if (event->severity != TW_AEN_SEVERITY_DEBUG)
- 		printk(KERN_WARNING "3w-9xxx:%s AEN: %s (0x%02X:0x%04X): %s:%s.\n",
-@@ -992,12 +1009,12 @@ static int twa_fill_sense(TW_Device_Extension *tw_dev, int request_id, int copy_
+ 		printk(KERN_WARNING "3w-sas:%s AEN: %s (0x%02X:0x%04X): %s:%s.\n",
+@@ -861,13 +878,13 @@ static int twl_fill_sense(TW_Device_Extension *tw_dev, int i, int request_id, in
+ 	TW_Command_Apache_Header *header;
  	TW_Command_Full *full_command_packet;
  	unsigned short error;
- 	int retval = 1;
 -	char *error_str;
 +	const char *error_str;
  
+ 	header = tw_dev->sense_buffer_virt[i];
  	full_command_packet = tw_dev->command_packet_virt[request_id];
  
- 	/* Check for embedded error string */
--	error_str = &(full_command_packet->header.err_specific_desc[strlen(full_command_packet->header.err_specific_desc) + 1]);
-+	error_str = twa_error_string(&full_command_packet->header);
+ 	/* Get embedded firmware error string */
+-	error_str = &(header->err_specific_desc[strlen(header->err_specific_desc) + 1]);
++	error_str = twl_error_string(header);
  
  	/* Don't print error for Logical unit not supported during rollcall */
- 	error = le16_to_cpu(full_command_packet->header.status_block.error);
+ 	error = le16_to_cpu(header->status_block.error);
 -- 
 2.43.0
 
