@@ -1,98 +1,103 @@
-Return-Path: <linux-scsi+bounces-26247-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-26246-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id MtZoElB6V2qdOwEAu9opvQ
-	(envelope-from <linux-scsi+bounces-26247-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 14:17:20 +0200
+	id HIOgGS56V2qSOwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-26246-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 14:16:46 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AACE675E003
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 14:17:19 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF9AA75DFE7
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 14:16:45 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=iokpp.de header.s=strato-dkim-0002 header.b=sdGMsn5x;
-	dkim=pass header.d=iokpp.de header.s=strato-dkim-0003 header.b=JDQOyGmN;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26247-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26247-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=iokpp.de header.s=strato-dkim-0002 header.b=j+6aOEa4;
+	dkim=pass header.d=iokpp.de header.s=strato-dkim-0003 header.b=TK8uEcF3;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-26246-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-26246-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=iokpp.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6AD8C300B54A
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 12:15:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D733E304E551
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2026 12:13:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 715F1446845;
-	Wed, 15 Jul 2026 12:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5568D3EB818;
+	Wed, 15 Jul 2026 12:13:42 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDAA7449EB8
-	for <linux-scsi@vger.kernel.org>; Wed, 15 Jul 2026 12:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCFCF37E5E2;
+	Wed, 15 Jul 2026 12:13:38 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784117722; cv=pass; b=lx8yKQKmkvKzDhHqXNlarjs1phqdONJ7PCXdFdvVQTaEzAew2pESwxwUevOnQJ/AvpgYsKhT9RzX3/JtVcPNWchHKps9UOqGXUBOc78mLP76avXronDdoQhLMsiGpQmeAvR35im8E+dQbNzvvYuYLFVze7hZ9aEHGD0pCW04U7I=
+	t=1784117621; cv=pass; b=nEB6fxstNiH2VYwf3S5UgH0SkB8O2JvhPZLhms6nFvhQ08t7GWZBNeTvvDseTi+/+xGiQ48VQGEOOj+frDfJQUc8gIjl2t/Jov7XQR7vnhQ5UPIi2dL8trJJmxzms1mpTQ5CC8RG+NiLsR03MmZ/5uS0KEuaAW+OR4Hi2qS2/i0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784117722; c=relaxed/simple;
-	bh=aOrVeHtXzsM1pRkqxNNddE3wD/FxMb2Yh1OYwAbAeQs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XvCF8EM60+JhvhydlZszl/Wpm752ArAb+wiCbniHogUdEIymXMEuTb2EXF6UL94sLhEMptckSH6HFJXlICVt3whe47dj5th/8H7iZqGMeqrdaIFyX6li9Zccy6nTLt292+9xJntCvRgP/t02nIx7t75/sBF0HP2X3Z6KItHaO8o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=sdGMsn5x; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=JDQOyGmN; arc=pass smtp.client-ip=85.215.255.23
-ARC-Seal: i=1; a=rsa-sha256; t=1784117530; cv=none;
+	s=arc-20240116; t=1784117621; c=relaxed/simple;
+	bh=d05XWyMUmUEVHb8Z1aRZUSmfiauT7FWVxU1dxAI3HTo=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RT44E440qPaqSYiPuDuQSqGFoBctPbxRCR1XUrtqwOn6/02/Q9/2BiiaquTQoKqVNzF2P0kyxhliu5jZtTw5gXPvQtRLsutFdzINuSd9QNQtmVWwiSqpYcEQVptYg39kSzph+DuRO6t2SmwVv6shUWYLYFuWojk0/RMCbNOYbV8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=j+6aOEa4; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=TK8uEcF3; arc=pass smtp.client-ip=85.215.255.52
+ARC-Seal: i=1; a=rsa-sha256; t=1784117607; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=a/C6r5DF3R+Y1Ks3iNwIJUapFpxCwF4w4LEQy7Id4OV73TFXevynSp+tpko9vnipk+
-    Wuz684JOYaB2PIzILyCEnWXXOU5K2AdsgiTYcXXdCy1ynDqaGR/fCoxHFSwPsgOhXydl
-    IzwQvmMB69B5Xn3ZcP0Eyz0zLuMT0Zsmro+mePA6K5fvLsG1AQ24acsbWQft+c0WpIYK
-    j5BLh993byIw0H6/8zufmJQOEsMAlS9fk0YjpSWIz64tHKIBLWmSZ3vXnMyrEYi2WeS1
-    44a6h/N2Odb8i84pSzMV/2T9XCY63Zp3e7R/p9vhtp9jzDnDmIEc3r7kqusgAXe90GBs
-    0S7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1784117530;
+    b=AYaD5Vn2+z0tPNzV53db60GfdhdhJFdDWB/PMfqasHCCY9rt9slKCqT6ETjPTXyzcJ
+    itrSzZUa5TRdodmPmWPhJHoEk51X8gOqVCj3eY9sHiOXvcqfq+tAY2TkNN+1xG0mHz5x
+    j1BAJYkGzJ0qHi9JW6bi9gqrKdXkPs2VL1d9RaRX70DA366sb4w+wwTNsUi7+0xOQXxy
+    hPXguFuBL1FvkNPK+ChIrmqz1Q+FUh4ww7sgCRbYNItESOgLvW/bE0adjObMGHAm0XXp
+    tqeuzAd7Kw9qHVfsCnBMVNO8bHV/Pt5jqerWO/p/i3dC8nKPbOsEDeFcXycj9tk9JP4c
+    +hPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1784117607;
     s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=aOrVeHtXzsM1pRkqxNNddE3wD/FxMb2Yh1OYwAbAeQs=;
-    b=EDHUgpEisSGRdDMQi2oDId6oAmXsHlRVkPLExcEuB4MuYuAXmi+6+Jep/zsws2VHqj
-    kdQpwGv1xi1k75lELtCCZhlTTzJchBYWNuxiEXKNceUMzAh5QJCHG8++xs6KWm5pPRKs
-    r4xT7mPTnXuTpJ+F9AKdPUWxL4sU5VJZdpvc/zYeTPz7ASmb6f76s3eHj/y9jxZjHCjf
-    Pk3wyldM9tQqHa7Y7y6Y5cWOYHuVH+0D9Q+msFstoFF1SwvZUN6aUZaMhZkDhKTGPa9t
-    xCAQbuDwzOXs4HS/LI/CEJPBMcWGs8H0jh2bHduYjS6NvHA23g9R+VzPAmrA+YSDUlse
-    BMQA==
+    h=References:In-Reply-To:Date:To:From:Subject:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=d05XWyMUmUEVHb8Z1aRZUSmfiauT7FWVxU1dxAI3HTo=;
+    b=s+iZ2VcBdEBkuN0hXPrq/HRL13gidUiMkRK2f2KKLZsa1iyDJEgQrNFb4Pc35rxXyG
+    gerNlhihA0YDNC4QHNzok5CqAkbjoFemOdyj77yl5T9UnpPghPMZkjvoshuN3/NI7XkZ
+    JnNfrTU6sf3vyo+F4kii9c2UA5Lt3pDc563OiX81m9wfmW6L4NZjyPCc2Ep0BOYdW1Aq
+    4S5JSeofzbZ3jbMZR8xvS18C20EwboM7P3VXXw81e3bJ9P44hGxOiSvskD+xJN5gybEE
+    b6xPBH+cYVNFEQCKBVTnF34SQvcmKYJMJBcJqb7r0OkpjdPJqWGW5YuQAJ3aBntiL2ee
+    5sVg==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1784117530;
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1784117607;
     s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=aOrVeHtXzsM1pRkqxNNddE3wD/FxMb2Yh1OYwAbAeQs=;
-    b=sdGMsn5xkczACH78Z7fAcNGkGwI/KgPW1YgVGUJyA0OAZuG48mx3ds+5z5AkUGV95w
-    /wjnFrLpl5Nfh+2isLfNZHaBzHPwzr6UBtj8CFnWOoGUeZQOKbdMyGF5PNmAuQjJpqkA
-    5b+Dhi55WGeeWA//tYW6aGyLagIid5KxeGhanu3TdPhJVgOXGCQVt19YbUuCRVBHR+zX
-    iReyS7aLk9fYk7VrFClmu3tNGcE1qALJU3PMCP6LAuS18+ev3PcoPdfpZrWKn/BY9Ftf
-    E237ZX49KCvAC9QrcdmTXK+FvL1QhOy0DgNe9FM7MDS3WfsQOiAaqs0tAp7EEpjhPPTu
-    5i6A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1784117530;
+    h=References:In-Reply-To:Date:To:From:Subject:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=d05XWyMUmUEVHb8Z1aRZUSmfiauT7FWVxU1dxAI3HTo=;
+    b=j+6aOEa4DTaioxTTP0IRLvq9R+t1Cjp+EtmGpmYbuWoHXZ5CyyVNPQup2TTzYA7jGv
+    b/a+XVNqlZ+7sHJnJ/uxzLoaSJ3l+ltvXgWKxKJUqZOwYzCnoQD5Rco0BQ+yDuyZIgDz
+    5GaPwEhgnSFtwI0JWg++08pixjEAywk4HagSqD1JLVs/NUgJTRFgvvl8p+YxD2NKvTSd
+    QmEtrkNzVJWTLKzxSUDdDy7Tw7uLMkDWuhVdxRdCXaEaTs7Pv38F2x6VtHj6k35q5/jQ
+    AF+SutmuvwavStOztrKQ+rPf9EV4XkDR6UD/J5PDFCzsSTavWc1GyzJQ1mZGSf6rJwwF
+    1bIw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1784117607;
     s=strato-dkim-0003; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=aOrVeHtXzsM1pRkqxNNddE3wD/FxMb2Yh1OYwAbAeQs=;
-    b=JDQOyGmNwcfLVpvak6VZpFpjVubp/cOk7Ux5rnaBJTSodl/A/bKx/zdA4kmsnjyymS
-    FmT18xHC7dRuhqx3juCw==
+    h=References:In-Reply-To:Date:To:From:Subject:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=d05XWyMUmUEVHb8Z1aRZUSmfiauT7FWVxU1dxAI3HTo=;
+    b=TK8uEcF3vUVT8JQwixvml7e6+KtijICPTF1icmhqOsaz2LoOcNVVr3mJpHYgMCXbZ6
+    DOhKy7Ijvy2BTROOYuDw==
 X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSe9tgBDSDt0V0DBslXBtZUxPOub3IZik"
 Received: from [10.176.237.62]
     by smtp.strato.de (RZmta 55.5.6 AUTH)
-    with ESMTPSA id z4d38826FCCAOLg
+    with ESMTPSA id z4d38826FCDPOLz
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Wed, 15 Jul 2026 14:12:10 +0200 (CEST)
-Message-ID: <c3b5899213c76c62fa0c7f9dffdf56607c3ae1f0.camel@iokpp.de>
+    Wed, 15 Jul 2026 14:13:25 +0200 (CEST)
+Message-ID: <06739c869ab26c2b661ed0b0d7878d27b44ebba3.camel@iokpp.de>
 Subject: Re: [PATCH v2] scsi: ufs: core: cancel RTC work in active-active
  suspend
 From: Bean Huo <beanhuo@iokpp.de>
-To: sashiko-reviews@lists.linux.dev, Guangshuo Li <lgs201920130244@gmail.com>
-Cc: linux-scsi@vger.kernel.org
-Date: Wed, 15 Jul 2026 14:12:09 +0200
-In-Reply-To: <20260714174406.6FD471F00A3A@smtp.kernel.org>
+To: Guangshuo Li <lgs201920130244@gmail.com>, Alim Akhtar
+ <alim.akhtar@samsung.com>, Avri Altman <avri.altman@sandisk.com>, Bart Van
+ Assche <bvanassche@acm.org>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>,  "Martin K. Petersen"
+ <martin.petersen@oracle.com>, Peter Wang <peter.wang@mediatek.com>, Bean
+ Huo <beanhuo@micron.com>,  Can Guo <can.guo@oss.qualcomm.com>, Adrian
+ Hunter <adrian.hunter@intel.com>, Wang Shuaiwei <wangshuaiwei1@xiaomi.com>,
+ linux-scsi@vger.kernel.org,  linux-kernel@vger.kernel.org
+Date: Wed, 15 Jul 2026 14:13:25 +0200
+In-Reply-To: <20260714172726.1736967-1-lgs201920130244@gmail.com>
 References: <20260714172726.1736967-1-lgs201920130244@gmail.com>
-	 <20260714174406.6FD471F00A3A@smtp.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.44.4-0ubuntu2.1 
@@ -106,23 +111,23 @@ X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[iokpp.de,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[iokpp.de:s=strato-dkim-0002,iokpp.de:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-26247-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:sashiko-reviews@lists.linux.dev,m:lgs201920130244@gmail.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[lists.linux.dev,gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:lgs201920130244@gmail.com,m:alim.akhtar@samsung.com,m:avri.altman@sandisk.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:peter.wang@mediatek.com,m:beanhuo@micron.com,m:can.guo@oss.qualcomm.com,m:adrian.hunter@intel.com,m:wangshuaiwei1@xiaomi.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-26246-lists,linux-scsi=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FREEMAIL_TO(0.00)[gmail.com,samsung.com,sandisk.com,acm.org,HansenPartnership.com,oracle.com,mediatek.com,micron.com,oss.qualcomm.com,intel.com,xiaomi.com,vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
@@ -132,120 +137,36 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,iokpp.de:from_mime,iokpp.de:dkim,iokpp.de:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,micron.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: AACE675E003
+X-Rspamd-Queue-Id: CF9AA75DFE7
 
-On Tue, 2026-07-14 at 17:44 +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s)
-> to consider:
-> - [Medium] The `ufs_rtc_update_work` is permanently lost if
-> `__ufshcd_wl_suspend()` fails after cancelling it in the active-active su=
-spend
-> path, stopping periodic UFS RTC updates until the next successful
-> suspend/resume cycle.
-> --
+On Wed, 2026-07-15 at 01:27 +0800, Guangshuo Li wrote:
+> controller.
 >=20
-> --- Patch [1]: [PATCH v2] scsi: ufs: core: cancel RTC work in active-acti=
-ve
-> suspend ---
-> commit 9a4850975ce80edc6032f13153aa50eb19b4cc19
-> Author: Guangshuo Li <lgs201920130244@gmail.com>
+> A previous change moved the RTC work cancellation before the PRE_CHANGE
+> vendor suspend callback to close a race in the common suspend path.
+> However, the active-active path jumps directly to vops_suspend after
+> flushing exception handling work and therefore bypasses the
+> cancellation.
 >=20
-> scsi: ufs: core: cancel RTC work in active-active suspend
-> =C2=A0=C2=A0=C2=A0=20
-> This commit cancels the UFS RTC update work in the active-active suspend
-> path before calling the vendor suspend callback to prevent an SError.
+> If the RTC work runs while the vendor suspend callback is gating or
+> otherwise changing hardware state, it can access the controller during
+> suspend and trigger an SError.
 >=20
-> > diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> > index d3044a3089b53..c3b105b2678e4 100644
-> > --- a/drivers/ufs/core/ufshcd.c
-> > +++ b/drivers/ufs/core/ufshcd.c
-> > @@ -10269,6 +10269,7 @@ static int __ufshcd_wl_suspend(struct ufs_hba *=
-hba,
-> > enum ufs_pm_op pm_op)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-req_link_state =3D=3D UIC_LINK_ACTIVE_STATE) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0ufshcd_disable_auto_bkops(hba);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0flush_work(&hba->eeh_work);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0cancel_delayed_work_sync(&hba->ufs_rtc_update_work);
+> Cancel the RTC work before entering the vendor suspend callback in the
+> active-active path. Since this path now cancels the work, move the RTC
+> work scheduling outside the device and link state restoration block in
+> the resume path. This restarts RTC updates after an active-active
+> suspend and resume cycle.
 >=20
-> [Severity: Medium]
-> If the active-active suspend path fails after this point, is the
-> ufs_rtc_update_work permanently lost?
->=20
-> When this jumps to the vops_suspend label, if ufshcd_vops_suspend() retur=
-ns
-> an error, the function branches to the error handling path:
->=20
-> __ufshcd_wl_suspend() {
-> =C2=A0=C2=A0=C2=A0 ...
-> vops_suspend:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D ufshcd_vops_suspe=
-nd(hba, pm_op, POST_CHANGE);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0goto set_link_active;
-> =C2=A0=C2=A0=C2=A0 ...
-> out:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0...
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0ufshcd_update_evt_hist(hba, UFS_EVT_WL_SUSP_ERR, (u=
-32)ret);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0hba->clk_gating.is_suspended =3D false;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0ufshcd_release(hba);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0hba->pm_op_in_progress =
-=3D false;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
-> }
->=20
-> The error path doesn't appear to re-arm the canceled RTC update work befo=
-re
-> returning the error code. Does this mean periodic UFS RTC updates will st=
-ay
-> stopped until the next successful suspend and resume cycle?
+> Fixes: b0bd84c39289 ("scsi: ufs: core: Fix SError in ufshcd_rtc_work() du=
+ring
+> UFS suspend")
+> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
 
-This is not a real issue, for the following reasons:
 
-1\ The RTC work is not permanently lost. If suspend fails, the device stays=
- in
-the active state and the PM core will retry the suspend later (runtime PM
-retries once the device idles again; a failed system suspend is simply retr=
-ied
-on the next suspend attempt). The next successful suspend/resume cycle re-a=
-rms
-the work via the now unconditional schedule_delayed_work() in
-__ufshcd_wl_resume().
-
-2\ RTC updates being paused between a failed suspend and the next successfu=
-l
-cycle is harmless. The device only uses the RTC for internal housekeeping/a=
-ge
-estimation, and periodic updates are opt-in anyway: rtc_update_period defau=
-lts
-to 0 and must be enabled via sysfs.
-
-3\ This behavior is not introduced by this patch. The common suspend path h=
-as
-worked exactly the same way since commit b0bd84c39289 ("scsi: ufs: core: Fi=
-x
-SError in ufshcd_rtc_work() during UFS suspend"): it cancels the work befor=
-e the
-PRE_CHANGE vendor callback and does not re-arm it on the error paths either=
-. If
-anything, this could be a separate follow-up cleanup, but it should not hol=
-d
-this bug fix.
-
+Reviewed-by: Bean Huo <beanhuo@micron.com>
 
